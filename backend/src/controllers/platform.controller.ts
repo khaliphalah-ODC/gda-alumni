@@ -1,0 +1,14 @@
+import type { RequestHandler } from 'express';
+import { platformService } from '../services/platform.service';
+import { platformRepository } from '../repositories/platform.repository';
+import { sendSuccess } from '../utils/api-response';
+import { getPagination } from '../utils/pagination';
+import { AppError } from '../utils/app-error';
+export const dashboard: RequestHandler = async (_req, res, next) => { try { return sendSuccess(res, 200, 'Platform overview', await platformService.dashboard()); } catch (e) { next(e); } };
+export const settings: RequestHandler = async (_req, res, next) => { try { return sendSuccess(res, 200, 'Platform settings', await platformService.settings()); } catch (e) { next(e); } };
+export const updateSettings: RequestHandler = async (req, res, next) => { try { const { currentPassword, ...data } = req.body; return sendSuccess(res, 200, 'Settings saved', await platformService.updateSettings(req.user!, currentPassword, data)); } catch (e) { next(e); } };
+export const list: RequestHandler = async (req, res, next) => { try { const { page, search, active } = req.query as unknown as { page: number; search: string; active?: string }; const data = await platformService.admins(page, search, active === undefined ? undefined : active === 'true'); return sendSuccess(res, 200, 'Admin accounts', data.users, getPagination(page, 12, data.total)); } catch (e) { next(e); } };
+export const detail: RequestHandler = async (req, res, next) => { try { const user = await platformService.detail(req.params.id as string); if (!user) throw new AppError(404, 'Admin account not found'); return sendSuccess(res, 200, 'Admin account', user); } catch (e) { next(e); } };
+export const invite: RequestHandler = async (req, res, next) => { try { await platformService.invite(req.user!, req.body.fullName, req.body.email, req.body.currentPassword); return sendSuccess(res, 201, 'Invitation accepted by the mail server. Inbox delivery is not guaranteed', null); } catch (e) { next(e); } };
+export const update: RequestHandler = async (req, res, next) => { try { await platformService.updateAdmin(req.user!, req.params.id as string, req.body.currentPassword, { fullName: req.body.fullName }); return sendSuccess(res, 200, 'Admin updated', null); } catch (e) { next(e); } };
+export const setActive = (active: boolean): RequestHandler => async (req, res, next) => { try { await platformService.updateAdmin(req.user!, req.params.id as string, req.body.currentPassword, { isActive: active }); return sendSuccess(res, 200, active ? 'Admin enabled' : 'Admin disabled; sessions revoked', null); } catch (e) { next(e); } };

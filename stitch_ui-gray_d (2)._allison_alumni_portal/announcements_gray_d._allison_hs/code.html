@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#031935",
+                        "on-surface": "#1b1b1e",
+                        "surface-dim": "#dbd9dc",
+                        "background": "#fbf9fb",
+                        "on-primary-container": "#8396b8",
+                        "primary-container": "#1b2e4b",
+                        "tertiary-fixed-dim": "#e5c18a",
+                        "inverse-surface": "#303033",
+                        "primary-fixed-dim": "#b4c7ec",
+                        "tertiary-container": "#3f2a01",
+                        "on-tertiary-container": "#b0915d",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed-dim": "#c6c6c6",
+                        "on-tertiary-fixed-variant": "#5b4317",
+                        "error-container": "#ffdad6",
+                        "primary-fixed": "#d6e3ff",
+                        "inverse-on-surface": "#f2f0f3",
+                        "outline": "#75777e",
+                        "outline-variant": "#c4c6ce",
+                        "surface-container-high": "#e9e7ea",
+                        "on-background": "#1b1b1e",
+                        "on-tertiary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "on-error": "#ffffff",
+                        "surface-variant": "#e4e2e5",
+                        "on-secondary-fixed-variant": "#474747",
+                        "secondary-fixed": "#e2e2e2",
+                        "secondary": "#5e5e5e",
+                        "on-secondary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed": "#1b1b1b",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#b4c7ec",
+                        "surface-container": "#efedf0",
+                        "on-primary-fixed": "#061b38",
+                        "surface": "#fbf9fb",
+                        "on-secondary-container": "#646464",
+                        "surface-tint": "#4d5f7f",
+                        "secondary-container": "#e2e2e2",
+                        "on-primary-fixed-variant": "#354766",
+                        "surface-bright": "#fbf9fb",
+                        "on-surface-variant": "#44474d",
+                        "tertiary": "#251700",
+                        "on-tertiary-fixed": "#281900",
+                        "tertiary-fixed": "#ffdeab",
+                        "surface-container-low": "#f5f3f6",
+                        "surface-container-highest": "#e4e2e5"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "sidebar-width": "280px",
+                        "container-max": "1280px",
+                        "margin-desktop": "32px",
+                        "stack-gap": "16px",
+                        "margin-mobile": "16px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Public Sans"],
+                        "h1": ["Public Sans"],
+                        "body-lg": ["Public Sans"],
+                        "label-sm": ["Public Sans"],
+                        "h2": ["Public Sans"],
+                        "caption": ["Public Sans"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "h1": ["36px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-sm": ["14px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "h2": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "caption": ["12px", {"lineHeight": "1.4", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md">
+<!-- TopNavBar -->
+<header class="bg-[#1B2E4B] dark:bg-slate-950 shadow-sm fixed top-0 left-0 w-full z-50">
+<div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+<div class="text-xl font-bold text-white tracking-widest uppercase">
+                Gray D. Allison HS
+            </div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="font-sans text-sm font-medium tracking-tight text-slate-200 hover:text-white transition-colors" href="#">Home</a>
+<a class="font-sans text-sm font-medium tracking-tight text-slate-200 hover:text-white transition-colors" href="#">About</a>
+<a class="font-sans text-sm font-medium tracking-tight text-white border-b-2 border-white pb-1" href="#">Announcements</a>
+<a class="font-sans text-sm font-medium tracking-tight text-slate-200 hover:text-white transition-colors" href="#">Alumni Stories</a>
+<a class="font-sans text-sm font-medium tracking-tight text-slate-200 hover:text-white transition-colors" href="#">Events</a>
+<a class="font-sans text-sm font-medium tracking-tight text-slate-200 hover:text-white transition-colors" href="#">Contact</a>
+</nav>
+<button class="bg-white/10 hover:bg-white/20 text-white font-sans text-sm font-medium px-5 py-2 rounded-lg transition-all active:opacity-80">
+                Login
+            </button>
+</div>
+</header>
+<main class="pt-24 pb-16 max-w-7xl mx-auto px-6">
+<!-- Hero Section -->
+<section class="mb-12">
+<h1 class="font-h1 text-h1 text-primary mb-4">Official Announcements</h1>
+<p class="font-body-lg text-body-lg text-secondary max-w-2xl">Stay informed with the latest updates from the Ministry of National Defense and the Gray D. Allison High School administration.</p>
+</section>
+<!-- Search and Filter Bar -->
+<div class="bg-surface-container-lowest border border-outline-variant p-4 mb-10 flex flex-col md:flex-row gap-4 items-center">
+<div class="relative w-full md:w-1/3">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-background border border-outline-variant focus:border-primary-container focus:ring-0 text-sm" placeholder="Search announcements..." type="text"/>
+</div>
+<div class="flex flex-wrap gap-2 w-full md:w-auto">
+<button class="px-4 py-2 text-sm font-semibold bg-primary-container text-white">All</button>
+<button class="px-4 py-2 text-sm font-semibold bg-white border border-outline-variant text-secondary hover:border-primary-container hover:text-primary-container">Academic</button>
+<button class="px-4 py-2 text-sm font-semibold bg-white border border-outline-variant text-secondary hover:border-primary-container hover:text-primary-container">Alumni</button>
+<button class="px-4 py-2 text-sm font-semibold bg-white border border-outline-variant text-secondary hover:border-primary-container hover:text-primary-container">Events</button>
+<button class="px-4 py-2 text-sm font-semibold bg-white border border-outline-variant text-secondary hover:border-primary-container hover:text-primary-container">Ministry</button>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Main Content: Announcements List -->
+<div class="lg:col-span-8 space-y-6">
+<!-- Announcement Card 1 -->
+<article class="bg-white border border-outline-variant flex flex-col md:flex-row overflow-hidden group">
+<div class="md:w-1/3 h-48 md:h-auto overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A dignified military school graduation ceremony at Gray D. Allison High School. Cadets in pristine uniforms stand in disciplined formation against a backdrop of the school's historic brick architecture. The morning sun casts long, sharp shadows, emphasizing the formal and institutional atmosphere of the event. The scene is professional, serious, and celebrates academic achievement within a national defense context." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyPqm0ffnMfl0NPGq7lqLSHHX4D4gWVfH6jA-69-7A5MA6rHmqLAUQM0n0weS_BKOx01dAunj5h0Izkwngh4WVd5PX9TFHEtIz2snebvblUHTm9XoLW7gsdXDxCSl0yj7Wwy3jMBSxyFfQRqaVAUIKkqMQyV9dPoj89aBxG6KXw3JKpOIo1qIXcz7WDyKJZuCKUgBnci2AqXS5FaA_6vBwn_5vdfVX8WRwh0iK8YfOFkSQ5DLyE_zG38mlgg7CWrIMdArAVI-bM_uX"/>
+</div>
+<div class="p-6 md:w-2/3 flex flex-col">
+<div class="flex items-center gap-2 mb-2">
+<span class="bg-primary-container text-white text-[10px] uppercase font-bold px-2 py-0.5 tracking-wider">Academic</span>
+<time class="text-caption font-caption text-secondary">October 24, 2024</time>
+</div>
+<h3 class="font-h2 text-h2 text-primary mb-3 group-hover:text-primary-container transition-colors">2024 Semester Examination Schedule Released</h3>
+<p class="text-on-surface-variant text-sm line-clamp-2 mb-6">The Office of the Registrar has officially released the comprehensive examination schedule for all grade levels. Students are advised to verify their seating assignments and subjects...</p>
+<div class="mt-auto">
+<button class="text-primary font-bold text-sm uppercase tracking-widest flex items-center gap-2 hover:underline">
+                                Read More <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Announcement Card 2 -->
+<article class="bg-white border border-outline-variant flex flex-col md:flex-row overflow-hidden group">
+<div class="md:w-1/3 h-48 md:h-auto overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A focused meeting of high-ranking government officials from the Ministry of National Defense of Liberia. They are seated around a polished mahogany table in a formal briefing room with national flags. The lighting is bright and professional, highlighting the serious and authoritative nature of the proceedings. The aesthetic is corporate and institutional, with a clear focus on leadership and strategic planning." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBV0JmmYcZtqf7BYCZCXS4WeuRLOgRgUt5_oz7rXSyyGIS4Gx1ChPDFXtnToCayX6VADNCmp-aEk6gfS4hN51GKVXHkQZghZNqR34xjbW5SD_qbix-_77P-u9VBFSngeX8TNlynkiv0iB5eUsSIewqEkNhCsbTZ9DFRzv0xSceOCwfKxxaFuW8bdSfeKB_9vmXYVLXiyFbtSr1Wl4LwsDSwZ_h-etvr99KOM87kaeG0dlX4xM8F2rcUVV100jMs8sApNzu4YbERz8dd"/>
+</div>
+<div class="p-6 md:w-2/3 flex flex-col">
+<div class="flex items-center gap-2 mb-2">
+<span class="bg-primary-container text-white text-[10px] uppercase font-bold px-2 py-0.5 tracking-wider">Ministry</span>
+<time class="text-caption font-caption text-secondary">October 21, 2024</time>
+</div>
+<h3 class="font-h2 text-h2 text-primary mb-3 group-hover:text-primary-container transition-colors">Ministry of Defense Infrastructure Grant Approval</h3>
+<p class="text-on-surface-variant text-sm line-clamp-2 mb-6">We are pleased to announce the approval of a significant infrastructure grant aimed at upgrading the school's digital laboratory and library facilities to meet international standards...</p>
+<div class="mt-auto">
+<button class="text-primary font-bold text-sm uppercase tracking-widest flex items-center gap-2 hover:underline">
+                                Read More <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Announcement Card 3 -->
+<article class="bg-white border border-outline-variant flex flex-col md:flex-row overflow-hidden group">
+<div class="md:w-1/3 h-48 md:h-auto overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A group of successful alumni from Gray D. Allison High School gathered for a formal networking evening. They are dressed in professional business attire, standing in a brightly lit modern reception hall. The mood is celebratory and prestigious, emphasizing the long-term success of the school's graduates. The photography uses a clean, high-contrast style that aligns with the institution's professional branding." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxuBFPjX80frcctf9SJ8JcSYWlg_Q7Zztm7Vk2wkYsaXwnjKohSMcqhUrr11v63VXmJMaSOyVcEL6prGHyPt64c22bN9rENlIlEpyFPPxVxNUE2faDPYDZtf8FN6w56hSciEB7kBy-hfIPW7tKHRK_Sko64aDsE-JYy2nlNF79x4UixgO6ecZnGldmewj5ytqQoeSanGg1x5LjwKv6y81ioazZYomZzbeMlq5EC73JngXFD8voszX4rFlWn7sA4xdEst6nKxpABO5l"/>
+</div>
+<div class="p-6 md:w-2/3 flex flex-col">
+<div class="flex items-center gap-2 mb-2">
+<span class="bg-primary-container text-white text-[10px] uppercase font-bold px-2 py-0.5 tracking-wider">Alumni</span>
+<time class="text-caption font-caption text-secondary">October 18, 2024</time>
+</div>
+<h3 class="font-h2 text-h2 text-primary mb-3 group-hover:text-primary-container transition-colors">Alumni Mentorship Program: Call for Volunteers</h3>
+<p class="text-on-surface-variant text-sm line-clamp-2 mb-6">The Alumni Association is launching its annual mentorship program for senior students. We invite graduates currently serving in leadership roles to participate in this impactful initiative...</p>
+<div class="mt-auto">
+<button class="text-primary font-bold text-sm uppercase tracking-widest flex items-center gap-2 hover:underline">
+                                Read More <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Pagination -->
+<div class="flex justify-center pt-8">
+<div class="flex border border-outline-variant bg-white">
+<button class="w-10 h-10 flex items-center justify-center border-r border-outline-variant hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center border-r border-outline-variant bg-primary-container text-white text-sm font-bold">1</button>
+<button class="w-10 h-10 flex items-center justify-center border-r border-outline-variant hover:bg-slate-50 text-sm transition-colors">2</button>
+<button class="w-10 h-10 flex items-center justify-center border-r border-outline-variant hover:bg-slate-50 text-sm transition-colors">3</button>
+<button class="w-10 h-10 flex items-center justify-center hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Sidebar -->
+<aside class="lg:col-span-4 space-y-8">
+<!-- Important Notices -->
+<div class="bg-white border border-outline-variant p-6">
+<h4 class="font-h2 text-lg text-primary border-b border-outline-variant pb-4 mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">warning</span>
+                        Important Notices
+                    </h4>
+<ul class="space-y-4">
+<li class="group">
+<a class="block" href="#">
+<span class="text-[10px] text-error font-bold uppercase block mb-1">Urgent</span>
+<span class="text-sm font-semibold text-on-surface group-hover:text-primary-container transition-colors">Mandatory Uniform Inspection - Monday 08:00 AM</span>
+</a>
+</li>
+<li class="group">
+<a class="block" href="#">
+<span class="text-[10px] text-secondary font-bold uppercase block mb-1">Notice</span>
+<span class="text-sm font-semibold text-on-surface group-hover:text-primary-container transition-colors">Library Closure for Maintenance (Oct 28-30)</span>
+</a>
+</li>
+<li class="group">
+<a class="block" href="#">
+<span class="text-[10px] text-secondary font-bold uppercase block mb-1">Deadline</span>
+<span class="text-sm font-semibold text-on-surface group-hover:text-primary-container transition-colors">Final Registration for National Science Fair</span>
+</a>
+</li>
+</ul>
+</div>
+<!-- Quick Links -->
+<div class="bg-white border border-outline-variant p-6">
+<h4 class="font-h2 text-lg text-primary border-b border-outline-variant pb-4 mb-4">Quick Links</h4>
+<nav class="space-y-1">
+<a class="flex items-center justify-between p-3 text-sm font-medium text-secondary hover:bg-slate-50 hover:text-primary-container group transition-colors" href="#">
+                            Academic Calendar <span class="material-symbols-outlined text-sm opacity-0 group-hover:opacity-100 transition-opacity">open_in_new</span>
+</a>
+<a class="flex items-center justify-between p-3 text-sm font-medium text-secondary hover:bg-slate-50 hover:text-primary-container group transition-colors" href="#">
+                            Student Handbook <span class="material-symbols-outlined text-sm opacity-0 group-hover:opacity-100 transition-opacity">download</span>
+</a>
+<a class="flex items-center justify-between p-3 text-sm font-medium text-secondary hover:bg-slate-50 hover:text-primary-container group transition-colors" href="#">
+                            Ministry Portal <span class="material-symbols-outlined text-sm opacity-0 group-hover:opacity-100 transition-opacity">link</span>
+</a>
+<a class="flex items-center justify-between p-3 text-sm font-medium text-secondary hover:bg-slate-50 hover:text-primary-container group transition-colors" href="#">
+                            Staff Directory <span class="material-symbols-outlined text-sm opacity-0 group-hover:opacity-100 transition-opacity">group</span>
+</a>
+</nav>
+</div>
+<!-- Banner/Call to Action -->
+<div class="relative bg-primary-container p-8 overflow-hidden group">
+<div class="absolute inset-0 opacity-10 pointer-events-none">
+<img class="w-full h-full object-cover" data-alt="A faint, stylized watermark pattern showing the silhouette of a school crest and architectural lines, integrated into a deep navy background. The visual represents institutional heritage and stability, providing a subtle texture to the professional announcement section." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDaJFgF0rgbWnyF8UGOoPgQ0oF5yYNaTDzb_NTUTqFznMh-4lO48vzMLUnUJboBs4IQK_-zGCoYUuwtXi0gau4BNWR7oCFEOv-TgxfqXqjXE9gvhlsscIvrySBgy0b4Zt_9-801UsP1G4G8O1P_LK8Li4GJ2zpgCZY9B6MWfe5HLH8Tc3aHLmy9fd5NfIW-ulbrhlLxBu17OP8u7QJsVoHEFemfy8sthDLWzofQps3lqw8p-0RspdvK5133LeRylS3cpyp8p0ujpqji"/>
+</div>
+<div class="relative z-10">
+<h5 class="text-white font-h2 text-xl mb-4">GDA Management System</h5>
+<p class="text-slate-300 text-sm mb-6">Access your administrative portal, student records, and Ministry reporting tools.</p>
+<button class="w-full py-3 bg-white text-primary font-bold text-xs uppercase tracking-widest hover:bg-slate-100 transition-colors">
+                            Dashboard Access
+                        </button>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-slate-50 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800">
+<div class="w-full py-8 px-6 flex flex-col md:flex-row justify-between items-center gap-4 max-w-7xl mx-auto">
+<div class="font-sans text-xs uppercase tracking-wider text-slate-500">
+                © 2024 Gray D. Allison High School. Ministry of National Defense, Liberia.
+            </div>
+<div class="flex gap-6">
+<a class="font-sans text-xs uppercase tracking-wider text-slate-500 hover:underline" href="#">Privacy Policy</a>
+<a class="font-sans text-xs uppercase tracking-wider text-slate-500 hover:underline" href="#">Terms of Service</a>
+<a class="font-sans text-xs uppercase tracking-wider text-slate-500 hover:underline" href="#">Ministry of Defense</a>
+<a class="font-sans text-xs uppercase tracking-wider text-slate-500 hover:underline" href="#">Staff Portal</a>
+</div>
+</div>
+</footer>
+</body></html>

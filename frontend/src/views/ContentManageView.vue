@@ -1,0 +1,51 @@
+<script setup lang="ts">
+import { reactive, ref, watch } from 'vue';
+import ContentImageInput from '@/components/ContentImageInput.vue';
+import DashboardLayout from '@/layouts/DashboardLayout.vue';
+import ApiAlert from '@/components/ApiAlert.vue';
+import PaginationControls from '@/components/PaginationControls.vue';
+import { uploadImage } from '@/api/image-upload';
+import { useMediaSettings } from '@/composables/useMediaSettings';
+import { api, errorMessage } from '@/api/client';
+import { useAuth } from '@/stores/auth';
+import { contentEndpoint, contentLabel, localDateTime, type ContentKind } from '@/utils/content';
+import type { ApiResponse, Pagination, Post } from '@/types/api';
+const props = defineProps<{ type: ContentKind; own?: boolean }>(); const { user } = useAuth();
+const posts = ref<Post[]>([]), pagination = ref<Pagination | null>(null), selected = ref<Post | null>(null), deleting = ref<Post | null>(null);
+const page = ref(1), search = ref(''), publication = ref('all'), loading = ref(false), busy = ref(false), editing = ref(false), error = ref(''), notice = ref('');
+const pendingImage = ref<File | null>(null), editorKey = ref(0);
+const { media, checking, mediaError, refreshMedia } = useMediaSettings();
+const form = reactive({ title: '', content: '', image: '', eventDate: '', eventTime: '', eventLocation: '', audience: '' });
+async function load(nextPage = 1) { page.value = nextPage; loading.value = true; error.value = ''; try { const response = await api.get<ApiResponse<Post[]>>(contentEndpoint(props.type), { params: { page: page.value, limit: 12, scope: props.own ? 'mine' : 'manage', publication: publication.value, search: search.value || undefined } }); posts.value = response.data.data; pagination.value = response.data.pagination; } catch (e) { error.value = errorMessage(e); } finally { loading.value = false; } }
+function edit(post?: Post) { editorKey.value++; pendingImage.value = null; error.value = ''; selected.value = post ?? null; deleting.value = null; editing.value = true; Object.assign(form, { title: post?.title ?? '', content: post?.content ?? '', image: post?.image ?? '', eventDate: localDateTime(post?.eventDate), eventTime: post?.eventTime ?? '', eventLocation: post?.eventLocation ?? '', audience: post?.audience ?? '' }); }
+async function save() {
+  busy.value = true; error.value = ''; notice.value = '';
+  try {
+    const data = { title: form.title, content: form.content, image: pendingImage.value ? (selected.value?.image ?? null) : (form.image || null), ...(props.type === 'events' ? { eventDate: new Date(form.eventDate).toISOString(), eventTime: form.eventTime || null, eventLocation: form.eventLocation || null, audience: form.audience || null } : {}) };
+    const response = selected.value
+      ? await api.patch<ApiResponse<Post>>(`${contentEndpoint(props.type)}/${selected.value.id}`, { ...data, version: selected.value.version })
+      : await api.post<ApiResponse<Post>>(contentEndpoint(props.type), { ...data, ...(props.type === 'announcements' ? { isPublished: false } : {}) });
+    selected.value = response.data.data;
+    if (pendingImage.value) {
+      try { selected.value = (await uploadImage<Post>(`${contentEndpoint(props.type)}/${selected.value.id}/image`, pendingImage.value, selected.value.version)).data.data; }
+      catch (cause) {
+        await load(page.value);
+        notice.value = 'Your content was saved. The image has not been saved; retry or use an image URL.';
+        error.value = `Image upload failed. ${errorMessage(cause)}`;
+        return;
+      }
+    }
+    editing.value = false; selected.value = null; pendingImage.value = null;
+    notice.value = props.own ? 'Story saved for administrator review.' : 'Content saved. Use Publish after reviewing the draft.';
+    await load(page.value);
+  } catch (cause) { error.value = errorMessage(cause); }
+  finally { busy.value = false; }
+}
+async function publicationAction(post: Post) { busy.value = true; error.value = ''; try { await api.patch(`${contentEndpoint(props.type)}/${post.id}/${post.isPublished ? 'unpublish' : 'publish'}`, { version: post.version }); notice.value = post.isPublished ? 'Content unpublished.' : 'Content published.'; await load(page.value); } catch (e) { error.value = errorMessage(e); } finally { busy.value = false; } }
+async function remove() { if (!deleting.value) return; busy.value = true; error.value = ''; try { await api.delete(`${contentEndpoint(props.type)}/${deleting.value.id}`, { params: { version: deleting.value.version } }); deleting.value = null; notice.value = 'Content deleted.'; await load(page.value); if (!posts.value.length && page.value > 1) await load(page.value - 1); } catch (e) { error.value = errorMessage(e); } finally { busy.value = false; } }
+watch(() => [props.type, props.own], () => { editing.value = false; selected.value = null; deleting.value = null; search.value = ''; publication.value = 'all'; void load(); }, { immediate: true });
+</script>
+<template><DashboardLayout><section class="mx-auto max-w-6xl space-y-6 p-5 lg:p-10"><header class="flex flex-wrap items-center justify-between gap-4"><div><h1 class="text-h1">{{ own ? 'My stories' : `Manage ${contentLabel(type).toLowerCase()}` }}</h1><p class="mt-2 text-secondary">{{ own ? 'Stories require administrator review. Editing a published story returns it to draft.' : 'Review each draft before publishing. Unpublished records are hidden from public readers.' }}</p></div><button class="primary-button" :disabled="busy" @click="edit()">{{ own ? 'Submit a story' : 'Create content' }}</button></header><ApiAlert :message="error"/><ApiAlert :message="notice" kind="success"/>
+<form v-if="editing" class="space-y-5 border bg-white p-6" @submit.prevent="save"><h2 class="text-h2">{{ selected ? 'Edit content' : 'New draft' }}</h2><label for="edit-title" class="field-label">Title</label><input id="edit-title" v-model.trim="form.title" class="field-input" required minlength="3" maxlength="200"><label for="edit-content" class="field-label">{{ type === 'events' ? 'Description' : 'Content' }}</label><textarea id="edit-content" v-model.trim="form.content" class="field-input" rows="8" required maxlength="20000"></textarea><ContentImageInput :key="editorKey" v-model="form.image" :upload-enabled="media.enabled" :checking="checking" :availability-error="mediaError" @refresh="refreshMedia" :max-bytes="media.maxBytes" :busy="busy" @file="pendingImage = $event"/><div v-if="type === 'events'" class="grid gap-4 sm:grid-cols-2"><div><label for="edit-date" class="field-label">Event date and start time</label><input id="edit-date" v-model="form.eventDate" class="field-input" type="datetime-local" required></div><div><label for="edit-time" class="field-label">Time details (optional)</label><input id="edit-time" v-model.trim="form.eventTime" class="field-input" maxlength="50" placeholder="e.g. Doors open 30 minutes before"></div><div><label for="edit-location" class="field-label">Location</label><input id="edit-location" v-model.trim="form.eventLocation" class="field-input" maxlength="300"></div><div><label for="edit-audience" class="field-label">Audience</label><input id="edit-audience" v-model.trim="form.audience" class="field-input" maxlength="300"></div></div><div class="flex gap-4"><button class="primary-button" :disabled="busy">{{ busy ? 'Saving…' : 'Save content' }}</button><button type="button" class="secondary-button" :disabled="busy" @click="editing = false; selected = null">Cancel</button></div></form>
+<form class="flex flex-wrap items-end gap-4 border bg-white p-5" @submit.prevent="load()"><div class="flex-1"><label for="manage-search" class="field-label">Search title or content</label><input id="manage-search" v-model.trim="search" class="field-input" maxlength="150"></div><div><label for="manage-publication" class="field-label">Publication status</label><select id="manage-publication" v-model="publication" class="field-input"><option value="all">All</option><option value="draft">Draft / pending review</option><option value="published">Published</option></select></div><button class="secondary-button" :disabled="loading || busy">Search</button></form><p v-if="loading" role="status">Loading content…</p><div v-else class="space-y-4"><article v-for="post in posts" :key="post.id" class="space-y-4 border bg-white p-6"><div class="flex flex-wrap justify-between gap-2"><h2 class="text-h2">{{ post.title }}</h2><span class="text-sm">{{ post.isPublished ? 'Published' : 'Draft / awaiting review' }}</span></div><p v-if="post.publishedAt" class="text-xs text-secondary">Published {{ new Date(post.publishedAt).toLocaleString() }}</p><p v-if="post.eventDate" class="text-sm">Event {{ new Date(post.eventDate).toLocaleString() }}<span v-if="new Date(post.eventDate) < new Date()"> · Past event</span></p><details><summary class="cursor-pointer underline">Review full content</summary><p class="mt-3 whitespace-pre-wrap">{{ post.content }}</p></details><div class="flex flex-wrap gap-4"><button class="secondary-button" :disabled="busy" @click="edit(post)">Edit</button><button v-if="user?.role === 'ADMIN'" class="primary-button" :disabled="busy" @click="publicationAction(post)">{{ post.isPublished ? 'Unpublish' : 'Publish' }}</button><button class="text-error underline" :disabled="busy" @click="deleting = post">Delete</button><RouterLink :to="`/${type}/${post.id}`" class="self-center underline">Open full page</RouterLink></div></article><p v-if="!posts.length">No matching content.</p></div>
+<section v-if="deleting" class="space-y-4 border border-red-200 bg-white p-6" role="alert"><h2 class="font-semibold">Delete “{{ deleting.title }}”?</h2><p>This permanently deletes this content record.</p><div class="flex gap-4"><button class="primary-button" :disabled="busy" @click="remove">Confirm deletion</button><button class="secondary-button" :disabled="busy" @click="deleting = null">Cancel</button></div></section><PaginationControls :page="page" :pagination="pagination" :busy="loading || busy" @change="load"/></section></DashboardLayout></template>

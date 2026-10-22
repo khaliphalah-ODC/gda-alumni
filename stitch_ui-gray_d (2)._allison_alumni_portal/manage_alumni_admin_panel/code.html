@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Alumni Management | Gray D. Allison High School</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed-variant": "#474747",
+                        "inverse-primary": "#b4c7ec",
+                        "primary-fixed-dim": "#b4c7ec",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#8396b8",
+                        "on-secondary-fixed": "#1b1b1b",
+                        "inverse-surface": "#303033",
+                        "on-error-container": "#93000a",
+                        "on-secondary": "#ffffff",
+                        "surface": "#fbf9fb",
+                        "surface-container-high": "#e9e7ea",
+                        "on-tertiary-fixed": "#281900",
+                        "surface-tint": "#4d5f7f",
+                        "on-primary-fixed-variant": "#354766",
+                        "on-secondary-container": "#646464",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-dim": "#dbd9dc",
+                        "outline": "#75777e",
+                        "on-surface": "#1b1b1e",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#ffdeab",
+                        "surface-container-low": "#f5f3f6",
+                        "secondary-fixed-dim": "#c6c6c6",
+                        "on-tertiary-container": "#b0915d",
+                        "tertiary-fixed-dim": "#e5c18a",
+                        "surface-variant": "#e4e2e5",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#f2f0f3",
+                        "secondary": "#5e5e5e",
+                        "on-surface-variant": "#44474d",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#1b2e4b",
+                        "surface-bright": "#fbf9fb",
+                        "background": "#fbf9fb",
+                        "surface-container-highest": "#e4e2e5",
+                        "tertiary": "#251700",
+                        "secondary-container": "#e2e2e2",
+                        "on-error": "#ffffff",
+                        "primary-fixed": "#d6e3ff",
+                        "on-background": "#1b1b1e",
+                        "surface-container": "#efedf0",
+                        "tertiary-container": "#3f2a01",
+                        "primary": "#031935",
+                        "secondary-fixed": "#e2e2e2",
+                        "outline-variant": "#c4c6ce",
+                        "on-primary-fixed": "#061b38",
+                        "on-tertiary-fixed-variant": "#5b4317"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "margin-desktop": "32px",
+                        "sidebar-width": "280px",
+                        "container-max": "1280px",
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "stack-gap": "16px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Public Sans"],
+                        "label-sm": ["Public Sans"],
+                        "body-md": ["Public Sans"],
+                        "h1": ["Public Sans"],
+                        "h2": ["Public Sans"],
+                        "caption": ["Public Sans"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-sm": ["14px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "h1": ["36px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "h2": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "caption": ["12px", {"lineHeight": "1.4", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- Dashboard Shell Layout -->
+<div class="flex">
+<!-- SideNavBar Component -->
+<aside class="fixed left-0 top-0 h-full w-[280px] border-r bg-white border-slate-200 dark:border-slate-800 flex flex-col z-50">
+<div class="px-6 py-8 flex flex-col gap-2">
+<h1 class="text-lg font-black text-[#1B2E4B] tracking-tight">GDA Management</h1>
+<p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Ministry of Defense</p>
+</div>
+<nav class="flex-1 flex flex-col">
+<a class="flex items-center gap-3 text-slate-500 hover:bg-slate-50 px-6 py-3 transition-colors duration-200 font-sans text-[13px] font-semibold" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                    Dashboard
+                </a>
+<a class="flex items-center gap-3 bg-slate-50 text-[#1B2E4B] border-l-4 border-[#1B2E4B] px-6 py-3 transition-colors duration-200 font-sans text-[13px] font-semibold" href="#">
+<span class="material-symbols-outlined" data-icon="group" style="font-variation-settings: 'FILL' 1;">group</span>
+                    Alumni Management
+                </a>
+<a class="flex items-center gap-3 text-slate-500 hover:bg-slate-50 px-6 py-3 transition-colors duration-200 font-sans text-[13px] font-semibold" href="#">
+<span class="material-symbols-outlined" data-icon="campaign">campaign</span>
+                    Announcements
+                </a>
+<a class="flex items-center gap-3 text-slate-500 hover:bg-slate-50 px-6 py-3 transition-colors duration-200 font-sans text-[13px] font-semibold" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+                    Document Requests
+                </a>
+<a class="flex items-center gap-3 text-slate-500 hover:bg-slate-50 px-6 py-3 transition-colors duration-200 font-sans text-[13px] font-semibold" href="#">
+<span class="material-symbols-outlined" data-icon="auto_stories">auto_stories</span>
+                    Stories &amp; Events
+                </a>
+<a class="flex items-center gap-3 text-slate-500 hover:bg-slate-50 px-6 py-3 transition-colors duration-200 font-sans text-[13px] font-semibold" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                    Settings
+                </a>
+</nav>
+<div class="p-6 border-t border-slate-100 flex flex-col gap-1">
+<a class="flex items-center gap-3 text-slate-500 hover:bg-slate-50 px-4 py-2 transition-colors duration-200 font-sans text-[13px] font-semibold" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+                    Support
+                </a>
+<a class="flex items-center gap-3 text-error hover:bg-red-50 px-4 py-2 transition-colors duration-200 font-sans text-[13px] font-semibold" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+                    Logout
+                </a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-[280px] min-h-screen">
+<!-- Header section -->
+<header class="bg-white border-b border-slate-200 px-8 py-6 flex justify-between items-center sticky top-0 z-40">
+<div>
+<h2 class="font-h2 text-h2 text-primary">Alumni Management</h2>
+<p class="font-caption text-caption text-secondary mt-1">Registry of former students and institutional affiliates.</p>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-2 border border-outline-variant px-4 py-2 rounded bg-white text-on-surface font-label-sm hover:bg-surface-container-low transition-all">
+<span class="material-symbols-outlined" data-icon="cloud_download">cloud_download</span>
+                        Export Data
+                    </button>
+<button class="flex items-center gap-2 bg-primary text-white px-6 py-2 rounded shadow-sm font-label-sm hover:opacity-90 transition-all">
+<span class="material-symbols-outlined" data-icon="person_add">person_add</span>
+                        Add New Alumnus
+                    </button>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="p-8 max-w-7xl mx-auto space-y-8">
+<!-- Filter Section -->
+<section class="bg-white border border-slate-200 p-6 rounded shadow-sm">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+<div class="md:col-span-2">
+<label class="block font-label-sm text-on-surface-variant mb-2">Search Alumni</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-2.5 border border-outline-variant rounded focus:border-primary focus:ring-0 text-body-md bg-surface-container-lowest" placeholder="Search by name, ID, or profession..." type="text"/>
+</div>
+</div>
+<div>
+<label class="block font-label-sm text-on-surface-variant mb-2">Graduation Year</label>
+<select class="w-full px-4 py-2.5 border border-outline-variant rounded focus:border-primary focus:ring-0 text-body-md bg-surface-container-lowest">
+<option>All Years</option>
+<option>2024</option>
+<option>2023</option>
+<option>2022</option>
+<option>2021</option>
+<option>2020</option>
+<option>Earlier</option>
+</select>
+</div>
+<div>
+<button class="w-full py-2.5 border border-primary text-primary font-label-sm rounded hover:bg-primary-fixed transition-colors">
+                                Apply Filters
+                            </button>
+</div>
+</div>
+</section>
+<!-- Alumni Table Card -->
+<section class="bg-white border border-slate-200 rounded shadow-sm overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low border-b border-slate-200">
+<tr>
+<th class="px-6 py-4 font-label-sm text-on-surface-variant uppercase tracking-wider">Alumnus Name</th>
+<th class="px-6 py-4 font-label-sm text-on-surface-variant uppercase tracking-wider">Class</th>
+<th class="px-6 py-4 font-label-sm text-on-surface-variant uppercase tracking-wider">Profession</th>
+<th class="px-6 py-4 font-label-sm text-on-surface-variant uppercase tracking-wider">Current Location</th>
+<th class="px-6 py-4 font-label-sm text-on-surface-variant uppercase tracking-wider">Status</th>
+<th class="px-6 py-4 font-label-sm text-on-surface-variant uppercase tracking-wider text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+<!-- Row 1 -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-primary-container flex items-center justify-center text-white font-bold text-xs">JA</div>
+<div>
+<div class="font-label-sm text-on-surface">Jeremiah Allison</div>
+<div class="font-caption text-secondary">ID: GDA-2015-0042</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-5 font-body-md text-on-surface">2015</td>
+<td class="px-6 py-5 font-body-md text-on-surface">Systems Engineer</td>
+<td class="px-6 py-5 font-body-md text-on-surface">Monrovia, LR</td>
+<td class="px-6 py-5">
+<span class="px-2.5 py-1 rounded bg-green-100 text-green-800 text-[11px] font-bold uppercase">Verified</span>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-2 hover:bg-slate-100 rounded text-primary transition-colors" title="View Profile">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+</button>
+<button class="p-2 hover:bg-slate-100 rounded text-secondary transition-colors" title="Update Role">
+<span class="material-symbols-outlined" data-icon="manage_accounts">manage_accounts</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<img class="h-10 w-10 rounded-full object-cover border border-slate-200" data-alt="Close-up professional studio portrait of a confident Liberian professional woman in her early 30s. She is wearing formal corporate attire. The background is a soft, out-of-focus modern office environment with professional lighting, maintaining a clean institutional aesthetic with subtle cool blue tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9A4g-Ba_3Q7Nt5ra9dxhIya6OYFdxboIWZVC88VnVvhsulXE_CesRw9wd9Co-UkjpJTLJ3cUlKutIgHhzJjxu8NYovylfPPF3Fle6-Kqgaj6UX6lbj-IqNQn6B7LTnS0Ly-F6GXm2IDF4cgnNAAHt6Vtl3dGtIdutFBei-oYGzT0oirYe0D9eSH4ML6AxpdMvuOXady4EhqqlgpIAzvTeRI3KTqdxGudVBlHkq1dMVXtl5ppnTRMpvuNoWd9jvYbo4vyEgDYjaDIJ"/>
+<div>
+<div class="font-label-sm text-on-surface">Sarah J. Kolleh</div>
+<div class="font-caption text-secondary">ID: GDA-2012-0118</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-5 font-body-md text-on-surface">2012</td>
+<td class="px-6 py-5 font-body-md text-on-surface">Attorney at Law</td>
+<td class="px-6 py-5 font-body-md text-on-surface">Accra, GH</td>
+<td class="px-6 py-5">
+<span class="px-2.5 py-1 rounded bg-blue-100 text-blue-800 text-[11px] font-bold uppercase">Lifetime Member</span>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-2 hover:bg-slate-100 rounded text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+</button>
+<button class="p-2 hover:bg-slate-100 rounded text-secondary transition-colors">
+<span class="material-symbols-outlined" data-icon="manage_accounts">manage_accounts</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-500 font-bold text-xs">WT</div>
+<div>
+<div class="font-label-sm text-on-surface">Wilfred Tarpeh</div>
+<div class="font-caption text-secondary">ID: GDA-2019-0522</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-5 font-body-md text-on-surface">2019</td>
+<td class="px-6 py-5 font-body-md text-on-surface">Medical Resident</td>
+<td class="px-6 py-5 font-body-md text-on-surface">Monrovia, LR</td>
+<td class="px-6 py-5">
+<span class="px-2.5 py-1 rounded bg-slate-100 text-slate-600 text-[11px] font-bold uppercase">Pending</span>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-2 hover:bg-slate-100 rounded text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+</button>
+<button class="p-2 hover:bg-slate-100 rounded text-secondary transition-colors">
+<span class="material-symbols-outlined" data-icon="manage_accounts">manage_accounts</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<img class="h-10 w-10 rounded-full object-cover border border-slate-200" data-alt="Headshot of a middle-aged male school administrator or professional. He is wearing a dark suit with a subtle tie. The background is a minimalist, softly lit grey office wall. High-contrast, clean corporate lighting style that emphasizes authority and clarity, fitting the Gray D. Allison High School institutional design language." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6DsLfEMsN6960mpAZkPbs-IG7lm8jLST5NDvLsd5pMkZzUwW3ppJAeljZaomkAkebB4JbjYKjr7BOqFSHMod3TRWyGhGB3-OoLrI6_cANlDYMrojjQ719sOmL0i8U0xx6fBLC4VNiH-5W2apPCIoxbCgngd7QmTO8KVoJ-qMutCuJOli0dkgnp6zDUcu1NbB415QrI6Rt4eGz7Cai4M-bQLcvIueOqDBrLNBlkDmxGbvesxqBPJctn9i_xl5eaQRS4EmI5Cl1AlAQ"/>
+<div>
+<div class="font-label-sm text-on-surface">Emmanuel Cooper</div>
+<div class="font-caption text-secondary">ID: GDA-2008-0005</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-5 font-body-md text-on-surface">2008</td>
+<td class="px-6 py-5 font-body-md text-on-surface">MoD Official</td>
+<td class="px-6 py-5 font-body-md text-on-surface">Washington, DC</td>
+<td class="px-6 py-5">
+<span class="px-2.5 py-1 rounded bg-green-100 text-green-800 text-[11px] font-bold uppercase">Verified</span>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-2 hover:bg-slate-100 rounded text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+</button>
+<button class="p-2 hover:bg-slate-100 rounded text-secondary transition-colors">
+<span class="material-symbols-outlined" data-icon="manage_accounts">manage_accounts</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="bg-surface-container-low px-6 py-4 flex items-center justify-between border-t border-slate-200">
+<p class="font-caption text-secondary">Showing 1 to 4 of 2,450 results</p>
+<div class="flex items-center gap-2">
+<button class="p-2 border border-outline-variant rounded bg-white text-on-surface hover:bg-slate-50 transition-all disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="px-4 py-2 border border-primary bg-primary text-white rounded font-label-sm">1</button>
+<button class="px-4 py-2 border border-outline-variant bg-white text-on-surface rounded font-label-sm hover:bg-slate-50 transition-all">2</button>
+<button class="px-4 py-2 border border-outline-variant bg-white text-on-surface rounded font-label-sm hover:bg-slate-50 transition-all">3</button>
+<span class="px-2 text-secondary">...</span>
+<button class="px-4 py-2 border border-outline-variant bg-white text-on-surface rounded font-label-sm hover:bg-slate-50 transition-all">612</button>
+<button class="p-2 border border-outline-variant rounded bg-white text-on-surface hover:bg-slate-50 transition-all">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Data Summary Bento Section -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-white p-6 border border-slate-200 rounded shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="h-12 w-12 rounded bg-primary-container/10 flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined" data-icon="verified_user">verified_user</span>
+</div>
+<span class="text-xs font-bold text-green-600">+12% vs last month</span>
+</div>
+<h3 class="font-label-sm text-secondary uppercase tracking-wider mb-1">Total Verified</h3>
+<p class="text-3xl font-black text-primary">1,842</p>
+</div>
+<div class="bg-white p-6 border border-slate-200 rounded shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="h-12 w-12 rounded bg-tertiary-container/10 flex items-center justify-center text-on-tertiary-container">
+<span class="material-symbols-outlined" data-icon="pending_actions">pending_actions</span>
+</div>
+<span class="text-xs font-bold text-on-secondary-fixed-variant">85 pending today</span>
+</div>
+<h3 class="font-label-sm text-secondary uppercase tracking-wider mb-1">Awaiting Review</h3>
+<p class="text-3xl font-black text-primary">124</p>
+</div>
+<div class="bg-white p-6 border border-slate-200 rounded shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="h-12 w-12 rounded bg-slate-100 flex items-center justify-center text-slate-500">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+</div>
+<span class="text-xs font-bold text-primary">Global Presence</span>
+</div>
+<h3 class="font-label-sm text-secondary uppercase tracking-wider mb-1">Active Regions</h3>
+<p class="text-3xl font-black text-primary">18 Countries</p>
+</div>
+</div>
+</div>
+<!-- Footer Component -->
+<footer class="w-full py-8 px-8 flex flex-col md:flex-row justify-between items-center gap-4 bg-slate-50 border-t border-slate-200 mt-12">
+<p class="font-sans text-xs uppercase tracking-wider text-slate-500">© 2024 Gray D. Allison High School. Ministry of National Defense, Liberia.</p>
+<div class="flex gap-6">
+<a class="font-sans text-xs uppercase tracking-wider text-slate-500 hover:underline" href="#">Privacy Policy</a>
+<a class="font-sans text-xs uppercase tracking-wider text-slate-500 hover:underline" href="#">Terms of Service</a>
+<a class="font-sans text-xs uppercase tracking-wider text-slate-500 hover:underline" href="#">Ministry of Defense</a>
+<a class="font-sans text-xs uppercase tracking-wider text-slate-500 hover:underline" href="#">Staff Portal</a>
+</div>
+</footer>
+</main>
+</div>
+</body></html>

@@ -1,0 +1,14 @@
+import type { RequestHandler } from 'express';
+import { membershipService } from '../services/membership.service';
+import { sendSuccess } from '../utils/api-response';
+import { env } from '../config/env';
+export const access: RequestHandler = (_req, res) => sendSuccess(res, 200, 'Public membership form', { url: `${env.FRONTEND_ORIGIN}/register` });
+export const apply: RequestHandler = async (req, res, next) => { try { return sendSuccess(res, 201, 'Membership application submitted. Save your private tracking credentials', await membershipService.apply(req.body)); } catch (e) { next(e); } };
+export const status: RequestHandler = async (req, res, next) => { try { return sendSuccess(res, 200, 'Application status retrieved', await membershipService.status(req.body.reference, req.body.secret)); } catch (e) { next(e); } };
+export const correct: RequestHandler = async (req, res, next) => { try { await membershipService.correct(req.body.reference, req.body.secret, req.body.application); return sendSuccess(res, 200, 'Pending application corrected', null); } catch (e) { next(e); } };
+export const activate: RequestHandler = async (req, res, next) => { try { return sendSuccess(res, 201, 'Account activated. You can now log in', await membershipService.activate(req.body.token, req.body.password)); } catch (e) { next(e); } };
+export const list: RequestHandler = async (req, res, next) => { try { const { page, limit, search, status: state } = req.query as unknown as { page: number; limit: number; search?: string; status?: 'PENDING' | 'APPROVED' | 'REJECTED' }; const result = await membershipService.list(req.user!, page, limit, search, state); return sendSuccess(res, 200, 'Applications retrieved', result.applications, result.pagination); } catch (e) { next(e); } };
+export const detail: RequestHandler = async (req, res, next) => { try { return sendSuccess(res, 200, 'Application retrieved', await membershipService.detail(req.user!, req.params.id as string)); } catch (e) { next(e); } };
+export const review: RequestHandler = async (req, res, next) => { try { return sendSuccess(res, 200, 'Application reviewed', await membershipService.review(req.user!, req.params.id as string, req.body.decision, req.body.notes, req.body.rejectionReason)); } catch (e) { next(e); } };
+export const reissue: RequestHandler = async (req, res, next) => { try { return sendSuccess(res, 200, 'Activation invitation reissued', await membershipService.reissue(req.user!, req.params.id as string)); } catch (e) { next(e); } };
+export const revoke: RequestHandler = async (req, res, next) => { try { await membershipService.revoke(req.user!, req.params.id as string); return sendSuccess(res, 200, 'Activation link revoked', null); } catch (e) { next(e); } };

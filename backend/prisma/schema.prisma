@@ -1,0 +1,307 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  ALUMNI
+  STUDENT
+}
+
+model User {
+  id                    String                  @id @default(cuid())
+  email                 String                  @unique
+  password              String
+  role                  Role                    @default(ALUMNI)
+  isActive              Boolean                 @default(true)
+  sessionVersion        Int                     @default(0)
+  staffProfile          StaffProfile?
+  accountTokens         AccountToken[]
+  auditRecords          AuditRecord[]
+  membershipApplication MembershipApplication?  @relation("MemberAccount")
+  reviewedApplications  MembershipApplication[] @relation("ApplicationReviewer")
+  membershipActions     MembershipReview[]
+  studentProfile        StudentProfile?
+  alumniProfile         AlumniProfile?
+  posts                 Post[]
+  requests              Request[]
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+}
+
+enum RequestType {
+  CERTIFICATE
+  TRANSCRIPT
+  DIPLOMA
+  WAEC_CERTIFICATE
+  WASSCE_CERTIFICATE
+}
+
+enum RequestStatus {
+  SUBMITTED
+  IN_REVIEW
+  APPROVED
+  REJECTED
+  READY_FOR_PICKUP
+  COMPLETED
+}
+
+model Request {
+  version                Int           @default(0)
+  id                     String        @id @default(cuid())
+  requestType            RequestType
+  purpose                String
+  status                 RequestStatus @default(SUBMITTED)
+  adminNote              String?
+  requestedBy            String
+  fullNameAtGraduation   String
+  graduationYear         Int?
+  studentIdOrIndexNumber String?
+  contactPhone           String
+  completedAt            DateTime?
+  createdAt              DateTime      @default(now())
+  updatedAt              DateTime      @updatedAt
+
+  user User @relation(fields: [requestedBy], references: [id], onDelete: Restrict)
+
+  @@index([requestedBy])
+  @@index([status])
+  @@index([requestType])
+  @@index([createdAt])
+}
+
+enum PostType {
+  ANNOUNCEMENT
+  STORY
+  EVENT
+  HISTORY
+  SCHOOL_LEADER
+  ALUMNI_LEADER
+}
+
+model Post {
+  version       Int       @default(0)
+  id            String    @id @default(cuid())
+  title         String
+  content       String
+  image         String?
+  type          PostType
+  isPublished   Boolean   @default(false)
+  publishedAt   DateTime?
+  createdBy     String
+  eventDate     DateTime?
+  eventTime     String?
+  eventLocation String?
+  audience      String?
+  milestoneDate String?
+  position      String?
+  displayOrder  Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  user User @relation(fields: [createdBy], references: [id], onDelete: Restrict)
+
+  @@index([type])
+  @@index([isPublished])
+  @@index([createdBy])
+  @@index([publishedAt])
+  @@index([type, isPublished, displayOrder])
+}
+
+model AlumniProfile {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  fullName       String
+  graduationYear Int?
+  occupation     String?
+  location       String?
+  phone          String?
+  bio            String?
+  profileImage   String?
+  profileImagePublicId String?
+  imageVersion Int @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Historical records are retained; no student account routes are enabled.
+enum EnrollmentStatus {
+  ACTIVE
+  INACTIVE
+  GRADUATED
+  TRANSFERRED
+}
+
+model StudentProfile {
+  id               String           @id @default(cuid())
+  userId           String           @unique
+  fullName         String
+  classLevel       String
+  section          String?
+  admissionYear    Int?
+  guardianName     String?
+  guardianPhone    String?
+  enrollmentStatus EnrollmentStatus @default(ACTIVE)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([enrollmentStatus])
+}
+
+enum ActivationDeliveryStatus {
+  NONE
+  DEVELOPMENT
+  SENT
+  FAILED
+}
+
+enum MembershipStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum MembershipAction {
+  SUBMITTED
+  CORRECTED
+  APPROVED
+  REJECTED
+  ACTIVATION_REISSUED
+  ACTIVATION_REVOKED
+  ACTIVATED
+}
+
+model MembershipApplication {
+  id                       String                   @id @default(cuid())
+  reference                String                   @unique
+  trackingHash             String
+  email                    String
+  fullName                 String
+  phone                    String
+  location                 String?
+  previousName             String?
+  graduationYear           Int
+  studentIndexNumber       String?
+  lastClassAttended        String?
+  verificationInformation  String?
+  status                   MembershipStatus         @default(PENDING)
+  rejectionReason          String?
+  reviewedBy               String?
+  reviewedAt               DateTime?
+  activationDeliveryStatus ActivationDeliveryStatus @default(NONE)
+  activationDeliveryAt     DateTime?
+  activationHash           String?                  @unique
+  activationExpiresAt      DateTime?
+  activationConsumedAt     DateTime?
+  activatedAt              DateTime?
+  userId                   String?                  @unique
+  createdAt                DateTime                 @default(now())
+  updatedAt                DateTime                 @updatedAt
+  reviewer                 User?                    @relation("ApplicationReviewer", fields: [reviewedBy], references: [id], onDelete: Restrict)
+  user                     User?                    @relation("MemberAccount", fields: [userId], references: [id], onDelete: Restrict)
+  history                  MembershipReview[]
+
+  @@index([email])
+  @@index([status, createdAt])
+}
+
+model MembershipReview {
+  id            String                @id @default(cuid())
+  applicationId String
+  actorId       String?
+  action        MembershipAction
+  notes         String?
+  snapshot      Json?
+  createdAt     DateTime              @default(now())
+  application   MembershipApplication @relation(fields: [applicationId], references: [id], onDelete: Restrict)
+  actor         User?                 @relation(fields: [actorId], references: [id], onDelete: Restrict)
+
+  @@index([applicationId, createdAt])
+}
+
+model StaffProfile {
+  id String @id @default(cuid())
+  userId String @unique
+  fullName String
+  phone String?
+  location String?
+  profileImage String?
+  profileImagePublicId String?
+  imageVersion Int @default(0)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PlatformSettings {
+  id Int @id @default(1)
+  platformName String @default("Gray D. Allison Alumni Portal")
+  emailEnabled Boolean @default(false)
+  mediaEnabled Boolean @default(false)
+  updatedAt DateTime @updatedAt
+}
+
+model AccountToken {
+  id String @id @default(cuid())
+  purpose String
+  targetEmail String? @unique
+  fullName String?
+  userId String?
+  user User? @relation(fields: [userId], references: [id], onDelete: Restrict)
+  tokenHash String? @unique
+  expiresAt DateTime
+  consumedAt DateTime?
+  deliveredAt DateTime?
+  createdAt DateTime @default(now())
+  @@index([userId, purpose])
+}
+
+model AuditRecord {
+  id String @id @default(cuid())
+  actorId String?
+  actor User? @relation(fields: [actorId], references: [id], onDelete: Restrict)
+  action String
+  targetId String?
+  createdAt DateTime @default(now())
+  @@index([createdAt])
+}
+
+model MediaCleanup {
+  id String @id @default(cuid())
+  publicId String @unique
+  createdAt DateTime @default(now())
+}
+
+// Public assistant configuration and anonymous aggregate quotas. No transcripts.
+model ChatbotSettings {
+  id Int @id @default(1)
+  enabled Boolean @default(false)
+  model String @default("openai/gpt-oss-20b")
+  dailyRequests Int @default(100)
+  dailyBudgetMicros Int @default(1000000)
+  updatedAt DateTime @updatedAt
+}
+model ChatbotFaq {
+  id String @id @default(cuid())
+  question String
+  answer String
+  path String
+  published Boolean @default(false)
+  validUntil DateTime
+  version Int @default(0)
+  updatedAt DateTime @updatedAt
+}
+model ChatbotUsage {
+  day String @id
+  requests Int @default(0)
+  reservedMicros Int @default(0)
+}

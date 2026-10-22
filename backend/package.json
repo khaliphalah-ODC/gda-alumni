@@ -1,0 +1,73 @@
+{
+  "name": "gray-d-allison-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Gray D. Allison Alumni and Information Management System API",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/src/server.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:seed": "tsx prisma/seed.ts",
+    "test": "vitest run",
+    "smtp:check": "tsx scripts/check-smtp.ts",
+    "db:check": "tsx scripts/check-database.ts",
+    "prisma:deploy": "prisma migrate deploy",
+    "super-admin:bootstrap": "tsx scripts/bootstrap-super-admin.ts",
+    "media:cleanup": "tsx scripts/retry-media-cleanup.ts",
+    "media:check": "tsx scripts/check-media.ts",
+    "super-admin:bootstrap:production": "node dist/scripts/bootstrap-super-admin.js",
+    "smtp:check:production": "node dist/scripts/check-smtp.js",
+    "media:check:production": "node dist/scripts/check-media.js",
+    "media:cleanup:production": "node dist/scripts/retry-media-cleanup.js",
+    "chatbot:evaluate": "tsx scripts/evaluate-chatbot.ts"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.7.0",
+    "bcrypt": "^6.0.0",
+    "cloudinary": "^2.11.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^2.4.0",
+    "nodemailer": "^10.1.2",
+    "sharp": "^0.35.5",
+    "zod": "^3.24.3",
+    "prisma": "^6.19.0"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/cookie-parser": "^1.4.9",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.1",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/multer": "^2.3.0",
+    "@types/node": "^22.15.3",
+    "@types/nodemailer": "^8.0.2",
+    "@types/supertest": "^6.0.2",
+    "supertest": "^7.3.1",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.3",
+    "vitest": "^4.1.11"
+  },
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "overrides": {
+    "@prisma/config": {
+      "deepmerge-ts": "^8.0.0"
+    }
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  }
+}

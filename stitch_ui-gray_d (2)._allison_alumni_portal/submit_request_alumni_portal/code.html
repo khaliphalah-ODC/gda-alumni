@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Document Request - Gray D. Allison High School</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed-variant": "#474747",
+                    "inverse-primary": "#b4c7ec",
+                    "primary-fixed-dim": "#b4c7ec",
+                    "on-tertiary": "#ffffff",
+                    "on-primary-container": "#8396b8",
+                    "on-secondary-fixed": "#1b1b1b",
+                    "inverse-surface": "#303033",
+                    "on-error-container": "#93000a",
+                    "on-secondary": "#ffffff",
+                    "surface": "#fbf9fb",
+                    "surface-container-high": "#e9e7ea",
+                    "on-tertiary-fixed": "#281900",
+                    "surface-tint": "#4d5f7f",
+                    "on-primary-fixed-variant": "#354766",
+                    "on-secondary-container": "#646464",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-dim": "#dbd9dc",
+                    "outline": "#75777e",
+                    "on-surface": "#1b1b1e",
+                    "error": "#ba1a1a",
+                    "tertiary-fixed": "#ffdeab",
+                    "surface-container-low": "#f5f3f6",
+                    "secondary-fixed-dim": "#c6c6c6",
+                    "on-tertiary-container": "#b0915d",
+                    "tertiary-fixed-dim": "#e5c18a",
+                    "surface-variant": "#e4e2e5",
+                    "on-primary": "#ffffff",
+                    "inverse-on-surface": "#f2f0f3",
+                    "secondary": "#5e5e5e",
+                    "on-surface-variant": "#44474d",
+                    "error-container": "#ffdad6",
+                    "primary-container": "#1b2e4b",
+                    "surface-bright": "#fbf9fb",
+                    "background": "#fbf9fb",
+                    "surface-container-highest": "#e4e2e5",
+                    "tertiary": "#251700",
+                    "secondary-container": "#e2e2e2",
+                    "on-error": "#ffffff",
+                    "primary-fixed": "#d6e3ff",
+                    "on-background": "#1b1b1e",
+                    "surface-container": "#efedf0",
+                    "tertiary-container": "#3f2a01",
+                    "primary": "#031935",
+                    "secondary-fixed": "#e2e2e2",
+                    "outline-variant": "#c4c6ce",
+                    "on-primary-fixed": "#061b38",
+                    "on-tertiary-fixed-variant": "#5b4317"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "margin-desktop": "32px",
+                    "sidebar-width": "280px",
+                    "container-max": "1280px",
+                    "unit": "4px",
+                    "margin-mobile": "16px",
+                    "stack-gap": "16px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Public Sans"],
+                    "label-sm": ["Public Sans"],
+                    "body-md": ["Public Sans"],
+                    "h1": ["Public Sans"],
+                    "h2": ["Public Sans"],
+                    "caption": ["Public Sans"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "label-sm": ["14px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "h1": ["36px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "h2": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "caption": ["12px", {"lineHeight": "1.4", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface antialiased">
+<!-- Dashboard Shell Layout -->
+<div class="flex min-h-screen">
+<!-- SideNavBar Component -->
+<aside class="fixed left-0 top-0 h-full w-[280px] bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 z-50">
+<div class="flex flex-col h-full">
+<!-- Brand Header -->
+<div class="px-6 py-8">
+<div class="flex items-center gap-3 mb-6">
+<div class="w-10 h-10 bg-primary-container flex items-center justify-center rounded-lg shadow-sm">
+<span class="material-symbols-outlined text-white" data-icon="school" style="font-variation-settings: 'FILL' 1;">school</span>
+</div>
+<div>
+<h1 class="text-lg font-black text-[#1B2E4B] dark:text-white leading-tight">GDA Management</h1>
+<p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Ministry of Defense</p>
+</div>
+</div>
+</div>
+<!-- Navigation Tabs -->
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-6 py-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors duration-200 font-sans text-[13px] font-semibold" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                        Dashboard
+                    </a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-6 py-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors duration-200 font-sans text-[13px] font-semibold" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+                        Alumni Management
+                    </a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-6 py-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors duration-200 font-sans text-[13px] font-semibold" href="#">
+<span class="material-symbols-outlined" data-icon="campaign">campaign</span>
+                        Announcements
+                    </a>
+<a class="flex items-center gap-3 bg-slate-50 dark:bg-slate-800 text-[#1B2E4B] border-l-4 border-[#1B2E4B] px-6 py-3 font-sans text-[13px] font-semibold transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="description" style="font-variation-settings: 'FILL' 1;">description</span>
+                        Document Requests
+                    </a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-6 py-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors duration-200 font-sans text-[13px] font-semibold" href="#">
+<span class="material-symbols-outlined" data-icon="auto_stories">auto_stories</span>
+                        Stories &amp; Events
+                    </a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-6 py-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors duration-200 font-sans text-[13px] font-semibold" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                        Settings
+                    </a>
+</nav>
+<!-- Footer Tabs -->
+<div class="p-4 border-t border-slate-100 dark:border-slate-800">
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors duration-200 font-sans text-[13px] font-semibold" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+                        Support
+                    </a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors duration-200 font-sans text-[13px] font-semibold" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+                        Logout
+                    </a>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-[280px] flex-1 bg-[#F8FAFC]">
+<!-- Top Header Area -->
+<header class="bg-white px-8 py-6 border-b border-slate-200 flex justify-between items-center sticky top-0 z-40">
+<div>
+<h2 class="font-h2 text-h2 text-primary">Document Request Form</h2>
+<p class="font-caption text-caption text-secondary mt-1">Official Alumni Records Department — Ministry of National Defense</p>
+</div>
+<div class="flex items-center gap-4">
+<div class="text-right">
+<p class="font-label-sm text-label-sm text-on-surface">John Doe</p>
+<p class="font-caption text-caption text-secondary text-[11px]">Class of 1994</p>
+</div>
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center border border-outline-variant overflow-hidden">
+<img alt="User Avatar" class="w-full h-full object-cover" data-alt="A professional studio portrait of a middle-aged Liberian man wearing a formal suit and tie, set against a neutral gray background. The lighting is soft and corporate, maintaining a high-contrast and professional aesthetic consistent with a government portal. The overall tone is serious, prestigious, and secure." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6HmL6rpRSSkBDfjg5xf62fH5xYRDe2A9mltmDaxFSRjp3WmBL0VbXHsfsZBgmcf8J8weE_Orn7mQKPndfKJ5CIsdw05OjC7fCdg5RQeC9EHbeYvvXxNDRebtZkQ-OErNusZBEdvKVs9rxbnVrlPGzy0Xk61OnktNuCwK4x2J2q-ROEdVoeeGG2tg0UAse8ebV0rOPhIpFx83EAzCku2GQc9mNwEUzd2B6n85FLdVDoRnumAhWlMkzC8eRmd4xF6s6PCiaaqkzpxKH"/>
+</div>
+</div>
+</header>
+<div class="p-8 max-w-6xl mx-auto">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Left: Request Form Container -->
+<div class="lg:col-span-2 space-y-6">
+<div class="bg-white p-8 border border-slate-200 shadow-sm rounded-lg">
+<form action="#" class="space-y-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Request Type -->
+<div class="md:col-span-2">
+<label class="block font-label-sm text-label-sm text-on-surface mb-2">Request Type</label>
+<select class="w-full p-3 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary-container focus:border-primary-container transition-all text-body-md font-body-md">
+<option value="">Select document type...</option>
+<option value="Certificate">Certificate</option>
+<option value="Transcript">Transcript</option>
+<option value="Diploma">Diploma</option>
+<option value="WAEC Certificate">WAEC Certificate</option>
+<option value="WASSCE Certificate">WASSCE Certificate</option>
+</select>
+</div>
+<!-- Full Name -->
+<div class="md:col-span-2">
+<label class="block font-label-sm text-label-sm text-on-surface mb-2">Full Name at Graduation</label>
+<input class="w-full p-3 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary-container focus:border-primary-container transition-all text-body-md font-body-md" placeholder="As it appears on school records" type="text"/>
+</div>
+<!-- Graduation Year -->
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface mb-2">Graduation Year</label>
+<input class="w-full p-3 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary-container focus:border-primary-container transition-all text-body-md font-body-md" placeholder="YYYY" type="number"/>
+</div>
+<!-- Student ID -->
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface mb-2">Student ID / Index Number</label>
+<input class="w-full p-3 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary-container focus:border-primary-container transition-all text-body-md font-body-md" placeholder="e.g. GDA-0000" type="text"/>
+</div>
+<!-- Contact Phone -->
+<div class="md:col-span-2">
+<label class="block font-label-sm text-label-sm text-on-surface mb-2">Contact Phone</label>
+<input class="w-full p-3 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary-container focus:border-primary-container transition-all text-body-md font-body-md" placeholder="+231 ..." type="tel"/>
+</div>
+<!-- Purpose of Request -->
+<div class="md:col-span-2">
+<label class="block font-label-sm text-label-sm text-on-surface mb-2">Purpose of Request</label>
+<textarea class="w-full p-3 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary-container focus:border-primary-container transition-all text-body-md font-body-md" placeholder="Explain the intended use of this document (e.g., Employment, University Admission)" rows="4"></textarea>
+</div>
+</div>
+<div class="pt-4">
+<button class="w-full bg-[#1B2E4B] hover:bg-primary-container text-white font-label-sm py-4 rounded-lg transition-all shadow-md flex items-center justify-center gap-2" type="submit">
+<span class="material-symbols-outlined" data-icon="send">send</span>
+                                        Submit Document Request
+                                    </button>
+<p class="text-center font-caption text-[11px] text-slate-400 mt-4 italic uppercase tracking-wider">
+                                        All requests are subject to verification by the Ministry of Defense.
+                                    </p>
+</div>
+</form>
+</div>
+</div>
+<!-- Right: Info Sidebars -->
+<div class="space-y-6">
+<!-- Documents Required Info Box -->
+<div class="bg-primary-container text-white p-6 rounded-lg shadow-sm">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-tertiary-fixed-dim" data-icon="info">info</span>
+<h3 class="font-h2 text-[18px] tracking-tight">Documents Required</h3>
+</div>
+<ul class="space-y-4 font-body-md text-[14px] opacity-90 leading-relaxed">
+<li class="flex gap-3">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span>
+                                    Valid Government-issued ID (Passport, Voter ID, or NIR Card)
+                                </li>
+<li class="flex gap-3">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span>
+                                    Passport-sized photograph (high resolution)
+                                </li>
+<li class="flex gap-3">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span>
+                                    Proof of payment (MOD Official Receipt)
+                                </li>
+<li class="flex gap-3">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span>
+                                    Clearance from the Alumni Secretariat
+                                </li>
+</ul>
+</div>
+<!-- Processing Time Card -->
+<div class="bg-white border border-slate-200 p-6 rounded-lg shadow-sm">
+<h3 class="font-label-sm text-primary mb-3">Processing Timeline</h3>
+<div class="flex items-center gap-4 py-3 border-b border-slate-50">
+<span class="material-symbols-outlined text-secondary" data-icon="timer">timer</span>
+<div>
+<p class="font-label-sm text-[13px]">Standard Processing</p>
+<p class="font-caption text-secondary">5 - 10 Business Days</p>
+</div>
+</div>
+<div class="flex items-center gap-4 py-3">
+<span class="material-symbols-outlined text-secondary" data-icon="verified_user">verified_user</span>
+<div>
+<p class="font-label-sm text-[13px]">Verification Window</p>
+<p class="font-caption text-secondary">Ministry of Defense HQ</p>
+</div>
+</div>
+</div>
+<!-- Contact Support Card -->
+<div class="bg-surface-container-low border border-outline-variant border-dashed p-6 rounded-lg">
+<p class="font-label-sm text-on-surface mb-1">Need Assistance?</p>
+<p class="font-caption text-secondary mb-4">Visit the Records Office at Gray D. Allison High School Compound.</p>
+<a class="text-primary-container font-label-sm text-sm hover:underline flex items-center gap-2" href="mailto:records@gdahs.edu.lr">
+<span class="material-symbols-outlined text-sm" data-icon="mail">mail</span>
+                                records@gdahs.edu.lr
+                            </a>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Section -->
+<footer class="mt-auto w-full py-8 px-8 bg-slate-50 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="font-sans text-xs uppercase tracking-wider text-slate-500">© 2024 Gray D. Allison High School. Ministry of National Defense, Liberia.</p>
+<div class="flex gap-6">
+<a class="font-sans text-xs uppercase tracking-wider text-slate-500 hover:underline" href="#">Privacy Policy</a>
+<a class="font-sans text-xs uppercase tracking-wider text-slate-500 hover:underline" href="#">Terms of Service</a>
+<a class="font-sans text-xs uppercase tracking-wider text-slate-500 hover:underline" href="#">Staff Portal</a>
+</div>
+</footer>
+</main>
+</div>
+</body></html>

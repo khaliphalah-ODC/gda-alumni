@@ -1,0 +1,131 @@
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+@layer base {
+  *, ::before, ::after { border-color: #e5e7eb; }
+  body { @apply m-0 bg-background font-sans text-on-surface antialiased; }
+  button, input, select, textarea { font: inherit; }
+  button { @apply disabled:cursor-not-allowed disabled:opacity-60; }
+}
+
+@layer components {
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .field-label { @apply mb-2 block text-label-sm text-on-surface-variant; }
+  .field-input { @apply w-full rounded border border-outline-variant bg-white px-4 py-3 text-base outline-none transition focus:border-primary-container focus:ring-1 focus:ring-primary-container; }
+  .primary-button { @apply inline-flex items-center justify-center gap-2 rounded bg-primary-container px-6 py-3 text-label-sm uppercase tracking-wide text-white transition hover:opacity-90; }
+  .secondary-button { @apply inline-flex items-center justify-center gap-2 rounded border border-primary-container bg-white px-6 py-3 text-label-sm text-primary-container transition hover:bg-slate-50; }
+}
+
+@layer base {
+  html { overflow-wrap: anywhere; }
+  input, select, textarea { min-width: 0; }
+  a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px solid #b0915d; outline-offset: 4px; }
+  main:focus { outline: none; }
+  summary { padding-block: .5rem; }
+}
+.skip-link { position: fixed; top: .5rem; left: .5rem; z-index: 100; padding: .75rem 1rem; background: white; color: #031935; transform: translateY(-200%); }
+.skip-link:focus { transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+
+/* Supplied Home/About design tokens, scoped to the restored public pages. */
+.reference-ui { --radius-sm: 0.125rem; --radius: 0.125rem; --radius-lg: 0.25rem; --radius-xl: 0.5rem; --radius-full: 0.75rem; }
+.reference-ui .font-h1 { font-size: 36px; line-height: 1.2; letter-spacing: -.02em; font-weight: 700; }
+.reference-ui .font-h2 { font-size: 24px; line-height: 1.3; letter-spacing: -.01em; font-weight: 600; }
+.reference-ui .font-label-sm { font-size: 14px; line-height: 1.2; font-weight: 600; }
+.reference-ui .font-body-lg { font-size: 18px; line-height: 1.6; font-weight: 400; }
+.reference-ui .font-body-md { font-size: 16px; line-height: 1.5; font-weight: 400; }
+.reference-ui .font-caption { font-size: 12px; line-height: 1.4; font-weight: 400; }
+.reference-ui .text-\[18px\] { font-size: 18px; }
+.reference-ui .text-\[32px\] { font-size: 32px; }
+.reference-ui .text-\[48px\] { font-size: 48px; }
+@media (min-width: 768px) { .reference-ui .md\:text-\[56px\] { font-size: 56px; } }
+@media (max-width: 639px) {
+ .reference-ui h1.text-\[48px\] { font-size: 36px; }
+ .reference-ui .md\:col-span-2.flex.items-center { flex-direction: column; align-items: stretch; }
+ .reference-ui .md\:col-span-2.flex.items-center > .w-48 { width: 100%; height: 160px; }
+ .reference-ui .mt-8.flex.gap-4 { flex-wrap: wrap; }
+}
+
+.reference-ui .font-h2.text-lg { font-size: 18px; }
+.reference-ui .leading-\[1\.1\] { line-height: 1.1; }
+
+/* Dashboard tokens measured from the supplied dashboard/registry documents. */
+.dashboard-ui { --dashboard-sidebar: 280px; --dashboard-gutter: 24px; --dashboard-margin: 32px; --dashboard-surface: #ffffff; --dashboard-canvas: #f8fafc; }
+@layer components {
+ .dashboard-action { @apply inline-flex items-center justify-center gap-2 rounded border border-primary-container bg-white px-5 py-2.5 text-label-sm text-primary-container transition hover:bg-slate-50; }
+ .dashboard-action-primary { @apply bg-primary-container text-white hover:bg-primary; }
+}
+.dashboard-ui .material-symbols-outlined.text-\[240px\] { font-size: 240px; }
+.dashboard-ui .material-symbols-outlined.text-sm { font-size: 14px; }
+.dashboard-ui .material-symbols-outlined.text-xl { font-size: 20px; }
+@media (min-width: 640px) {
+ .request-progress-list { position: relative; }
+ .request-progress-list::before { content: ''; position: absolute; top: 36px; left: 10%; right: 10%; height: 2px; background: #f1f5f9; }
+}
+.dashboard-ui .material-symbols-outlined.flex { display: flex; }
+/* Reference form dimensions; scope prevents changes to dashboard/public controls elsewhere. */
+.reference-ui .reference-crest { display: flex; font-size: 36px; }
+.reference-ui .material-symbols-outlined.inline-flex { display: inline-flex; }
+.reference-ui .material-symbols-outlined.text-4xl { font-size: 36px; }
+.request-reference .field-input { border-radius: 4px; padding: 12px; }
+.request-reference .field-label { color: #1b1b1e; }
+.reference-ui .story-card-image img { filter: grayscale(1); transition: filter .5s; }
+.reference-ui article:hover .story-card-image img { filter: grayscale(0); }
+.reference-ui .material-symbols-outlined.text-xl { font-size: 20px; }
+.reference-ui .material-symbols-outlined.text-lg { font-size: 18px; }
+.reference-ui .material-symbols-outlined.text-sm { font-size: 14px; }
+/* The supplied form themes define `full` as 0.75rem, rather than an unlimited radius. */
+.form-reference .rounded-full, .request-reference .rounded-full { border-radius: 12px; }
+
+/* Shared photograph/carousel treatments retain the existing institutional palette. */
+html { scrollbar-gutter: stable; }
+.school-photo { max-width: 100%; }
+.hero-copy a, .hero-copy button { pointer-events: auto; }
+.hero-shade { background: linear-gradient(90deg, #031935ed 0%, #031935b3 45%, #03193533 100%); }
+.site-footer { color-scheme: light; }
+.hero-photographs .school-photo { width: 70%; margin-left: auto; }
+.carousel-control { display: inline-flex; min-width: 44px; min-height: 44px; align-items: center; justify-content: center; border: 1px solid currentColor; border-radius: 4px; background: transparent; }
+.carousel-control:hover:enabled { background: #ffffff15; }
+.hero-dot { display: grid; width: 30px; height: 44px; place-items: center; }
+.hero-dot span { width: 7px; height: 7px; border-radius: 50%; transition: background-color .2s; }
+.content-carousel { --swiper-theme-color: currentColor; --swiper-navigation-size: 14px; --swiper-navigation-top-offset: auto; --swiper-pagination-bottom: 15px; min-width: 0; }
+.content-carousel > .swiper, .lightbox-carousel { padding: 8px 4px 64px; margin: -8px -4px 0; }
+.content-carousel .swiper-slide { height: auto; min-width: 0; }
+.content-carousel .swiper.swiper-horizontal > .swiper-button-prev, .content-carousel .swiper.swiper-horizontal > .swiper-button-next, .lightbox-carousel.swiper-horizontal > .swiper-button-prev, .lightbox-carousel.swiper-horizontal > .swiper-button-next { top: auto; bottom: 4px; width: 44px; height: 44px; margin: 0; padding: 14px; border: 1px solid currentColor; border-radius: 4px; background: transparent; }
+.content-carousel .swiper-button-prev { left: 4px; }
+.content-carousel .swiper-button-next { right: 4px; }
+.content-carousel .swiper.swiper-horizontal > .swiper-pagination, .lightbox-carousel.swiper-horizontal > .swiper-pagination { bottom: 15px; left: 56px; width: calc(100% - 112px); pointer-events: none; }
+.content-carousel .swiper-pagination-bullet { width: 8px; height: 8px; background: currentColor; opacity: .3; pointer-events: auto; }
+.content-carousel .swiper-pagination-bullet-active { opacity: 1; }
+.content-carousel .swiper-button-lock, .content-carousel .swiper-pagination-lock { display: none; }
+.content-carousel .swiper-button-disabled { opacity: .3; }
+.content-carousel .swiper-notification { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+.achievement-scene { perspective: 1000px; }
+.achievement-faces { position: relative; min-height: 360px; height: 100%; transform-style: preserve-3d; }
+.achievement-face { backface-visibility: hidden; height: 100%; }
+.achievement-back { position: absolute; inset: 0; transform: rotateY(180deg); overflow-y: auto; overscroll-behavior: contain; background: white; }
+.achievement-card { min-height: 450px; }
+.gallery-dialog { max-width: min(1100px, calc(100vw - 24px)); width: 100%; max-height: calc(100dvh - 24px); padding: 0; margin: auto; border: 1px solid #ffffff40; border-radius: 8px; color: white; background: #031935; overflow-y: auto; }
+.gallery-dialog::backdrop { background: #031935e8; }
+.gallery-dialog-content { min-width: 0; }
+.gallery-dialog .preview-photo { height: min(65dvh, 680px); }
+.gallery-dialog .lightbox-carousel { margin: 0; }
+.gallery-dialog .swiper-pagination { bottom: 15px; }
+.milestone-marker { transition: box-shadow .25s; }
+li:hover > .milestone-marker { box-shadow: 0 0 0 4px #03193515; }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+ .primary-button, .secondary-button, .dashboard-action { transition: transform .18s, background-color .18s, opacity .18s; }
+ .primary-button:hover:enabled, .secondary-button:hover:enabled, .dashboard-action:hover:enabled { transform: translateY(-1px); }
+ .primary-button:active:enabled, .secondary-button:active:enabled { transform: scale(.99); }
+ header nav a { transition: color .18s, opacity .18s; }
+ header nav a:hover { text-decoration: underline; text-underline-offset: 5px; }
+}
+@media (max-width: 767px) {
+ .hero-photographs .school-photo { width: 100%; }
+ .hero-shade { background: linear-gradient(180deg, #031935cc, #031935b3 65%, #03193580); }
+ .hero-copy { padding-bottom: 112px; }
+}
+@media (prefers-reduced-motion: reduce) {
+ .motion-card { transform: none !important; opacity: 1 !important; }
+ .milestone-marker { transition: none; }
+}

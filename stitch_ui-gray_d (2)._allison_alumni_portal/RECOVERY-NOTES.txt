@@ -1,0 +1,7 @@
+Recovery after the folder cleanup
+
+The ten original design HTML files, their ten screen.png files, and DESIGN.md were recovered from the saved Documents export. The home HTML includes the saved editor-history change to its testimonial name and graduation year.
+
+Login and Registration code.html were recovered from local rendered-preview caches. They preserve the design markup and use recovered-assets CSS plus the existing frontend/public images and fonts. These two files are recovery copies, not verified byte-for-byte copies of the deleted originals. Their screen.png files are recreated from these recovered pages, not recovered original screenshots.
+
+The project-root images folder contains all 27 recorded photo filenames. Twenty-six full-size JPEG payloads were recovered from the browser cache and matched their recorded download sizes. image1.jpg could only be recovered as a 588 x 403 cached copy (99,821 bytes); its original 469,619-byte download was not recoverable, and the original download URL now returns HTTP 403. Replace this one file if you still have the original elsewhere.

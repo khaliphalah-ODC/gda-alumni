@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Alumni Portal | Gray D. Allison HS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed-variant": "#474747",
+                        "inverse-primary": "#b4c7ec",
+                        "primary-fixed-dim": "#b4c7ec",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#8396b8",
+                        "on-secondary-fixed": "#1b1b1b",
+                        "inverse-surface": "#303033",
+                        "on-error-container": "#93000a",
+                        "on-secondary": "#ffffff",
+                        "surface": "#fbf9fb",
+                        "surface-container-high": "#e9e7ea",
+                        "on-tertiary-fixed": "#281900",
+                        "surface-tint": "#4d5f7f",
+                        "on-primary-fixed-variant": "#354766",
+                        "on-secondary-container": "#646464",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-dim": "#dbd9dc",
+                        "outline": "#75777e",
+                        "on-surface": "#1b1b1e",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#ffdeab",
+                        "surface-container-low": "#f5f3f6",
+                        "secondary-fixed-dim": "#c6c6c6",
+                        "on-tertiary-container": "#b0915d",
+                        "tertiary-fixed-dim": "#e5c18a",
+                        "surface-variant": "#e4e2e5",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#f2f0f3",
+                        "secondary": "#5e5e5e",
+                        "on-surface-variant": "#44474d",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#1b2e4b",
+                        "surface-bright": "#fbf9fb",
+                        "background": "#fbf9fb",
+                        "surface-container-highest": "#e4e2e5",
+                        "tertiary": "#251700",
+                        "secondary-container": "#e2e2e2",
+                        "on-error": "#ffffff",
+                        "primary-fixed": "#d6e3ff",
+                        "on-background": "#1b1b1e",
+                        "surface-container": "#efedf0",
+                        "tertiary-container": "#3f2a01",
+                        "primary": "#031935",
+                        "secondary-fixed": "#e2e2e2",
+                        "outline-variant": "#c4c6ce",
+                        "on-primary-fixed": "#061b38",
+                        "on-tertiary-fixed-variant": "#5b4317"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "margin-desktop": "32px",
+                        "sidebar-width": "280px",
+                        "container-max": "1280px",
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "stack-gap": "16px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Public Sans"],
+                        "label-sm": ["Public Sans"],
+                        "body-md": ["Public Sans"],
+                        "h1": ["Public Sans"],
+                        "h2": ["Public Sans"],
+                        "caption": ["Public Sans"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-sm": ["14px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "h1": ["36px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "h2": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "caption": ["12px", {"lineHeight": "1.4", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md">
+<!-- SideNavBar (Authority: JSON Component 2) -->
+<aside class="fixed left-0 top-0 h-full w-[280px] bg-white border-r border-slate-200 flex flex-col z-50">
+<!-- Header -->
+<div class="px-6 py-8 flex flex-col gap-2">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary-container flex items-center justify-center rounded">
+<span class="material-symbols-outlined text-white" data-icon="school">school</span>
+</div>
+<h1 class="text-lg font-black text-[#1B2E4B] tracking-tight">GDA Management</h1>
+</div>
+<p class="text-[11px] uppercase tracking-widest text-slate-400 font-bold px-1">Ministry of Defense</p>
+</div>
+<!-- Navigation Tabs -->
+<nav class="flex-1 flex flex-col px-2">
+<!-- Dashboard Active (Semantic Mapping) -->
+<a class="flex items-center gap-3 bg-slate-50 text-[#1B2E4B] border-l-4 border-[#1B2E4B] px-4 py-3 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+<span class="font-sans text-[13px] font-semibold">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 px-4 py-3 hover:bg-slate-50 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="person">person</span>
+<span class="font-sans text-[13px] font-semibold">Profile</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 px-4 py-3 hover:bg-slate-50 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="description">description</span>
+<span class="font-sans text-[13px] font-semibold">My Requests</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 px-4 py-3 hover:bg-slate-50 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="add_circle">add_circle</span>
+<span class="font-sans text-[13px] font-semibold">Submit Request</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 px-4 py-3 hover:bg-slate-50 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="auto_stories">auto_stories</span>
+<span class="font-sans text-[13px] font-semibold">My Stories</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 px-4 py-3 hover:bg-slate-50 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="campaign">campaign</span>
+<span class="font-sans text-[13px] font-semibold">Events</span>
+</a>
+</nav>
+<!-- Footer Tabs -->
+<div class="border-t border-slate-100 p-2">
+<a class="flex items-center gap-3 text-slate-500 px-4 py-3 hover:bg-slate-50 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="help">help</span>
+<span class="font-sans text-[13px] font-semibold">Support</span>
+</a>
+<a class="flex items-center gap-3 text-error px-4 py-3 hover:bg-error/5 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="logout">logout</span>
+<span class="font-sans text-[13px] font-semibold">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-[280px] min-h-screen">
+<!-- Top Bar -->
+<header class="h-16 flex justify-between items-center px-gutter bg-white border-b border-slate-100">
+<div class="flex items-center gap-2">
+<span class="text-slate-400 font-label-sm uppercase tracking-tighter">Portal</span>
+<span class="material-symbols-outlined text-slate-300 text-sm" data-icon="chevron_right">chevron_right</span>
+<span class="text-primary font-label-sm font-bold">Dashboard Overview</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant p-2 hover:bg-surface-container rounded-full" data-icon="notifications">notifications</button>
+<div class="flex items-center gap-3 pl-4 border-l border-slate-200">
+<div class="text-right">
+<p class="font-label-sm text-primary block">John K. Doe</p>
+<p class="text-[11px] text-on-surface-variant block">Class of 2012</p>
+</div>
+<img alt="User Profile" class="w-10 h-10 rounded shadow-sm border border-slate-200" data-alt="A professional headshot of a middle-aged Liberian man wearing a formal suit, set against a clean white studio background. The lighting is soft and professional, reflecting the serious and disciplined institutional tone of the Ministry of National Defense. High clarity and corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxzElESR1giEiQycAXE2hmfqOWKsZbdDZQK5aYTJCdyKt2vWVEFkJioLcVtKA4KYwVEoUThTRqiG112dC3jiX_Zpw_FPKSl8_u77B5cFAuG6IcG_a4a3HFLNo7gtdAbUy0QBJK95nkiAkkeIlr7TDRExwoE03uesmhDJbAPqVbK4hmxYhCMTiBiIZEs7lFamTzTPwcqofHkIUdKxaX2iWQxZhTtdcxIyxUQhiYp1C3C7SMopHJdtaPhnxa_awW2SfvuT6iK5lpwc5B"/>
+</div>
+</div>
+</header>
+<div class="p-gutter max-w-container-max mx-auto space-y-gutter">
+<!-- Welcome Section (Asymmetric Bento Entry) -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-stack-gap">
+<div class="lg:col-span-8 bg-primary-container p-8 rounded-lg relative overflow-hidden flex flex-col justify-between min-h-[240px]">
+<div class="relative z-10">
+<h2 class="font-h1 text-white mb-2">Welcome back, John.</h2>
+<p class="text-on-primary-container max-w-md font-body-md">Your contribution to the Gray D. Allison legacy continues here. Stay updated with your alma mater and manage your professional documents with ease.</p>
+</div>
+<div class="relative z-10 flex gap-4 mt-6">
+<button class="bg-white text-primary px-6 py-2 rounded font-label-sm hover:bg-slate-100 transition-colors">Apply for Documents</button>
+<button class="border border-white/30 text-white px-6 py-2 rounded font-label-sm hover:bg-white/10 transition-colors">View Alumni Network</button>
+</div>
+<!-- Decorative Crest Element -->
+<div class="absolute -bottom-10 -right-10 opacity-10 pointer-events-none">
+<span class="material-symbols-outlined text-[240px] text-white" data-icon="shield">shield</span>
+</div>
+</div>
+<!-- Quick Action Bento Piece -->
+<div class="lg:col-span-4 grid grid-rows-2 gap-stack-gap">
+<div class="bg-white border border-slate-200 p-6 rounded-lg hover:border-primary/30 transition-all cursor-pointer group">
+<div class="flex items-center justify-between mb-4">
+<div class="p-2 bg-tertiary-container rounded">
+<span class="material-symbols-outlined text-on-tertiary-container" data-icon="share">share</span>
+</div>
+<span class="material-symbols-outlined text-slate-300 group-hover:text-primary" data-icon="arrow_forward">arrow_forward</span>
+</div>
+<p class="font-h2 text-primary text-lg mb-1">Share Success Story</p>
+<p class="text-caption text-on-surface-variant">Inspire current students with your professional journey.</p>
+</div>
+<div class="bg-white border border-slate-200 p-6 rounded-lg hover:border-primary/30 transition-all cursor-pointer group">
+<div class="flex items-center justify-between mb-4">
+<div class="p-2 bg-secondary-container rounded">
+<span class="material-symbols-outlined text-on-secondary-container" data-icon="description">description</span>
+</div>
+<span class="material-symbols-outlined text-slate-300 group-hover:text-primary" data-icon="arrow_forward">arrow_forward</span>
+</div>
+<p class="font-h2 text-primary text-lg mb-1">Request Transcript</p>
+<p class="text-caption text-on-surface-variant">Fast-track your educational and career document needs.</p>
+</div>
+</div>
+</section>
+<!-- Status Tracker Section -->
+<section class="bg-white border border-slate-200 rounded-lg p-6">
+<div class="flex items-center justify-between mb-8">
+<h3 class="font-h2 text-primary text-xl flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="track_changes">track_changes</span>
+                        Active Document Request Status
+                    </h3>
+<span class="text-caption bg-surface-container-high px-3 py-1 rounded-full text-primary font-bold">ID: #REQ-2024-089</span>
+</div>
+<div class="relative px-8 py-4">
+<!-- Progress Line -->
+<div class="absolute top-1/2 left-0 w-full h-[2px] bg-slate-100 -translate-y-1/2 z-0"></div>
+<div class="absolute top-1/2 left-0 w-2/3 h-[2px] bg-primary-container -translate-y-1/2 z-0"></div>
+<div class="flex justify-between relative z-10">
+<!-- Step 1: Submitted -->
+<div class="flex flex-col items-center gap-3 bg-white px-2">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center border-4 border-white shadow-sm">
+<span class="material-symbols-outlined text-white text-sm" data-icon="check" data-weight="fill">check</span>
+</div>
+<div class="text-center">
+<p class="font-label-sm text-primary">Submitted</p>
+<p class="text-[10px] text-slate-400">Oct 12, 2024</p>
+</div>
+</div>
+<!-- Step 2: In Review -->
+<div class="flex flex-col items-center gap-3 bg-white px-2">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center border-4 border-white shadow-sm">
+<span class="material-symbols-outlined text-white text-sm" data-icon="check" data-weight="fill">check</span>
+</div>
+<div class="text-center">
+<p class="font-label-sm text-primary">In Review</p>
+<p class="text-[10px] text-slate-400">Oct 14, 2024</p>
+</div>
+</div>
+<!-- Step 3: Approved (Active) -->
+<div class="flex flex-col items-center gap-3 bg-white px-2">
+<div class="w-10 h-10 rounded-full bg-white border-2 border-primary-container flex items-center justify-center shadow-sm">
+<div class="w-3 h-3 bg-primary-container rounded-full animate-pulse"></div>
+</div>
+<div class="text-center">
+<p class="font-label-sm text-primary">Approved</p>
+<p class="text-[10px] text-on-surface-variant font-bold">Processing...</p>
+</div>
+</div>
+<!-- Step 4: Ready -->
+<div class="flex flex-col items-center gap-3 bg-white px-2">
+<div class="w-10 h-10 rounded-full bg-slate-50 border-2 border-slate-200 flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-slate-300 text-sm" data-icon="location_on">location_on</span>
+</div>
+<div class="text-center">
+<p class="font-label-sm text-slate-400">Pickup</p>
+<p class="text-[10px] text-slate-300">Pending</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Bottom Layout: Recent Requests & Events -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Recent Requests Table -->
+<div class="lg:col-span-8 bg-white border border-slate-200 rounded-lg overflow-hidden flex flex-col">
+<div class="p-6 border-b border-slate-100 flex justify-between items-center">
+<h3 class="font-h2 text-primary text-xl">My Recent Requests</h3>
+<button class="text-primary font-label-sm hover:underline">View All History</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low">
+<tr>
+<th class="px-6 py-4 font-label-sm text-slate-500 uppercase tracking-wider">Document Type</th>
+<th class="px-6 py-4 font-label-sm text-slate-500 uppercase tracking-wider">Reference ID</th>
+<th class="px-6 py-4 font-label-sm text-slate-500 uppercase tracking-wider">Date Applied</th>
+<th class="px-6 py-4 font-label-sm text-slate-500 uppercase tracking-wider">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400" data-icon="history_edu">history_edu</span>
+<span class="font-medium text-primary">Certified Diploma Copy</span>
+</div>
+</td>
+<td class="px-6 py-4 text-on-surface-variant text-sm">GDA-2024-X992</td>
+<td class="px-6 py-4 text-on-surface-variant text-sm">Oct 12, 2024</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-50 text-blue-700">IN PROGRESS</span>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400" data-icon="article">article</span>
+<span class="font-medium text-primary">Official Transcript</span>
+</div>
+</td>
+<td class="px-6 py-4 text-on-surface-variant text-sm">GDA-2023-V110</td>
+<td class="px-6 py-4 text-on-surface-variant text-sm">Sep 05, 2023</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-green-50 text-green-700">COMPLETED</span>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400" data-icon="assignment_ind">assignment_ind</span>
+<span class="font-medium text-primary">Character Attestation</span>
+</div>
+</td>
+<td class="px-6 py-4 text-on-surface-variant text-sm">GDA-2023-A042</td>
+<td class="px-6 py-4 text-on-surface-variant text-sm">May 15, 2023</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-green-50 text-green-700">COMPLETED</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Upcoming Events Widget -->
+<div class="lg:col-span-4 flex flex-col gap-stack-gap">
+<div class="bg-white border border-slate-200 rounded-lg p-6 flex-1">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-h2 text-primary text-xl">Upcoming Events</h3>
+<button class="material-symbols-outlined text-slate-400 hover:text-primary transition-colors" data-icon="event">event</button>
+</div>
+<div class="space-y-4">
+<!-- Event Item 1 -->
+<div class="flex gap-4 group cursor-pointer">
+<div class="w-12 h-14 bg-surface-container rounded flex flex-col items-center justify-center text-primary border border-slate-100 group-hover:bg-primary-container group-hover:text-white transition-all">
+<span class="text-[10px] uppercase font-black">Nov</span>
+<span class="text-xl font-black">15</span>
+</div>
+<div class="flex-1">
+<p class="font-label-sm text-primary group-hover:text-primary-fixed-dim transition-colors">70th Anniversary Gala</p>
+<p class="text-caption text-on-surface-variant">Main Campus Grounds • 6:00 PM</p>
+</div>
+</div>
+<!-- Event Item 2 -->
+<div class="flex gap-4 group cursor-pointer">
+<div class="w-12 h-14 bg-surface-container rounded flex flex-col items-center justify-center text-primary border border-slate-100 group-hover:bg-primary-container group-hover:text-white transition-all">
+<span class="text-[10px] uppercase font-black">Dec</span>
+<span class="text-xl font-black">02</span>
+</div>
+<div class="flex-1">
+<p class="font-label-sm text-primary group-hover:text-primary-fixed-dim transition-colors">Career Mentorship Day</p>
+<p class="text-caption text-on-surface-variant">Virtual Session • 10:00 AM</p>
+</div>
+</div>
+<!-- Event Item 3 -->
+<div class="flex gap-4 group cursor-pointer">
+<div class="w-12 h-14 bg-surface-container rounded flex flex-col items-center justify-center text-primary border border-slate-100 group-hover:bg-primary-container group-hover:text-white transition-all">
+<span class="text-[10px] uppercase font-black">Jan</span>
+<span class="text-xl font-black">20</span>
+</div>
+<div class="flex-1">
+<p class="font-label-sm text-primary group-hover:text-primary-fixed-dim transition-colors">Alumni Sports Meet</p>
+<p class="text-caption text-on-surface-variant">Monrovia Sports Complex</p>
+</div>
+</div>
+</div>
+<button class="w-full mt-6 py-2 border border-slate-200 rounded font-label-sm text-primary hover:bg-slate-50 transition-colors">Explore All Events</button>
+</div>
+<!-- Security Banner -->
+<div class="bg-on-tertiary-fixed-variant/5 border-l-4 border-[#B0915D] p-4 rounded-r-lg">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-[#B0915D]" data-icon="verified_user">verified_user</span>
+<div>
+<p class="font-label-sm text-primary">Account Verified</p>
+<p class="text-[11px] text-on-surface-variant">Your identity has been confirmed by the GDA Registrar's Office for Ministry document access.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer (Authority: JSON Component 3) -->
+<footer class="mt-gutter w-full py-8 px-gutter flex flex-col md:flex-row justify-between items-center gap-4 border-t border-slate-200 bg-slate-50 text-[#1B2E4B]">
+<div class="flex flex-col gap-1 items-center md:items-start">
+<p class="font-sans text-xs uppercase tracking-wider font-bold">© 2024 Gray D. Allison High School. Ministry of National Defense, Liberia.</p>
+<p class="text-[10px] text-slate-400">Institutional Excellence Since 1954</p>
+</div>
+<div class="flex gap-6">
+<a class="font-sans text-xs uppercase tracking-wider text-slate-500 hover:underline" href="#">Privacy Policy</a>
+<a class="font-sans text-xs uppercase tracking-wider text-slate-500 hover:underline" href="#">Terms of Service</a>
+<a class="font-sans text-xs uppercase tracking-wider text-slate-500 hover:underline" href="#">Ministry of Defense</a>
+<a class="font-sans text-xs uppercase tracking-wider text-slate-500 hover:underline" href="#">Staff Portal</a>
+</div>
+</footer>
+</main>
+</body></html>

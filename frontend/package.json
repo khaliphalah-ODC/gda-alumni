@@ -1,0 +1,44 @@
+{
+  "name": "gray-d-allison-portal",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --build && vite build",
+    "preview": "vite preview",
+    "test": "node ../backend/node_modules/tsx/dist/cli.mjs --test tests/*.test.ts",
+    "test:e2e": "npm run test:e2e:functional",
+    "test:e2e:functional": "playwright test e2e/portal.spec.ts && playwright test e2e/content-images.spec.ts e2e/about-content.spec.ts && playwright test e2e/visual-enhancements.spec.ts && playwright test e2e/public.spec.ts && playwright test e2e/admin.spec.ts e2e/dashboard.spec.ts e2e/forms.spec.ts && playwright test e2e/chatbot.spec.ts",
+    "test:e2e:visual": "playwright test e2e/visual-enhancements.spec.ts",
+    "build:netlify": "npm run build && node ../scripts/netlify-redirects.mjs",
+    "test:e2e:uploads": "playwright test e2e/image-uploads.spec.ts",
+    "test:e2e:excellence": "playwright test --config playwright.excellence.config.ts"
+  },
+  "dependencies": {
+    "axios": "^1.19.0",
+    "motion-v": "^2.8.0",
+    "qrcode": "^1.5.4",
+    "swiper": "^14.3.0",
+    "vue": "^3.5.41",
+    "vue-router": "^4.6.4"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.64.1",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^22.13.14",
+    "@types/qrcode": "^1.5.6",
+    "@vitejs/plugin-vue": "^5.2.3",
+    "autoprefixer": "^10.4.21",
+    "jsqr": "^1.4.0",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.3.3",
+    "typescript": "~5.7.2",
+    "vite": "^6.2.2",
+    "vue-tsc": "^2.2.8"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  }
+}

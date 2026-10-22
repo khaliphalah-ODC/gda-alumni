@@ -1,0 +1,15 @@
+import type { RequestHandler } from 'express';
+import { accountService } from '../services/account.service';
+import { mediaService } from '../services/media.service';
+import { platformService } from '../services/platform.service';
+import { sendSuccess } from '../utils/api-response';
+import { clearAuthenticationCookie } from '../utils/auth-cookie';
+export const me: RequestHandler = async (req, res, next) => { try { return sendSuccess(res, 200, 'Account settings', { ...await accountService.me(req.user!), media: await mediaService.status() }); } catch (e) { next(e); } };
+export const profile: RequestHandler = async (req, res, next) => { try { return sendSuccess(res, 200, 'Profile saved', await accountService.profile(req.user!, req.body)); } catch (e) { next(e); } };
+export const password: RequestHandler = async (req, res, next) => { try { await accountService.password(req.user!, req.body.currentPassword, req.body.newPassword); clearAuthenticationCookie(res); return sendSuccess(res, 200, 'Password updated. Log in again', null); } catch (e) { next(e); } };
+export const email: RequestHandler = async (req, res, next) => { try { await accountService.requestEmail(req.user!, req.body.newEmail, req.body.currentPassword); return sendSuccess(res, 200, 'Check your new email address for a verification link', null); } catch (e) { next(e); } };
+export const verify: RequestHandler = async (req, res, next) => { try { await accountService.verifyEmail(req.body.token); clearAuthenticationCookie(res); return sendSuccess(res, 200, 'Email verified. Log in again with your new email', null); } catch (e) { next(e); } };
+export const activateAdmin: RequestHandler = async (req, res, next) => { try { await platformService.activate(req.body.token, req.body.password); return sendSuccess(res, 201, 'Administrator account activated. You can log in', null); } catch (e) { next(e); } };
+export const image: RequestHandler = async (req, res, next) => { try { await mediaService.upload(req.user!, req.file, req.body.version); return sendSuccess(res, 200, 'Profile picture saved', null); } catch (e) { next(e); } };
+export const imageUrl: RequestHandler = async (req, res, next) => { try { await mediaService.url(req.user!, req.body.url, req.body.version); return sendSuccess(res, 200, 'Profile picture saved', null); } catch (e) { next(e); } };
+export const removeImage: RequestHandler = async (req, res, next) => { try { await mediaService.url(req.user!, null, req.body.version); return sendSuccess(res, 200, 'Profile picture removed', null); } catch (e) { next(e); } };

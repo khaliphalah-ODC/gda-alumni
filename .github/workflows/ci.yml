@@ -1,0 +1,55 @@
+name: Portal checks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: portal_test
+          POSTGRES_PASSWORD: local_ci_password
+          POSTGRES_DB: gda_phase1_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U portal_test -d gda_phase1_test"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      NODE_ENV: test
+      DATABASE_URL: postgresql://portal_test:local_ci_password@127.0.0.1:5432/gda_phase1_test
+      PHASE1_TEST_DATABASE_URL: postgresql://portal_test:local_ci_password@127.0.0.1:5432/gda_phase1_test
+      JWT_SECRET: isolated-ci-only-6e04a9d823c7f105bd8e2a96c0f37451
+      FRONTEND_ORIGIN: http://localhost:3000
+      ACTIVATION_DELIVERY: development
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.20.2'
+          cache: npm
+          cache-dependency-path: |
+            backend/package-lock.json
+            frontend/package-lock.json
+      - run: npm ci --prefix backend
+      - run: npm ci --prefix frontend
+      - run: npm run prisma:generate --prefix backend
+      - run: npm run prisma:deploy --prefix backend
+      - run: npm run build --prefix backend
+      - run: npm test --prefix backend
+      - run: npm test --prefix frontend
+      - run: npm run build --prefix frontend
+      - run: npx playwright install --with-deps chromium
+        working-directory: frontend
+      - run: npm run test:e2e
+        working-directory: frontend
+

@@ -1,0 +1,2 @@
+<template><div class="flex min-h-screen flex-col"><PublicHeader v-if="!hideHeader" /><main id="main-content" tabindex="-1" class="flex-1"><slot /></main><SiteFooter /><SchoolChatbot /></div></template>
+<script setup lang="ts">import SchoolChatbot from '@/components/SchoolChatbot.vue'; import PublicHeader from '@/components/PublicHeader.vue'; import SiteFooter from '@/components/SiteFooter.vue'; defineProps<{ hideHeader?: boolean }>();</script>

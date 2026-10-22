@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gray D. Allison HS | Alumni &amp; Management System</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed-variant": "#474747",
+                        "inverse-primary": "#b4c7ec",
+                        "primary-fixed-dim": "#b4c7ec",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#8396b8",
+                        "on-secondary-fixed": "#1b1b1b",
+                        "inverse-surface": "#303033",
+                        "on-error-container": "#93000a",
+                        "on-secondary": "#ffffff",
+                        "surface": "#fbf9fb",
+                        "surface-container-high": "#e9e7ea",
+                        "on-tertiary-fixed": "#281900",
+                        "surface-tint": "#4d5f7f",
+                        "on-primary-fixed-variant": "#354766",
+                        "on-secondary-container": "#646464",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-dim": "#dbd9dc",
+                        "outline": "#75777e",
+                        "on-surface": "#1b1b1e",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#ffdeab",
+                        "surface-container-low": "#f5f3f6",
+                        "secondary-fixed-dim": "#c6c6c6",
+                        "on-tertiary-container": "#b0915d",
+                        "tertiary-fixed-dim": "#e5c18a",
+                        "surface-variant": "#e4e2e5",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#f2f0f3",
+                        "secondary": "#5e5e5e",
+                        "on-surface-variant": "#44474d",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#1b2e4b",
+                        "surface-bright": "#fbf9fb",
+                        "background": "#fbf9fb",
+                        "surface-container-highest": "#e4e2e5",
+                        "tertiary": "#251700",
+                        "secondary-container": "#e2e2e2",
+                        "on-error": "#ffffff",
+                        "primary-fixed": "#d6e3ff",
+                        "on-background": "#1b1b1e",
+                        "surface-container": "#efedf0",
+                        "tertiary-container": "#3f2a01",
+                        "primary": "#031935",
+                        "secondary-fixed": "#e2e2e2",
+                        "outline-variant": "#c4c6ce",
+                        "on-primary-fixed": "#061b38",
+                        "on-tertiary-fixed-variant": "#5b4317"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "margin-desktop": "32px",
+                        "sidebar-width": "280px",
+                        "container-max": "1280px",
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "stack-gap": "16px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Public Sans"],
+                        "label-sm": ["Public Sans"],
+                        "body-md": ["Public Sans"],
+                        "h1": ["Public Sans"],
+                        "h2": ["Public Sans"],
+                        "caption": ["Public Sans"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-sm": ["14px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "h1": ["36px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "h2": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "caption": ["12px", {"lineHeight": "1.4", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background">
+<!-- TopNavBar -->
+<nav class="bg-[#1B2E4B] dark:bg-slate-950 shadow-sm fixed top-0 w-full z-50">
+<div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+<div class="text-xl font-bold text-white tracking-widest uppercase">Gray D. Allison HS</div>
+<!-- Desktop Navigation -->
+<div class="hidden md:flex items-center gap-8 font-sans text-sm font-medium tracking-tight">
+<a class="text-white border-b-2 border-white pb-1" href="#">Home</a>
+<a class="text-slate-200 hover:text-white transition-colors" href="#">About</a>
+<a class="text-slate-200 hover:text-white transition-colors" href="#">Announcements</a>
+<a class="text-slate-200 hover:text-white transition-colors" href="#">Alumni Stories</a>
+<a class="text-slate-200 hover:text-white transition-colors" href="#">Events</a>
+<a class="text-slate-200 hover:text-white transition-colors" href="#">Contact</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="bg-white text-[#1B2E4B] px-6 py-2 font-label-sm rounded-lg hover:bg-slate-100 transition-all uppercase tracking-wider">Login</button>
+</div>
+</div>
+</nav>
+<main class="mt-[72px]">
+<!-- Hero Section -->
+<section class="relative bg-primary overflow-hidden min-h-[600px] flex items-center">
+<div class="absolute inset-0 opacity-20">
+<img class="w-full h-full object-cover" data-alt="A grand, institutional school building with classical architecture, captured during a bright morning with soft, direct sunlight. The scene is clean and professional, emphasizing the authority and history of the school. The color palette is dominated by deep navy blue shadows and bright silver highlights, reflecting a prestigious government-affiliated high school in Liberia." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5f5fLhgWSmbkFnMb4rv1CUQVT-bdw7Wd4hB3m18den5XzIjv-SndmnIQ0i5fd8SmBv8ZncRBOIPBMO_bsHT2-2Ky-WO2oLA7G3P7PubhR4Sl9sdXe_mD2nLhKu67UyhnLj5FrcxByHzQeQexEB2YtfBVDStl9Q46V8DTyr7VQ0o2qx1j5wU0pCS7OXRa3ChbE1dwNg46ALw0NZrraOO9ys6GPZvPNSmDoyByFSTz24oKu6zsKeJfGC58cMvNYp7GVjFargnpUMTBA"/>
+</div>
+<div class="absolute inset-0 bg-gradient-to-r from-primary via-primary/80 to-transparent"></div>
+<div class="relative max-w-7xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
+<div class="space-y-8">
+<h1 class="font-h1 text-white text-[48px] md:text-[56px] leading-[1.1]">
+                        Gray D. Allison Alumni and Information Management System
+                    </h1>
+<p class="font-body-lg text-slate-300 max-w-lg">
+                        The official gateway for the Gray D. Allison High School community. Securely manage academic records, connect with fellow alumni, and stay updated with school developments under the Ministry of National Defense.
+                    </p>
+<div class="flex flex-col sm:flex-row gap-4">
+<button class="bg-primary-fixed text-on-primary-fixed px-8 py-4 font-label-sm rounded-lg flex items-center justify-center gap-2 hover:bg-white transition-all">
+                            JOIN ALUMNI NETWORK
+                            <span class="material-symbols-outlined">chevron_right</span>
+</button>
+<button class="border border-white/30 bg-white/10 backdrop-blur-md text-white px-8 py-4 font-label-sm rounded-lg hover:bg-white/20 transition-all">
+                            REQUEST DOCUMENT
+                        </button>
+</div>
+</div>
+<div class="hidden md:block">
+<div class="bg-white/5 border border-white/10 p-8 rounded-xl backdrop-blur-xl">
+<div class="grid grid-cols-2 gap-6">
+<div class="space-y-2">
+<p class="text-on-primary-container font-h1 text-[32px]">15k+</p>
+<p class="text-slate-400 font-caption uppercase tracking-widest">Active Alumni</p>
+</div>
+<div class="space-y-2">
+<p class="text-on-primary-container font-h1 text-[32px]">100%</p>
+<p class="text-slate-400 font-caption uppercase tracking-widest">Secure Records</p>
+</div>
+<div class="space-y-2">
+<p class="text-on-primary-container font-h1 text-[32px]">1950</p>
+<p class="text-slate-400 font-caption uppercase tracking-widest">Legacy Founded</p>
+</div>
+<div class="space-y-2">
+<p class="text-on-primary-container font-h1 text-[32px]">24h</p>
+<p class="text-slate-400 font-caption uppercase tracking-widest">Support Access</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Institutional About Preview -->
+<section class="py-24 bg-white">
+<div class="max-w-7xl mx-auto px-6">
+<div class="grid md:grid-cols-2 gap-16 items-center">
+<div class="relative">
+<div class="absolute -top-4 -left-4 w-24 h-24 bg-primary-container/10 -z-10"></div>
+<img class="rounded-lg shadow-2xl border border-outline-variant" data-alt="A professional, close-up photograph of high-quality academic documents, diplomas, and official seals arranged neatly on a dark wooden desk. The lighting is focused and warm, creating a sense of importance and institutional prestige. The aesthetic is clean and corporate, featuring rich paper textures and sharp navy blue ink details." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2SFd79ycJHfz4vOkkD7an-6rgiJVVqgNl0E9dmNGzEU_vsGZuerTDRJcgFjSYh81KFTeoJjwlDeNQBUJSblBauBUnsn6t7Jbl-rphbhzPalgI3D8rjxydbR5noB3tfyvKd5PYKNDejtdcn48t2FRdtZXoAoO8jKV9YMPCJ69G0w8o3q3Fr3MIFWZliEuCu2BYGgQNIlcHgLz77LtSHOoQWUiX6KMOR1mY1B3nGgsHvx0TAIAgvH5oXcqZBLuY3ulvz2Ijn-KXSci7"/>
+</div>
+<div class="space-y-6">
+<div class="flex items-center gap-4">
+<div class="h-[2px] w-12 bg-primary"></div>
+<span class="font-label-sm text-primary uppercase tracking-[0.2em]">Institutional Profile</span>
+</div>
+<h2 class="font-h1 text-primary">A Legacy of Discipline and Excellence</h2>
+<p class="font-body-md text-on-surface-variant">
+                            Founded under the auspices of the Ministry of National Defense, Gray D. Allison High School has stood as a bastion of academic rigor and character building for decades. Our institution is dedicated to nurturing the next generation of Liberian leaders through a curriculum that balances intellectual pursuit with civic responsibility.
+                        </p>
+<p class="font-body-md text-on-surface-variant">
+                            The Alumni &amp; Information Management System (AIMS) is our digital leap forward, ensuring that every graduate remains connected to their alma mater and has seamless access to their essential academic credentials.
+                        </p>
+<button class="text-primary font-label-sm border-b-2 border-primary pb-1 hover:text-on-primary-container hover:border-on-primary-container transition-colors">LEARN MORE ABOUT OUR MISSION</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Services Bento Grid -->
+<section class="py-24 bg-surface-container-low">
+<div class="max-w-7xl mx-auto px-6">
+<div class="text-center mb-16 space-y-4">
+<h2 class="font-h1 text-primary">Credential Services</h2>
+<p class="font-body-md text-on-surface-variant max-w-2xl mx-auto">Digitized, verifiable, and secure document processing for all alumni and current students.</p>
+</div>
+<div class="grid md:grid-cols-3 gap-6">
+<!-- Certificate Card -->
+<div class="md:col-span-2 bg-white p-8 border border-outline-variant rounded-lg flex flex-col justify-between hover:shadow-lg transition-all">
+<div class="space-y-4">
+<span class="material-symbols-outlined text-primary text-[40px]" data-weight="fill">verified</span>
+<h3 class="font-h2 text-primary">Academic Certificates</h3>
+<p class="font-body-md text-on-surface-variant max-w-md">Request official replacements or digital verifications of your graduation certificates issued by Gray D. Allison High School.</p>
+</div>
+<div class="mt-8 flex gap-4">
+<button class="bg-primary text-white px-6 py-3 font-label-sm rounded-lg hover:opacity-90">START REQUEST</button>
+<button class="text-primary font-label-sm px-6 py-3">VIEW REQUIREMENTS</button>
+</div>
+</div>
+<!-- Transcript Card -->
+<div class="bg-primary-container p-8 rounded-lg flex flex-col justify-between text-white border border-primary">
+<div class="space-y-4">
+<span class="material-symbols-outlined text-primary-fixed-dim text-[40px]">description</span>
+<h3 class="font-h2">Official Transcripts</h3>
+<p class="text-slate-300 font-body-md">Complete academic records for university applications or professional background checks.</p>
+</div>
+<button class="mt-8 border border-white/30 bg-white/10 px-6 py-3 font-label-sm rounded-lg hover:bg-white/20 transition-all uppercase tracking-wider">APPLY NOW</button>
+</div>
+<!-- Diplomas -->
+<div class="bg-white p-8 border border-outline-variant rounded-lg flex flex-col justify-between hover:shadow-lg transition-all">
+<div class="space-y-4">
+<span class="material-symbols-outlined text-primary text-[40px]">military_tech</span>
+<h3 class="font-h2 text-primary">Diplomas</h3>
+<p class="font-body-md text-on-surface-variant">Archived diploma retrieval for all graduating classes from 1950 to present.</p>
+</div>
+<button class="mt-8 text-primary font-label-sm border-t border-outline-variant pt-4 flex items-center gap-2">RECOVER DIPLOMA <span class="material-symbols-outlined text-sm">arrow_forward</span></button>
+</div>
+<!-- WAEC -->
+<div class="md:col-span-2 bg-white p-8 border border-outline-variant rounded-lg flex items-center gap-8 hover:shadow-lg transition-all">
+<div class="h-full w-48 bg-surface-container-high rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover grayscale" data-alt="A focused image of official-looking certificates with gold foil seals and elegant script on premium ivory paper. The lighting is professional and emphasizes the security features of the documents. The style is institutional and secure, with a color palette of white, gold, and deep navy blue." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXGcU2vgpQIrLE97_Ww1C1dWzO7g9Kk7S8RcdVvDbebqfUKKMTMFOau_EjSzyaHXald0yegqjq5mF4suL_Lr7aJ7zOM5skyHrqsmAMbOEzYmBbINPDjHqSbnVyMI0mD49GDABfvICeUu6c_jdSlKwdvnOFIDs9Oepcz6Go6DMtM7NG8CYfFO8zowL4bQHdbV6r63ScZQYDzbvs8auqyOiCivGfqvh8AERU8BZhGdO-4joryQt9Bi6qF1zKQvhUc--SVPB8Zovq8av2"/>
+</div>
+<div class="space-y-4">
+<h3 class="font-h2 text-primary">WAEC/WASSCE Results</h3>
+<p class="font-body-md text-on-surface-variant">Assistance in retrieving official West African Examinations Council results archived at the school registrar's office.</p>
+<button class="bg-surface-container-highest text-primary px-6 py-2 font-label-sm rounded-lg hover:bg-outline-variant transition-all">SUBMIT INQUIRY</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Announcements & Stories -->
+<section class="py-24 bg-white border-t border-outline-variant">
+<div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16">
+<!-- Announcements -->
+<div>
+<div class="flex justify-between items-end mb-10">
+<div>
+<span class="font-label-sm text-primary uppercase tracking-[0.2em] block mb-2">Notice Board</span>
+<h2 class="font-h1 text-primary">Latest Announcements</h2>
+</div>
+<a class="text-primary font-label-sm hover:underline" href="#">View All News</a>
+</div>
+<div class="space-y-8">
+<div class="flex gap-6 group cursor-pointer">
+<div class="bg-surface-container-high w-20 h-20 flex flex-col items-center justify-center rounded-lg flex-shrink-0">
+<span class="text-[20px] font-bold text-primary">24</span>
+<span class="text-[10px] uppercase font-bold text-on-surface-variant">OCT</span>
+</div>
+<div>
+<h4 class="font-h2 text-[18px] group-hover:text-primary-container transition-colors mb-2">Annual Alumni Reunion 2024 Date Announced</h4>
+<p class="text-on-surface-variant font-body-md line-clamp-2">The Ministry of National Defense is pleased to announce the schedule for the 74th Anniversary Alumni Gathering.</p>
+</div>
+</div>
+<div class="flex gap-6 group cursor-pointer">
+<div class="bg-surface-container-high w-20 h-20 flex flex-col items-center justify-center rounded-lg flex-shrink-0">
+<span class="text-[20px] font-bold text-primary">12</span>
+<span class="text-[10px] uppercase font-bold text-on-surface-variant">SEP</span>
+</div>
+<div>
+<h4 class="font-h2 text-[18px] group-hover:text-primary-container transition-colors mb-2">New Digital Document Processing Policy</h4>
+<p class="text-on-surface-variant font-body-md line-clamp-2">Effective immediately, all transcript requests must be initiated through the AIMS portal for faster processing.</p>
+</div>
+</div>
+<div class="flex gap-6 group cursor-pointer">
+<div class="bg-surface-container-high w-20 h-20 flex flex-col items-center justify-center rounded-lg flex-shrink-0">
+<span class="text-[20px] font-bold text-primary">05</span>
+<span class="text-[10px] uppercase font-bold text-on-surface-variant">SEP</span>
+</div>
+<div>
+<h4 class="font-h2 text-[18px] group-hover:text-primary-container transition-colors mb-2">Library Modernization Project Completion</h4>
+<p class="text-on-surface-variant font-body-md line-clamp-2">We celebrate the successful renovation of the General Gray D. Allison Memorial Library, now featuring a digital research wing.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Success Stories -->
+<div class="bg-surface-container-lowest border border-outline-variant p-8 rounded-lg relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16"></div>
+<span class="font-label-sm text-primary uppercase tracking-[0.2em] block mb-2">Alumni Impact</span>
+<h2 class="font-h1 text-primary mb-10">Success Stories</h2>
+<div class="space-y-8">
+<div class="border-l-4 border-primary pl-6 py-2">
+<p class="font-body-md italic text-on-surface-variant mb-4">"The discipline I learned at Gray D. Allison High School provided the bedrock for my career in international diplomacy. I am proud to support the next generation of students."</p>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A portrait of a middle-aged Liberian professional man in a sharp navy blue suit, smiling confidently against a soft-focus background of a government office. The lighting is warm and flattering. The photo conveys success, integrity, and the school's legacy of excellence." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZ3UIvV0mn1k2NPxr3gnekuBGhaiyO7SoZBW3qRonEO3sBCWeoELochRxTYy1igJyexsmAJpknP1t-rrI0t3KoIp1eYT__1Ho8cPKEzyJrpanaCjBBzgKELgZiOe-wdWYZnfiHyBVGGVSNBdS1reUXcvKk-IMNWbvYtpUR4leZlv_ygdNjzoc_dxb1PkzKVB2QIadUpRavvh9jImNaXcHmoBSexjdgRmq7ffe6volNxLJYDgfuOccFa9J6vqbt5xjKQIxVpFcv2sGs"/>
+</div>
+<div>
+<p class="font-label-sm text-primary">Abdulazzi Bah</p>
+<p class="font-caption text-on-surface-variant">Class of 2022 | Senior Diplomat</p>
+</div>
+</div>
+</div>
+<div class="border-l-4 border-primary pl-6 py-2">
+<p class="font-body-md italic text-on-surface-variant mb-4">"The foundation of academic excellence here is unparalleled. Every alumni has a responsibility to give back to the institution that made them."</p>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A portrait of a successful Liberian professional woman in her early 40s wearing a modern, elegant dress. She is in a bright, contemporary office setting. The lighting is high-key and professional. The image reflects a modern, empowered alumna." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4RFl1JsteFSdwwb58z4X138xTYcmb1sHZC4-5pzI65JdI8wXCKX8QT636GKw1VIGapDi2XnxaDzg1IWvY--AsqJx7qXtlX3TQWEXeBjcWxaU7RIhqIL3Dq9dbb97lTHBxU_mrQfXSDWgt1yaVke_suiyBaGApyXIXldUJpA8dWpU4gnv8mkI6gAR2_XWZhrwtqgrZgpXs3Qz-jM8Rpr833udQn8X9X9e9NEJQAwEoC-mC-K55XXTS-9D9S4wSc7LvTQBxUXkZLE4e"/>
+</div>
+<div>
+<p class="font-label-sm text-primary">Dr. Sarah T. Kollie</p>
+<p class="font-caption text-on-surface-variant">Class of 1995 | Chief Medical Surgeon</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Upcoming Events -->
+<section class="py-24 bg-primary text-white">
+<div class="max-w-7xl mx-auto px-6">
+<div class="flex justify-between items-end mb-12">
+<div>
+<span class="font-label-sm text-primary-fixed-dim uppercase tracking-[0.2em] block mb-2">Calendar</span>
+<h2 class="font-h1">Upcoming Events</h2>
+</div>
+<button class="bg-white/10 hover:bg-white/20 border border-white/20 px-6 py-2 rounded-lg font-label-sm transition-all uppercase tracking-wider">VIEW FULL CALENDAR</button>
+</div>
+<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="bg-white/5 border border-white/10 p-6 rounded-lg hover:bg-white/10 transition-colors">
+<div class="text-primary-fixed-dim font-bold text-[24px] mb-4">NOV 15</div>
+<h5 class="font-h2 text-[18px] mb-2">Career Mentorship Day</h5>
+<p class="text-slate-400 font-caption">Main Campus Auditorium</p>
+</div>
+<div class="bg-white/5 border border-white/10 p-6 rounded-lg hover:bg-white/10 transition-colors">
+<div class="text-primary-fixed-dim font-bold text-[24px] mb-4">DEC 02</div>
+<h5 class="font-h2 text-[18px] mb-2">Sports Gala Finals</h5>
+<p class="text-slate-400 font-caption">School Sports Ground</p>
+</div>
+<div class="bg-white/5 border border-white/10 p-6 rounded-lg hover:bg-white/10 transition-colors">
+<div class="text-primary-fixed-dim font-bold text-[24px] mb-4">JAN 20</div>
+<h5 class="font-h2 text-[18px] mb-2">New Year Faculty Meet</h5>
+<p class="text-slate-400 font-caption">Conference Hall B</p>
+</div>
+<div class="bg-white/5 border border-white/10 p-6 rounded-lg hover:bg-white/10 transition-colors">
+<div class="text-primary-fixed-dim font-bold text-[24px] mb-4">FEB 11</div>
+<h5 class="font-h2 text-[18px] mb-2">Armed Forces Day Parade</h5>
+<p class="text-slate-400 font-caption">National Parade Ground</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Document Process -->
+<section class="py-24 bg-surface">
+<div class="max-w-7xl mx-auto px-6">
+<div class="text-center mb-16">
+<h2 class="font-h1 text-primary">How to Request Your Documents</h2>
+<p class="font-body-md text-on-surface-variant mt-4">A simple 3-step process to access your academic history.</p>
+</div>
+<div class="grid md:grid-cols-3 gap-12 relative">
+<div class="hidden md:block absolute top-10 left-0 w-full h-[2px] bg-slate-200 -z-10"></div>
+<div class="bg-white p-8 rounded-lg border border-outline-variant text-center space-y-4">
+<div class="w-20 h-20 bg-primary text-white rounded-full flex items-center justify-center font-h1 mx-auto border-8 border-surface">1</div>
+<h4 class="font-h2">Identity Verification</h4>
+<p class="font-body-md text-on-surface-variant">Register on the AIMS portal using your graduating class details and a valid national ID.</p>
+</div>
+<div class="bg-white p-8 rounded-lg border border-outline-variant text-center space-y-4">
+<div class="w-20 h-20 bg-primary text-white rounded-full flex items-center justify-center font-h1 mx-auto border-8 border-surface">2</div>
+<h4 class="font-h2">Select Document</h4>
+<p class="font-body-md text-on-surface-variant">Choose the specific document you need (Transcript, Certificate, or Diploma) and provide delivery details.</p>
+</div>
+<div class="bg-white p-8 rounded-lg border border-outline-variant text-center space-y-4">
+<div class="w-20 h-20 bg-primary text-white rounded-full flex items-center justify-center font-h1 mx-auto border-8 border-surface">3</div>
+<h4 class="font-h2">Secure Processing</h4>
+<p class="font-body-md text-on-surface-variant">Pay the processing fee securely online and track your document status until delivery.</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Institutional Footer -->
+<footer class="bg-slate-50 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800">
+<div class="max-w-7xl mx-auto px-6 pt-16 pb-8">
+<div class="grid md:grid-cols-4 gap-12 mb-16">
+<div class="col-span-2 space-y-6">
+<h3 class="text-lg font-black text-[#1B2E4B] dark:text-white tracking-widest uppercase">Gray D. Allison High School</h3>
+<p class="font-body-md text-on-surface-variant max-w-md">
+                        The premiere educational institution of the Ministry of National Defense, Liberia. Dedicated to academic excellence, discipline, and national service since 1950.
+                    </p>
+<div class="flex gap-4">
+<a class="w-10 h-10 bg-primary-container/10 flex items-center justify-center rounded-lg text-primary hover:bg-primary hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">public</span>
+</a>
+<a class="w-10 h-10 bg-primary-container/10 flex items-center justify-center rounded-lg text-primary hover:bg-primary hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">alternate_email</span>
+</a>
+</div>
+</div>
+<div class="space-y-6">
+<h4 class="font-label-sm text-primary uppercase tracking-widest">Portal Links</h4>
+<ul class="space-y-4 font-caption text-on-surface-variant">
+<li><a class="hover:text-primary transition-colors" href="#">Alumni Dashboard</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Document Status</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Staff Portal</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Privacy Policy</a></li>
+</ul>
+</div>
+<div class="space-y-6">
+<h4 class="font-label-sm text-primary uppercase tracking-widest">Contact Defense</h4>
+<ul class="space-y-4 font-caption text-on-surface-variant">
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+<span>BTC Campus, Ministry of Defense<br/>Monrovia, Liberia</span>
+</li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">phone</span>
+<span>+231 000-000-000</span>
+</li>
+</ul>
+</div>
+</div>
+<div class="pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="font-sans text-xs uppercase tracking-wider text-slate-500">
+                    © 2024 Gray D. Allison High School. Ministry of National Defense, Liberia.
+                </p>
+<div class="flex gap-6 font-sans text-xs uppercase tracking-wider">
+<a class="text-slate-500 hover:underline" href="#">Privacy Policy</a>
+<a class="text-slate-500 hover:underline" href="#">Terms of Service</a>
+<a class="text-slate-500 hover:underline" href="#">Ministry of Defense</a>
+<a class="text-slate-500 hover:underline" href="#">Staff Portal</a>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

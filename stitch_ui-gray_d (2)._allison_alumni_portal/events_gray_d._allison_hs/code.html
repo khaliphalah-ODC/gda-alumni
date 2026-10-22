@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Events - Gray D. Allison High School</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary": "#031935",
+                    "on-surface": "#1b1b1e",
+                    "surface-dim": "#dbd9dc",
+                    "background": "#fbf9fb",
+                    "on-primary-container": "#8396b8",
+                    "primary-container": "#1b2e4b",
+                    "tertiary-fixed-dim": "#e5c18a",
+                    "inverse-surface": "#303033",
+                    "primary-fixed-dim": "#b4c7ec",
+                    "tertiary-container": "#3f2a01",
+                    "on-tertiary-container": "#b0915d",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-fixed-dim": "#c6c6c6",
+                    "on-tertiary-fixed-variant": "#5b4317",
+                    "error-container": "#ffdad6",
+                    "primary-fixed": "#d6e3ff",
+                    "inverse-on-surface": "#f2f0f3",
+                    "outline": "#75777e",
+                    "outline-variant": "#c4c6ce",
+                    "surface-container-high": "#e9e7ea",
+                    "on-background": "#1b1b1e",
+                    "on-tertiary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "on-error": "#ffffff",
+                    "surface-variant": "#e4e2e5",
+                    "on-secondary-fixed-variant": "#474747",
+                    "secondary-fixed": "#e2e2e2",
+                    "secondary": "#5e5e5e",
+                    "on-secondary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "on-secondary-fixed": "#1b1b1b",
+                    "on-primary": "#ffffff",
+                    "inverse-primary": "#b4c7ec",
+                    "surface-container": "#efedf0",
+                    "on-primary-fixed": "#061b38",
+                    "surface": "#fbf9fb",
+                    "on-secondary-container": "#646464",
+                    "surface-tint": "#4d5f7f",
+                    "secondary-container": "#e2e2e2",
+                    "on-primary-fixed-variant": "#354766",
+                    "surface-bright": "#fbf9fb",
+                    "on-surface-variant": "#44474d",
+                    "tertiary": "#251700",
+                    "on-tertiary-fixed": "#281900",
+                    "tertiary-fixed": "#ffdeab",
+                    "surface-container-low": "#f5f3f6",
+                    "surface-container-highest": "#e4e2e5"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "sidebar-width": "280px",
+                    "container-max": "1280px",
+                    "margin-desktop": "32px",
+                    "stack-gap": "16px",
+                    "margin-mobile": "16px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "body-md": ["Public Sans"],
+                    "h1": ["Public Sans"],
+                    "body-lg": ["Public Sans"],
+                    "label-sm": ["Public Sans"],
+                    "h2": ["Public Sans"],
+                    "caption": ["Public Sans"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "h1": ["36px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "label-sm": ["14px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "h2": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "caption": ["12px", {"lineHeight": "1.4", "fontWeight": "400"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Public Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<header class="bg-[#1B2E4B] dark:bg-slate-950 shadow-sm sticky top-0 z-50">
+<div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+<div class="text-xl font-bold text-white tracking-widest uppercase">Gray D. Allison HS</div>
+<nav class="hidden md:flex items-center gap-8 font-sans text-sm font-medium tracking-tight">
+<a class="text-slate-200 hover:text-white transition-colors" href="#">Home</a>
+<a class="text-slate-200 hover:text-white transition-colors" href="#">About</a>
+<a class="text-slate-200 hover:text-white transition-colors" href="#">Announcements</a>
+<a class="text-slate-200 hover:text-white transition-colors" href="#">Alumni Stories</a>
+<a class="text-white border-b-2 border-white pb-1" href="#">Events</a>
+<a class="text-slate-200 hover:text-white transition-colors" href="#">Contact</a>
+</nav>
+<button class="bg-white text-[#1B2E4B] px-6 py-2 font-semibold text-sm hover:bg-slate-100 transition-all uppercase tracking-wider">Login</button>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-6 py-12">
+<section class="mb-12">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<span class="text-primary-container font-label-sm uppercase tracking-widest text-caption">Academic Calendar</span>
+<h1 class="font-h1 text-h1 text-primary mt-2">Upcoming Events</h1>
+<p class="font-body-md text-body-md text-secondary mt-4 max-w-2xl">Stay connected with our school community. Join us for institutional ceremonies, alumni reunions, and military-academic traditions at Gray D. Allison High School.</p>
+</div>
+<div class="flex gap-2 bg-surface-container p-1 rounded-lg">
+<button class="px-4 py-2 bg-white shadow-sm font-label-sm text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">calendar_month</span> List View
+                    </button>
+<button class="px-4 py-2 font-label-sm text-secondary flex items-center gap-2 hover:bg-white/50 transition-colors">
+<span class="material-symbols-outlined text-[18px]">grid_view</span> Calendar View
+                    </button>
+</div>
+</div>
+</section>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<aside class="lg:col-span-3 space-y-8">
+<div class="bg-white border border-outline-variant p-6">
+<h3 class="font-label-sm text-primary uppercase tracking-wider mb-4">Filter by Type</h3>
+<div class="space-y-3">
+<label class="flex items-center gap-3 cursor-pointer group">
+<input checked="" class="rounded-none border-outline text-primary focus:ring-0 w-4 h-4" type="checkbox"/>
+<span class="font-body-md text-on-surface-variant group-hover:text-primary transition-colors">Academic</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="rounded-none border-outline text-primary focus:ring-0 w-4 h-4" type="checkbox"/>
+<span class="font-body-md text-on-surface-variant group-hover:text-primary transition-colors">Military Traditions</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input checked="" class="rounded-none border-outline text-primary focus:ring-0 w-4 h-4" type="checkbox"/>
+<span class="font-body-md text-on-surface-variant group-hover:text-primary transition-colors">Alumni Reunions</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="rounded-none border-outline text-primary focus:ring-0 w-4 h-4" type="checkbox"/>
+<span class="font-body-md text-on-surface-variant group-hover:text-primary transition-colors">Sports &amp; Athletics</span>
+</label>
+</div>
+</div>
+<div class="relative group overflow-hidden">
+<img class="w-full h-[300px] object-cover" data-alt="A professional architectural photograph of a prestigious institutional building facade under clear blue skies. The scene is illuminated with bright, natural daylight, emphasizing the clean lines and formal structure of the building. The image uses a crisp, high-contrast style that reflects corporate reliability and academic excellence, consistent with a modern light-mode design system." src="https://lh3.googleusercontent.com/aida-public/AB6AXuComqubY56a9Gi7qEHqSEuylqLwKlPLuZNedkauwYlOJ2pL91CXDqvv8s7WWyRbqtbURzZUTq5UHT260TeucVuUCmLcuIDGlE-BLXs-6G1EPLL8OHza54khX5zD-TAPj2D2tfBVc281jQAJB7TNWmuUBdp1UmQBS8TdmJOAdcrF3eswU5VuQXd8aDgKH48gLD1cbn7SsxMbXVs1RbU9fveVyskV95qqDJR7nVmHl0_XXH0QV-WqUmDTeZZiysZUoAtBSR1ckVQHxO4I"/>
+<div class="absolute inset-0 bg-primary/40 flex flex-col justify-end p-6 text-white">
+<p class="font-label-sm text-caption uppercase tracking-widest mb-2">Notice Board</p>
+<h4 class="font-h2 text-lg">Alumni Homecoming Gala</h4>
+<button class="mt-4 border border-white px-4 py-2 text-xs font-bold uppercase tracking-tighter hover:bg-white hover:text-primary transition-all">Register Now</button>
+</div>
+</div>
+</aside>
+<div class="lg:col-span-9 space-y-6">
+<div class="flex items-center gap-4 py-2 border-b border-outline-variant mb-4">
+<h2 class="font-label-sm text-primary uppercase tracking-widest">May 2024</h2>
+<div class="h-px flex-1 bg-outline-variant"></div>
+</div>
+<div class="grid grid-cols-1 gap-4">
+<div class="bg-white border border-outline-variant flex flex-col md:flex-row hover:border-primary transition-all group">
+<div class="md:w-32 bg-primary-container flex flex-col items-center justify-center p-4 text-white">
+<span class="font-h2 text-2xl">15</span>
+<span class="font-label-sm uppercase tracking-widest text-[10px]">MAY</span>
+</div>
+<div class="flex-1 p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+<div>
+<span class="inline-block px-2 py-1 bg-surface-container text-primary text-[10px] font-bold uppercase tracking-widest mb-2">Institutional</span>
+<h3 class="font-h2 text-primary group-hover:text-primary-container transition-colors">65th Commencement Ceremony</h3>
+<div class="mt-3 space-y-1">
+<div class="flex items-center gap-2 text-secondary font-body-md text-sm">
+<span class="material-symbols-outlined text-[18px]">schedule</span> 09:00 AM — 01:00 PM
+                                    </div>
+<div class="flex items-center gap-2 text-secondary font-body-md text-sm">
+<span class="material-symbols-outlined text-[18px]">location_on</span> BTC Campus, Main Auditorium
+                                    </div>
+</div>
+</div>
+<button class="bg-transparent border border-primary text-primary px-6 py-2 font-bold text-xs uppercase tracking-widest hover:bg-primary hover:text-white transition-all">View Details</button>
+</div>
+</div>
+<div class="bg-white border border-outline-variant flex flex-col md:flex-row hover:border-primary transition-all group">
+<div class="md:w-32 bg-primary flex flex-col items-center justify-center p-4 text-white">
+<span class="font-h2 text-2xl">22</span>
+<span class="font-label-sm uppercase tracking-widest text-[10px]">MAY</span>
+</div>
+<div class="flex-1 p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+<div>
+<span class="inline-block px-2 py-1 bg-tertiary-fixed text-on-tertiary-fixed-variant text-[10px] font-bold uppercase tracking-widest mb-2">Alumni Event</span>
+<h3 class="font-h2 text-primary group-hover:text-primary-container transition-colors">National Defense Career Seminar</h3>
+<div class="mt-3 space-y-1">
+<div class="flex items-center gap-2 text-secondary font-body-md text-sm">
+<span class="material-symbols-outlined text-[18px]">schedule</span> 02:00 PM — 05:00 PM
+                                    </div>
+<div class="flex items-center gap-2 text-secondary font-body-md text-sm">
+<span class="material-symbols-outlined text-[18px]">location_on</span> Ministry of Defense, Executive Hall
+                                    </div>
+</div>
+</div>
+<button class="bg-transparent border border-primary text-primary px-6 py-2 font-bold text-xs uppercase tracking-widest hover:bg-primary hover:text-white transition-all">View Details</button>
+</div>
+</div>
+<div class="bg-white border border-outline-variant flex flex-col md:flex-row hover:border-primary transition-all group">
+<div class="md:w-32 bg-primary-container flex flex-col items-center justify-center p-4 text-white">
+<span class="font-h2 text-2xl">29</span>
+<span class="font-label-sm uppercase tracking-widest text-[10px]">MAY</span>
+</div>
+<div class="flex-1 p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+<div>
+<span class="inline-block px-2 py-1 bg-surface-container text-primary text-[10px] font-bold uppercase tracking-widest mb-2">Military tradition</span>
+<h3 class="font-h2 text-primary group-hover:text-primary-container transition-colors">Cadet Drill Competition</h3>
+<div class="mt-3 space-y-1">
+<div class="flex items-center gap-2 text-secondary font-body-md text-sm">
+<span class="material-symbols-outlined text-[18px]">schedule</span> 08:30 AM — 12:00 PM
+                                    </div>
+<div class="flex items-center gap-2 text-secondary font-body-md text-sm">
+<span class="material-symbols-outlined text-[18px]">location_on</span> AFL Training Parade Grounds
+                                    </div>
+</div>
+</div>
+<button class="bg-transparent border border-primary text-primary px-6 py-2 font-bold text-xs uppercase tracking-widest hover:bg-primary hover:text-white transition-all">View Details</button>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4 py-2 border-b border-outline-variant mb-4 mt-8">
+<h2 class="font-label-sm text-primary uppercase tracking-widest">June 2024</h2>
+<div class="h-px flex-1 bg-outline-variant"></div>
+</div>
+<div class="grid grid-cols-1 gap-4">
+<div class="bg-white border border-outline-variant flex flex-col md:flex-row hover:border-primary transition-all group opacity-80">
+<div class="md:w-32 bg-primary flex flex-col items-center justify-center p-4 text-white">
+<span class="font-h2 text-2xl">05</span>
+<span class="font-label-sm uppercase tracking-widest text-[10px]">JUN</span>
+</div>
+<div class="flex-1 p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+<div>
+<span class="inline-block px-2 py-1 bg-surface-container text-primary text-[10px] font-bold uppercase tracking-widest mb-2">Academic</span>
+<h3 class="font-h2 text-primary group-hover:text-primary-container transition-colors">Staff Professional Development</h3>
+<div class="mt-3 space-y-1">
+<div class="flex items-center gap-2 text-secondary font-body-md text-sm">
+<span class="material-symbols-outlined text-[18px]">schedule</span> 10:00 AM — 03:00 PM
+                                    </div>
+<div class="flex items-center gap-2 text-secondary font-body-md text-sm">
+<span class="material-symbols-outlined text-[18px]">location_on</span> School Resource Center
+                                    </div>
+</div>
+</div>
+<button class="bg-transparent border border-primary text-primary px-6 py-2 font-bold text-xs uppercase tracking-widest hover:bg-primary hover:text-white transition-all">View Details</button>
+</div>
+</div>
+</div>
+<div class="pt-8 flex justify-center">
+<button class="text-primary font-label-sm flex items-center gap-2 hover:gap-4 transition-all">
+                        Load More Events <span class="material-symbols-outlined">expand_more</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<footer class="bg-slate-50 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800">
+<div class="w-full py-8 px-6 flex flex-col md:flex-row justify-between items-center gap-4 max-w-7xl mx-auto">
+<div class="font-sans text-xs uppercase tracking-wider text-[#1B2E4B] dark:text-slate-300">
+                © 2024 Gray D. Allison High School. Ministry of National Defense, Liberia.
+            </div>
+<div class="flex gap-6">
+<a class="font-sans text-xs uppercase tracking-wider text-slate-500 hover:underline" href="#">Privacy Policy</a>
+<a class="font-sans text-xs uppercase tracking-wider text-slate-500 hover:underline" href="#">Terms of Service</a>
+<a class="font-sans text-xs uppercase tracking-wider text-slate-500 hover:underline" href="#">Ministry of Defense</a>
+<a class="font-sans text-xs uppercase tracking-wider text-slate-500 hover:underline" href="#">Staff Portal</a>
+</div>
+</div>
+</footer>
+</body></html>
