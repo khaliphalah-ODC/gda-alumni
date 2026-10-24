@@ -15,6 +15,8 @@ const MembershipStatusView = () => import('@/views/MembershipStatusView.vue');
 const ActivateView = () => import('@/views/ActivateView.vue');
 const MembershipAdminView = () => import('@/views/MembershipAdminView.vue');
 const MembershipQrView = () => import('@/views/MembershipQrView.vue');
+const PasswordRecoveryView = () => import('@/views/PasswordRecoveryView.vue');
+const ShowcaseManageView = () => import('@/views/ShowcaseManageView.vue');
 const ProfileView = () => import('@/views/ProfileView.vue');
 const DirectoryView = () => import('@/views/DirectoryView.vue');
 const RequestHistoryView = () => import('@/views/RequestHistoryView.vue');
@@ -31,6 +33,10 @@ const router = createRouter({ history: createWebHistory(), scrollBehavior: (to, 
   return { top: 0 };
 }, routes: [
   { path: '/gallery', component: () => import('@/views/GalleryView.vue') },
+  { path: '/forgot-password', component: PasswordRecoveryView },
+  { path: '/reset-password', component: PasswordRecoveryView, props: { reset: true } },
+  { path: '/admin/content/gallery', component: ShowcaseManageView, props: { kind: 'gallery' }, meta: { auth: true, admin: true } },
+  { path: '/admin/content/achievements', component: ShowcaseManageView, props: { kind: 'achievements' }, meta: { auth: true, admin: true } },
   { path: '/account/settings', component: AccountSettingsView, meta: { auth: true, shared: true } },
   { path: '/super-admin', component: SuperAdminView, props: { section: 'overview' }, meta: { auth: true, superAdmin: true } },
   { path: '/super-admin/admins', component: SuperAdminView, props: { section: 'admins' }, meta: { auth: true, superAdmin: true } },

@@ -9,6 +9,8 @@ export const postSelection = {
   title: true,
   content: true,
   image: true,
+  category: true, imageAlt: true, imageCaption: true, imageWidth: true, imageHeight: true,
+  summary: true, heading: true, sourceUrl: true, sourceLabel: true,
   type: true,
   isPublished: true,
   publishedAt: true,
@@ -42,6 +44,13 @@ export class PostRepository {
         if (!account || !account.isActive || account.role !== actor.role || account.sessionVersion !== (actor.sessionVersion ?? 0)) throw new AppError(401, 'Your account changed. Please sign in again');
       }
       const result = await tx.post.updateMany({ where: { id, type, version }, data: { ...data, version: { increment: 1 } } });
+      if (result.count === 1 && ['GALLERY', 'ACHIEVEMENT'].includes(type)) {
+        if (data.isPublished === true) {
+          const flags = type === 'GALLERY' ? { galleryManaged: true } : { achievementsManaged: true };
+          await tx.platformSettings.upsert({ where: { id: 1 }, create: { id: 1, ...flags }, update: flags });
+        }
+        if (actor) await tx.auditRecord.create({ data: { actorId: actor.userId, action: `${type}_UPDATED`, targetId: id } });
+      }
       if (result.count === 1 && cleanupPublicId) await tx.mediaCleanup.upsert({ where: { publicId: cleanupPublicId }, create: { publicId: cleanupPublicId }, update: {} });
       return result.count === 1 ? tx.post.findUnique({ where: { id }, select: postSelection }) : null;
     });
@@ -59,7 +68,7 @@ export class PostRepository {
     return prisma.$transaction([
       prisma.post.findMany({ where: finalWhere, skip, take, orderBy: type === 'HISTORY' && chronological
         ? [{ milestoneDate: { sort: 'asc', nulls: 'last' } }, { displayOrder: 'asc' }, { id: 'asc' }]
-        : ['HISTORY', 'SCHOOL_LEADER', 'ALUMNI_LEADER'].includes(type)
+        : ['HISTORY', 'SCHOOL_LEADER', 'ALUMNI_LEADER', 'GALLERY', 'ACHIEVEMENT'].includes(type)
         ? [{ displayOrder: 'asc' }, { id: 'asc' }]
         : type === 'EVENT' ? [{ eventDate: 'asc' }, { id: 'asc' }] : [{ publishedAt: { sort: 'desc', nulls: 'last' } }, { createdAt: 'desc' }, { id: 'desc' }], select: postSelection }),
       prisma.post.count({ where: finalWhere }),

@@ -14,7 +14,7 @@ import graduatesTogether from '../../../images/graduaimage2.jpg';
 
 export interface SchoolPhoto {
   id: string; src: string; width: number; height: number;
-  alt: string; caption: string; category: 'School life' | 'Parade' | 'Graduation';
+  alt: string; caption: string; category: string;
 }
 export const schoolPhotos = {
   ministryGroup: { id: 'ministry-group', src: ministryGroup, width: 1600, height: 1066, alt: 'Students in blue uniforms gathered beside the Ministry of National Defense welcome sign.', caption: 'School community', category: 'School life' },

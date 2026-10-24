@@ -1,5 +1,5 @@
 import { Router, type RequestHandler } from 'express';
-import rateLimit from 'express-rate-limit';
+import { createLimiter } from '../utils/shared-rate-limit';
 import { prisma } from '../config/prisma';
 import { env } from '../config/env';
 import { requireAuth } from '../middleware/auth.middleware';
@@ -16,7 +16,7 @@ const handle = (fn: RequestHandler): RequestHandler => (req, res, next) => { Pro
 export const chatbotRouter = Router();
 chatbotRouter.get('/availability', handle(async (_req,res) => { const s = await chatSettings(); return sendSuccess(res,200,'Assistant availability',{ enabled: s.enabled && Boolean(env.GROQ_API_KEY) }); }));
 chatbotRouter.get('/faqs', handle(async (_req,res) => sendSuccess(res,200,'Approved school answers',await prisma.chatbotFaq.findMany({where:{published:true,validUntil:{gt:new Date()}},select:{id:true,question:true,answer:true,path:true,validUntil:true,updatedAt:true},orderBy:{updatedAt:'desc'},take:200}))));
-chatbotRouter.post('/messages', rateLimit({ windowMs: 60000, limit: 6, standardHeaders: 'draft-8', legacyHeaders: false, handler: (_req,res) => res.status(429).json({ success:false, message:'Please wait a minute before asking another question.', data:null, pagination:null }) }), validateBody(messageSchema), handle(async (req,res) => sendSuccess(res,200,'School guidance',await askChatbot(req.body.message))));
+chatbotRouter.post('/messages', createLimiter('chatbot', { windowMs: 60000, limit: 6, standardHeaders: 'draft-8', legacyHeaders: false, handler: (_req,res) => res.status(429).json({ success:false, message:'Please wait a minute before asking another question.', data:null, pagination:null }) }), validateBody(messageSchema), handle(async (req,res) => sendSuccess(res,200,'School guidance',await askChatbot(req.body.message))));
 export const chatbotPlatformRouter = Router();
 chatbotPlatformRouter.use(requireAuth, requirePermission('PLATFORM_MANAGE'));
 chatbotPlatformRouter.get('/', handle(async (_req,res) => sendSuccess(res,200,'Chatbot configuration',{ ...await chatSettings(), configured:Boolean(env.GROQ_API_KEY), usage: await prisma.chatbotUsage.findUnique({ where:{ day:new Date().toISOString().slice(0,10) } }) })));

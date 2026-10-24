@@ -1,0 +1,11 @@
+.env
+.env.*
+!.env.vercel.example
+node_modules
+dist
+coverage
+backups
+uploads
+src/__tests__
+scripts/test-mail.cjs
+*.log

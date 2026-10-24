@@ -9,6 +9,7 @@ import { mediaRepository } from '../repositories/media.repository';
 import type { AuthenticatedUser } from '../types/auth.types';
 import { AppError } from '../utils/app-error';
 import { localMedia, localAssetPath } from './local-media';
+import { background } from '../utils/background';
 const folder = 'gda-aims/profile-pictures/';
 function configure() { cloudinary.config({ cloud_name: env.CLOUDINARY_CLOUD_NAME, api_key: env.CLOUDINARY_API_KEY, api_secret: env.CLOUDINARY_API_SECRET, secure: true, timeout: 10000 }); }
 export const cloudMedia = {
@@ -36,10 +37,14 @@ export function mediaConfiguration() {
 export const mediaService = {
   async status() { const settings = await platformRepository.settings(); const config = mediaConfiguration(); return { enabled: Boolean(settings?.mediaEnabled && config.configured), maxBytes: config.maxBytes, provider: config.provider }; },
   async cleanup() {
-    for (const job of await mediaRepository.pending()) {
-      if (job.publicId.startsWith('local/') ? !localAssetPath(`${job.publicId.slice(6)}.webp`) : !job.publicId.startsWith(folder) && !/^gda-aims\/content-images\/c[a-z0-9]{24}\/[0-9a-f-]{36}$/.test(job.publicId)) continue;
-      try { await cloudMedia.destroy(job.publicId); await mediaRepository.done(job.id); } catch { /* Durable retry; never expose provider errors. */ }
-    }
+    const jobs = await mediaRepository.claim();
+    const results = await Promise.all(jobs.map(async job => {
+      try {
+        if (job.publicId.startsWith('local/') ? !localAssetPath(`${job.publicId.slice(6)}.webp`) : !(/^gda-aims\/profile-pictures\/[A-Za-z0-9_-]{1,200}$/.test(job.publicId) || /^gda-aims\/content-images\/c[a-z0-9]{24}\/[0-9a-f-]{36}$/.test(job.publicId))) throw new Error('Invalid managed asset');
+        await cloudMedia.destroy(job.publicId); await mediaRepository.complete(job.id, job.leaseToken); return true;
+      } catch { await mediaRepository.retry(job.id, job.leaseToken, job.attempts); return false; }
+    }));
+    return { processed: jobs.length, deleted: results.filter(Boolean).length, deferred: results.filter(value => !value).length };
   },
   async prepareImage(file: Express.Multer.File | undefined): Promise<Buffer> {
     if (!file || file.size > env.IMAGE_MAX_BYTES) throw new AppError(400, 'Choose an image within the upload size limit');
@@ -60,11 +65,11 @@ export const mediaService = {
     let uploaded: { url: string; publicId: string };
     try { uploaded = await cloudMedia.upload(buffer); } catch { throw new AppError(502, 'Image upload failed. Please try again'); }
     try { await accountRepository.saveImage(actor.userId, actor.role, version, actor.sessionVersion ?? 0, uploaded.url, uploaded.publicId); }
-    catch (error) { await mediaRepository.queue(uploaded.publicId); void this.cleanup().catch(() => {}); throw error; }
-    void this.cleanup().catch(() => {});
+    catch (error) { await mediaRepository.queue(uploaded.publicId); background(this.cleanup()); throw error; }
+    background(this.cleanup());
   },
   async url(actor: AuthenticatedUser, url: string | null, version: number) {
     await accountRepository.saveImage(actor.userId, actor.role, version, actor.sessionVersion ?? 0, url, null);
-    void this.cleanup().catch(() => {});
+    background(this.cleanup());
   },
 };

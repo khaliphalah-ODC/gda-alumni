@@ -1,3 +1,4 @@
+import { background } from '../utils/background';
 import { localMediaOrigin } from './local-media';
 import type { PostType } from '@prisma/client';
 import type { AuthenticatedUser } from '../types/auth.types';
@@ -19,18 +20,18 @@ export const contentMediaService = {
     if (managedContentImageId(uploaded.url, id, env.CLOUDINARY_CLOUD_NAME, localMediaOrigin()) !== uploaded.publicId) {
       const prefix = `${uploaded.publicId.startsWith('local/') ? 'local/' : ''}${contentImagePrefix(id)}`;
       if (uploaded.publicId.startsWith(prefix) && /^[0-9a-f-]{36}$/.test(uploaded.publicId.slice(prefix.length))) {
-        await mediaRepository.queue(uploaded.publicId); void mediaService.cleanup().catch(() => {});
+        await mediaRepository.queue(uploaded.publicId); background(mediaService.cleanup());
       }
       throw new AppError(502, 'Image provider returned an invalid asset');
     }
     try {
       // Normal update policy retains version checks and unpublishes alumni edits.
       const post = await contentService.update(type, actor, id, { image: uploaded.url, version });
-      void mediaService.cleanup().catch(() => {});
+      background(mediaService.cleanup());
       return post;
     } catch (error) {
       await mediaRepository.queue(uploaded.publicId);
-      void mediaService.cleanup().catch(() => {});
+      background(mediaService.cleanup());
       throw error;
     }
   },

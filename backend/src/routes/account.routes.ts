@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import rateLimit from 'express-rate-limit';
+import { createLimiter, clientIpKey } from '../utils/shared-rate-limit';
 import * as controller from '../controllers/account.controller';
 import { requireAuth } from '../middleware/auth.middleware';
 import { requirePermission } from '../policies/permission.policy';
 import { validateBody } from '../middleware/validate.middleware';
 import { imageUpload } from '../middleware/upload.middleware';
 import { adminActivationSchema, emailChangeSchema, imageUrlSchema, imageVersionSchema, passwordChangeSchema, profileSchema, tokenSchema } from '../validators/account.validator';
-export const sensitiveLimiter = rateLimit({ windowMs: 15 * 60000, limit: 25, message: { success: false, message: 'Too many sensitive requests. Please try again later.', data: null, pagination: null }, keyGenerator: (req) => req.user?.userId ?? req.ip ?? 'unknown', standardHeaders: 'draft-8', legacyHeaders: false });
+export const sensitiveLimiter = createLimiter('sensitive', { windowMs: 15 * 60000, limit: 25, message: { success: false, message: 'Too many sensitive requests. Please try again later.', data: null, pagination: null }, keyGenerator: (req) => req.user?.userId ?? clientIpKey(req.ip), standardHeaders: 'draft-8', legacyHeaders: false });
 export const accountRouter = Router();
 accountRouter.use((_req, res, next) => { res.set('Cache-Control', 'no-store'); res.set('Referrer-Policy', 'no-referrer'); next(); });
 accountRouter.post('/email-change/verify', sensitiveLimiter, validateBody(tokenSchema), controller.verify);

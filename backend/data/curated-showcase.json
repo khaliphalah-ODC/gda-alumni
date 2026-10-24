@@ -1,0 +1,207 @@
+[
+  {
+    "legacyKey": "gallery-ministry-group",
+    "type": "GALLERY",
+    "file": "images/heroimage1.jpg",
+    "data": {
+      "title": "School community",
+      "content": "Students in blue uniforms gathered beside the Ministry of National Defense welcome sign.",
+      "imageAlt": "Students in blue uniforms gathered beside the Ministry of National Defense welcome sign.",
+      "imageCaption": "School community",
+      "imageWidth": 1600,
+      "imageHeight": 1066,
+      "category": "School life",
+      "displayOrder": 0
+    }
+  },
+  {
+    "legacyKey": "gallery-school-group",
+    "type": "GALLERY",
+    "file": "images/image2.jpg",
+    "data": {
+      "title": "Together at school",
+      "content": "Students in blue uniforms smiling together outside a blue school building.",
+      "imageAlt": "Students in blue uniforms smiling together outside a blue school building.",
+      "imageCaption": "Together at school",
+      "imageWidth": 722,
+      "imageHeight": 480,
+      "category": "School life",
+      "displayOrder": 1
+    }
+  },
+  {
+    "legacyKey": "gallery-flag-parade",
+    "type": "GALLERY",
+    "file": "images/image4.jpg",
+    "data": {
+      "title": "Flags on parade",
+      "content": "Students carrying flags as they march in front of a blue building.",
+      "imageAlt": "Students carrying flags as they march in front of a blue building.",
+      "imageCaption": "Flags on parade",
+      "imageWidth": 1079,
+      "imageHeight": 605,
+      "category": "Parade",
+      "displayOrder": 2
+    }
+  },
+  {
+    "legacyKey": "gallery-flag-bearers",
+    "type": "GALLERY",
+    "file": "images/image3.jpg",
+    "data": {
+      "title": "Student flag bearers",
+      "content": "Flag bearers in blue uniforms marching together outdoors.",
+      "imageAlt": "Flag bearers in blue uniforms marching together outdoors.",
+      "imageCaption": "Student flag bearers",
+      "imageWidth": 1079,
+      "imageHeight": 605,
+      "category": "Parade",
+      "displayOrder": 3
+    }
+  },
+  {
+    "legacyKey": "gallery-school-band",
+    "type": "GALLERY",
+    "file": "images/paraimage4.jpg",
+    "data": {
+      "title": "The marching band",
+      "content": "A marching band in blue uniforms with brass instruments and a Liberian flag.",
+      "imageAlt": "A marching band in blue uniforms with brass instruments and a Liberian flag.",
+      "imageCaption": "The marching band",
+      "imageWidth": 2048,
+      "imageHeight": 1152,
+      "category": "Parade",
+      "displayOrder": 4
+    }
+  },
+  {
+    "legacyKey": "gallery-street-band",
+    "type": "GALLERY",
+    "file": "images/paraimage.jpg",
+    "data": {
+      "title": "Music in the community",
+      "content": "School musicians in blue uniforms marching along a street.",
+      "imageAlt": "School musicians in blue uniforms marching along a street.",
+      "imageCaption": "Music in the community",
+      "imageWidth": 960,
+      "imageHeight": 720,
+      "category": "Parade",
+      "displayOrder": 5
+    }
+  },
+  {
+    "legacyKey": "gallery-percussion",
+    "type": "GALLERY",
+    "file": "images/paraimage2.jpg",
+    "data": {
+      "title": "The percussion section",
+      "content": "Students carrying drums in a marching band outdoors.",
+      "imageAlt": "Students carrying drums in a marching band outdoors.",
+      "imageCaption": "The percussion section",
+      "imageWidth": 960,
+      "imageHeight": 540,
+      "category": "Parade",
+      "displayOrder": 6
+    }
+  },
+  {
+    "legacyKey": "gallery-school-musicians",
+    "type": "GALLERY",
+    "file": "images/sectionimage1.jpg",
+    "data": {
+      "title": "Student musicians",
+      "content": "Students standing together with percussion instruments outside.",
+      "imageAlt": "Students standing together with percussion instruments outside.",
+      "imageCaption": "Student musicians",
+      "imageWidth": 1280,
+      "imageHeight": 960,
+      "category": "School life",
+      "displayOrder": 7
+    }
+  },
+  {
+    "legacyKey": "gallery-alumni-community",
+    "type": "GALLERY",
+    "file": "images/upcoming1.jpg",
+    "data": {
+      "title": "Our alumni community",
+      "content": "A school community group beside a G.D.A. Alumni banner and a blue building.",
+      "imageAlt": "A school community group beside a G.D.A. Alumni banner and a blue building.",
+      "imageCaption": "Our alumni community",
+      "imageWidth": 1536,
+      "imageHeight": 2048,
+      "category": "School life",
+      "displayOrder": 8
+    }
+  },
+  {
+    "legacyKey": "gallery-graduates",
+    "type": "GALLERY",
+    "file": "images/graduaimage1.jpg",
+    "data": {
+      "title": "Graduates together",
+      "content": "A group of graduates wearing black caps and gowns with blue stoles outdoors.",
+      "imageAlt": "A group of graduates wearing black caps and gowns with blue stoles outdoors.",
+      "imageCaption": "Graduates together",
+      "imageWidth": 1536,
+      "imageHeight": 2048,
+      "category": "Graduation",
+      "displayOrder": 9
+    }
+  },
+  {
+    "legacyKey": "gallery-graduates-together",
+    "type": "GALLERY",
+    "file": "images/graduaimage2.jpg",
+    "data": {
+      "title": "A graduation gathering",
+      "content": "Graduates gathered outdoors in black gowns and blue stoles.",
+      "imageAlt": "Graduates gathered outdoors in black gowns and blue stoles.",
+      "imageCaption": "A graduation gathering",
+      "imageWidth": 1536,
+      "imageHeight": 2048,
+      "category": "Graduation",
+      "displayOrder": 10
+    }
+  },
+  {
+    "legacyKey": "achievement-cadet-drill",
+    "type": "ACHIEVEMENT",
+    "file": "frontend/src/assets/excellence/parade.webp",
+    "data": {
+      "title": "Precision, Discipline & Unity",
+      "content": "In 2017, Gray D. Allison High School placed third in Liberia's National Flag Day Cadet Corps Drill competition, which featured 29 participating schools.",
+      "summary": "From coordinated marching formations to ceremonial parades, Gray D. Allison's cadet drill activities represent teamwork, discipline, and commitment.",
+      "heading": "National Flag Day Cadet Corps Drill",
+      "milestoneDate": "2017",
+      "sourceUrl": "https://mod.gov.lr/liberia-celebrates-170th-national-flag-day/",
+      "sourceLabel": "Ministry of National Defense · National Flag Day report",
+      "imageAlt": "Cadets in blue and black uniforms marching with flags in front of a blue building.",
+      "imageCaption": "School parade photograph · event date not identified",
+      "imageWidth": 960,
+      "imageHeight": 538,
+      "category": "Parade & Cadet Drill Excellence",
+      "displayOrder": 0
+    }
+  },
+  {
+    "legacyKey": "achievement-academic-excellence",
+    "type": "ACHIEVEMENT",
+    "file": "frontend/src/assets/excellence/graduation.webp",
+    "data": {
+      "title": "A Tradition of Academic Achievement",
+      "content": "In September 2026, the Ministry of National Defense reported a 100% WASSCE pass rate for Gray D. Allison High School.",
+      "summary": "Celebrating the dedication of students, teachers, and administrators whose achievements continue to strengthen the school's academic record.",
+      "heading": "Reported WASSCE Achievement",
+      "milestoneDate": "2026-09",
+      "sourceUrl": "https://www.facebook.com/modliberia/posts/1492531776241236/",
+      "sourceLabel": "Ministry of National Defense · reported result on Facebook",
+      "imageAlt": "Graduates gathered outdoors in black caps and gowns with blue stoles.",
+      "imageCaption": "School graduation photograph · graduating year not identified",
+      "imageWidth": 768,
+      "imageHeight": 1024,
+      "category": "Academic Excellence",
+      "displayOrder": 1
+    }
+  }
+]

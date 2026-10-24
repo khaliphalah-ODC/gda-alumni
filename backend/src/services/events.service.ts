@@ -4,7 +4,7 @@ import type { AuthenticatedUser } from '../types/auth.types';
 import type { EventQuery } from '../validators/event.validator';
 import { postRepository } from '../repositories/post.repository';
 import { contentService } from './content.service';
-interface EventInput { title: string; content: string; image?: string | null; eventDate: Date; eventTime?: string | null; eventLocation?: string | null; audience?: string | null; version?: number }
+interface EventInput { title: string; content: string; image?: string | null; category?: string | null; eventDate: Date; eventTime?: string | null; eventLocation?: string | null; audience?: string | null; version?: number }
 export class EventsService {
   create(actor: AuthenticatedUser, data: EventInput) {
     assertPermission(actor.role, 'SCHOOL_MANAGE');

@@ -83,6 +83,8 @@ enum PostType {
   HISTORY
   SCHOOL_LEADER
   ALUMNI_LEADER
+  GALLERY
+  ACHIEVEMENT
 }
 
 model Post {
@@ -91,6 +93,16 @@ model Post {
   title         String
   content       String
   image         String?
+  category      String?
+  imageAlt      String?
+  imageCaption  String?
+  imageWidth    Int?
+  imageHeight   Int?
+  summary       String?
+  heading       String?
+  sourceUrl     String?
+  sourceLabel   String?
+  legacyKey     String?   @unique
   type          PostType
   isPublished   Boolean   @default(false)
   publishedAt   DateTime?
@@ -112,6 +124,7 @@ model Post {
   @@index([createdBy])
   @@index([publishedAt])
   @@index([type, isPublished, displayOrder])
+  @@index([type, isPublished, category])
 }
 
 model AlumniProfile {
@@ -247,6 +260,8 @@ model PlatformSettings {
   platformName String @default("Gray D. Allison Alumni Portal")
   emailEnabled Boolean @default(false)
   mediaEnabled Boolean @default(false)
+  galleryManaged Boolean @default(false)
+  achievementsManaged Boolean @default(false)
   updatedAt DateTime @updatedAt
 }
 
@@ -256,6 +271,8 @@ model AccountToken {
   targetEmail String? @unique
   fullName String?
   userId String?
+  sessionVersion Int?
+  emailSnapshot String?
   user User? @relation(fields: [userId], references: [id], onDelete: Restrict)
   tokenHash String? @unique
   expiresAt DateTime
@@ -279,6 +296,18 @@ model MediaCleanup {
   id String @id @default(cuid())
   publicId String @unique
   createdAt DateTime @default(now())
+  attempts Int @default(0)
+  nextAttemptAt DateTime @default(now())
+  leaseUntil DateTime?
+  leaseToken String?
+  @@index([nextAttemptAt])
+}
+
+model RateLimitBucket {
+  key String @id
+  count Int
+  resetAt DateTime
+  @@index([resetAt])
 }
 
 // Public assistant configuration and anonymous aggregate quotas. No transcripts.

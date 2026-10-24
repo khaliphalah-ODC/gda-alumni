@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
+    "build:vercel": "npm run prisma:generate && npm run build",
     "start": "node dist/src/server.js",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
@@ -16,6 +17,7 @@
     "prisma:deploy": "prisma migrate deploy",
     "super-admin:bootstrap": "tsx scripts/bootstrap-super-admin.ts",
     "media:cleanup": "tsx scripts/retry-media-cleanup.ts",
+    "media:migrate": "tsx scripts/migrate-local-media.ts",
     "media:check": "tsx scripts/check-media.ts",
     "super-admin:bootstrap:production": "node dist/scripts/bootstrap-super-admin.js",
     "smtp:check:production": "node dist/scripts/check-smtp.js",
@@ -28,6 +30,7 @@
   },
   "dependencies": {
     "@prisma/client": "^6.7.0",
+    "@vercel/functions": "^3.10.3",
     "bcrypt": "^6.0.0",
     "cloudinary": "^2.11.0",
     "cookie-parser": "^1.4.7",
@@ -39,9 +42,9 @@
     "jsonwebtoken": "^9.0.2",
     "multer": "^2.4.0",
     "nodemailer": "^10.1.2",
+    "prisma": "^6.19.0",
     "sharp": "^0.35.5",
-    "zod": "^3.24.3",
-    "prisma": "^6.19.0"
+    "zod": "^3.24.3"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

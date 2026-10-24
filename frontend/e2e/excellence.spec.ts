@@ -49,6 +49,19 @@ test('cards flip independently, transfer keyboard focus and expose only the acti
   await expect(cards.nth(0).locator('.excellence-card-front')).toHaveAttribute('inert', '');
   await page.keyboard.press('Space'); await expect(front).toBeFocused();
   await cards.nth(1).getByRole('button', { name: /Explore achievement:/ }).click();
+  // Pause one native transition mid-flip for visual inspection, then resume it
+  // before continuing the interaction checks.
+  const rotor = cards.nth(1).locator('.excellence-card-rotor');
+  const paused = await rotor.evaluate(el => {
+    const animation = el.getAnimations()[0];
+    if (!animation) return false;
+    animation.pause(); animation.currentTime = 200;
+    return true;
+  });
+  if (paused) {
+    await cards.nth(1).screenshot({ path: '/tmp/gda-excellence-mid-flip.png', animations: 'allow' });
+    await rotor.evaluate(el => el.getAnimations().forEach(animation => animation.play()));
+  }
   await expect(cards.nth(1).getByRole('button', { name: /Flip back:/ })).toBeFocused();
   await expect(cards.nth(1).getByRole('link')).toHaveAttribute('href', 'https://www.facebook.com/modliberia/posts/1492531776241236/');
   await expect(cards.nth(1).locator('time')).toHaveText('September 2026');

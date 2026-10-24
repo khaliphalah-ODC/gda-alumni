@@ -1,4 +1,4 @@
-import rateLimit from 'express-rate-limit';
+import { createLimiter } from '../utils/shared-rate-limit';
 
 const rateLimitResponse = {
   success: false,
@@ -7,5 +7,6 @@ const rateLimitResponse = {
   pagination: null,
 };
 
-export const apiLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 300, standardHeaders: 'draft-8', legacyHeaders: false, message: rateLimitResponse });
-export const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 10, standardHeaders: 'draft-8', legacyHeaders: false, message: rateLimitResponse });
+export const apiLimiter = createLimiter('api', { windowMs: 15 * 60 * 1000, limit: 300, standardHeaders: 'draft-8', legacyHeaders: false, message: rateLimitResponse,
+  skip: req => ['/api/health', '/api/cron/maintenance'].includes(req.path) });
+export const authLimiter = createLimiter('auth', { windowMs: 15 * 60 * 1000, limit: 10, standardHeaders: 'draft-8', legacyHeaders: false, message: rateLimitResponse });

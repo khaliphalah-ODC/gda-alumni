@@ -21,6 +21,8 @@ import { requestsRouter } from './routes/requests.routes';
 import { storiesRouter } from './routes/stories.routes';
 import { sendSuccess } from './utils/api-response';
 import { localMediaRoot, localAssetPath } from './services/local-media';
+import { maintenanceRouter } from './routes/maintenance.routes';
+import { galleryRouter, achievementsRouter } from './routes/showcase.routes';
 
 export const app = express();
 
@@ -44,6 +46,7 @@ app.use('/api/media/images', (req, res, next) => {
 
 app.get('/api/health', (_request, response) => sendSuccess(response, 200, 'API is healthy', { status: 'ok' }));
 app.get('/api/ready', readiness);
+app.use('/api/cron', maintenanceRouter);
 app.use('/api/chatbot', chatbotRouter);
 app.use('/api/super-admin/chatbot', chatbotPlatformRouter);
 app.use('/api/admin/chatbot/faqs', chatbotFaqRouter);
@@ -57,8 +60,13 @@ app.use('/api/posts', postsRouter);
 app.use('/api/stories', storiesRouter);
 app.use('/api/events', eventsRouter);
 app.use('/api/history', historyRouter);
+app.use('/api/gallery', galleryRouter);
+app.use('/api/achievements', achievementsRouter);
 app.use('/api/leadership/school', schoolLeadershipRouter);
 app.use('/api/leadership/alumni', alumniLeadershipRouter);
 app.use('/api/requests', requestsRouter);
 app.use(notFoundHandler);
 app.use(errorHandler);
+
+// Vercel invokes the Express app directly; server.ts remains the local/Railway listener.
+export default app;

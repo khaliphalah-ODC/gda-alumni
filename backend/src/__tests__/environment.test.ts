@@ -19,6 +19,14 @@ describe('production configuration', () => {
   it('accepts server storage with a persistent directory and HTTPS public API origin', () => {
     expect(environmentSchema.safeParse({ ...settings, MEDIA_STORAGE: 'local', MEDIA_UPLOAD_DIR: '/data/images', MEDIA_PUBLIC_ORIGIN: 'https://api.school.example' }).success).toBe(true);
   });
+  it('rejects local image storage on Vercel even with a configured upload directory', () => {
+    const result = environmentSchema.safeParse({ ...settings, VERCEL: '1', MEDIA_STORAGE: 'local', MEDIA_UPLOAD_DIR: '/tmp/images', MEDIA_PUBLIC_ORIGIN: 'https://api.school.example' });
+    expect(result.success).toBe(false);
+    if (!result.success) expect(result.error.flatten().fieldErrors.MEDIA_STORAGE).toContain('Vercel cannot persist server image uploads. Use MEDIA_STORAGE=cloudinary.');
+  });
+  it('accepts Vercel with external image storage and a smaller upload limit', () => {
+    expect(environmentSchema.safeParse({ ...settings, VERCEL: '1', CRON_SECRET: 'isolated-maintenance-fixture-0123456789', MEDIA_STORAGE: 'cloudinary', IMAGE_MAX_BYTES: '4194304' }).success).toBe(true);
+  });
   it('accepts authenticated SMTP with mandatory STARTTLS', () => {
     const result = environmentSchema.parse({ ...settings, ACTIVATION_DELIVERY: 'smtp', SMTP_HOST: 'smtp.school.example', SMTP_FROM: 'registrar@school.example', SMTP_PORT: '587', SMTP_SECURE: 'false', SMTP_USER: 'registrar', SMTP_PASSWORD: 'provider-credential' });
     expect(result.SMTP_SECURE).toBe(false);

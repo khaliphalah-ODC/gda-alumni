@@ -1,0 +1,14 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "express",
+  "installCommand": "npm ci --include=dev",
+  "buildCommand": "npm run build:vercel",
+  "regions": ["iad1"],
+  "crons": [{ "path": "/api/cron/maintenance", "schedule": "0 3 * * *" }],
+  "functions": {
+    "src/app.ts": {
+      "maxDuration": 60,
+      "includeFiles": ["node_modules/.prisma/client/**"]
+    }
+  }
+}

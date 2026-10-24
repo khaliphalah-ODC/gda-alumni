@@ -25,3 +25,14 @@ PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/google-chrome npm --prefix frontend
 ```
 
 The dedicated browser configuration starts only the built frontend and intercepts public API responses. It requires no database and does not change records. Tests cover independent flips, keyboard and touch, focus/inert behavior, sources, reduced motion, accessibility, existing homepage request paths, and layouts at 375, 390, 768, 1024 and 1440 pixels. This does not establish live backend availability or independently verify external-source contents.
+
+## Completed verification — 2026-10-23
+
+- Production build passed, including Vue/TypeScript checking and Vite asset generation.
+- All six existing frontend test files passed.
+- All four dedicated Chrome tests passed on the production build (1.1 minutes). All five requested viewport widths passed checks for layout, face clipping and horizontal overflow.
+- The section's WCAG A/AA accessibility scan returned no violations. Keyboard, touch, independent state, source-link opening and reduced-motion focus transfer passed.
+- The browser test captures a native CSS transition at 200 ms and resumes it before continuing. The captured frame was visually reviewed and shows the card's projected 3D rotation; front/back and responsive screenshots were also reviewed.
+- Reduced-motion mode disables transitions throughout each card, including inherited visibility transitions from the site's global rule, so the new face can receive focus immediately.
+
+No deployment was performed. No authentic photograph is missing for the selected parade and graduation categories; exact event dates for those photos remain unidentified. The Facebook-source and live-backend verification limitations above still apply.

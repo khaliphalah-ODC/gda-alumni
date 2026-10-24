@@ -3,6 +3,9 @@ import { z } from 'zod';
 
 const schema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
+  VERCEL: z.enum(['1']).optional(),
+  RATE_LIMIT_STORAGE: z.enum(['memory', 'database']).optional(),
+  CRON_SECRET: z.string().min(32).optional(),
   PORT: z.coerce.number().int().positive().default(4000),
   TRUST_PROXY_HOPS: z.coerce.number().int().min(0).max(5).default(0),
   ACTIVATION_DELIVERY: z.enum(['development', 'smtp']).default('development'),
@@ -33,6 +36,15 @@ const schema = z.object({
 });
 
 export const environmentSchema = schema.superRefine((config, context) => {
+  if (config.VERCEL === '1' && !config.CRON_SECRET) {
+    context.addIssue({ code: 'custom', path: ['CRON_SECRET'], message: 'Vercel scheduled maintenance requires a random CRON_SECRET of at least 32 characters' });
+  }
+  if (config.VERCEL === '1' && config.RATE_LIMIT_STORAGE === 'memory') {
+    context.addIssue({ code: 'custom', path: ['RATE_LIMIT_STORAGE'], message: 'Vercel requires shared database rate limiting' });
+  }
+  if (config.VERCEL === '1' && config.MEDIA_STORAGE === 'local') {
+    context.addIssue({ code: 'custom', path: ['MEDIA_STORAGE'], message: 'Vercel cannot persist server image uploads. Use MEDIA_STORAGE=cloudinary.' });
+  }
   if (config.ACTIVATION_DELIVERY === 'smtp' && (!config.SMTP_HOST || !config.SMTP_FROM)) {
     context.addIssue({ code: 'custom', path: ['ACTIVATION_DELIVERY'], message: 'SMTP delivery requires SMTP_HOST and SMTP_FROM' });
   }

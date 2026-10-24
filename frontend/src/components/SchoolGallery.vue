@@ -8,10 +8,15 @@ import ContentCarousel from './ContentCarousel.vue';
 import MotionCard from './MotionCard.vue';
 import SchoolPhoto from './SchoolPhoto.vue';
 import { galleryPhotos, type SchoolPhoto as Photo } from '@/assets/school-photos';
+import { useManagedCollection } from '@/composables/useManagedCollection';
+import ApiAlert from './ApiAlert.vue';
 
-const categories = ['All photos', 'School life', 'Parade', 'Graduation'] as const;
-const category = ref<(typeof categories)[number]>('All photos');
-const photos = computed(() => galleryPhotos.filter(photo => category.value === 'All photos' || photo.category === category.value));
+const collection = useManagedCollection('gallery');
+const allPhotos = computed<Photo[]>(() => !collection.resolved.value ? [] : collection.managed.value
+  ? collection.items.value.map(item => ({ id: item.id, src: item.image!, width: item.imageWidth || 1200, height: item.imageHeight || 900, alt: item.imageAlt, caption: item.imageCaption || item.title, category: item.category || 'School life' })) : galleryPhotos);
+const categories = computed(() => ['All photos', ...new Set(allPhotos.value.map(photo => photo.category))]);
+const category = ref('All photos');
+const photos = computed(() => allPhotos.value.filter(photo => category.value === 'All photos' || photo.category === category.value));
 const dialog = ref<HTMLDialogElement>(), open = ref(false), selected = ref(0), reduced = useReducedMotion();
 let slider: SwiperInstance | undefined, previousFocus: HTMLElement | null = null, previousOverflow = '';
 async function preview(photo: Photo, event: MouseEvent) {
@@ -38,6 +43,7 @@ onBeforeUnmount(() => { if (open.value) { dialog.value?.close(); document.body.s
 </script>
 <template>
   <section aria-label="School photo gallery" class="min-w-0">
+    <p v-if="collection.loading.value" role="status">Loading school photographs…</p><ApiAlert :message="collection.error.value"/><button v-if="collection.error.value" class="secondary-button" @click="collection.load">Retry gallery</button><p v-if="collection.resolved.value && !allPhotos.length && !collection.error.value">No gallery photographs are published.</p>
     <div class="mb-8 flex flex-wrap gap-2" role="group" aria-label="Filter photographs"><button v-for="name in categories" :key="name" class="min-h-11 border border-outline-variant px-4 py-2 text-sm" :class="category === name ? 'bg-primary text-white' : 'bg-white text-primary'" :aria-pressed="category === name" @click="category = name">{{ name }}</button></div>
     <p class="sr-only" role="status">{{ photos.length }} photographs in {{ category.toLowerCase() }}</p>
     <ContentCarousel :items="photos" label="school gallery" :per-view="3"><template #default="{ item, index }">

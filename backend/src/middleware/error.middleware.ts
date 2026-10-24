@@ -13,7 +13,7 @@ export const notFoundHandler: RequestHandler = (request, _response, next) => {
 export const errorHandler: ErrorRequestHandler = (error, _request, response, _next) => {
   if (error instanceof AppError) return sendError(response, error.statusCode, error.message, error.details);
   if (error instanceof MulterError) {
-    const message = error.code === 'LIMIT_FILE_SIZE' ? 'Uploaded image exceeds the 5 MB limit' : 'Invalid image upload';
+    const message = error.code === 'LIMIT_FILE_SIZE' ? `Uploaded image exceeds the ${env.IMAGE_MAX_BYTES / (1024 * 1024)} MB limit` : 'Invalid image upload';
     return sendError(response, 400, message);
   }
   if (error instanceof ZodError) return sendError(response, 400, 'Validation failed', error.flatten().fieldErrors);

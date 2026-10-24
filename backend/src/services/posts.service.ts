@@ -5,7 +5,7 @@ import { PostType } from '@prisma/client';
 import type { AuthenticatedUser } from '../types/auth.types';
 import { postRepository } from '../repositories/post.repository';
 
-interface PostInput { title: string; content: string; image?: string | null }
+interface PostInput { title: string; content: string; image?: string | null; category?: string | null }
 
 export class PostsService {
   async createAnnouncement(actor: AuthenticatedUser, data: PostInput & { isPublished?: boolean }) {

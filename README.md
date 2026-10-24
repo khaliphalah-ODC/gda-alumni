@@ -24,6 +24,8 @@ For database connection errors, run `npm --prefix backend run db:check` to verif
 
 ## Preview hosting and uploads
 
+For **Vercel backend-only deployment**, use [docs/vercel-backend.md](docs/vercel-backend.md). Import the repository with Root Directory `backend` and the Express preset. The Vercel backend uses external PostgreSQL and Cloudinary, with a 4 MiB image limit; server disk uploads are not supported there.
+
 See [DEPLOYMENT.md](DEPLOYMENT.md) for the Railway API/PostgreSQL and Netlify frontend configuration. The frontend uses a same-origin API proxy for hosted sessions and image uploads. Run `npm --prefix backend run media:check -- --upload` to verify Cloudinary and delete the temporary diagnostic asset.
 
 Image files can also be stored on the API server without a Cloudinary account. Set `MEDIA_STORAGE=local`, `MEDIA_UPLOAD_DIR` to an absolute directory, and `MEDIA_PUBLIC_ORIGIN` to the API's public origin (for local development, `http://localhost:5000` if the backend uses port 5000). Restart the API, then enable **image uploads** in **SuperAdmin → Platform settings**. Existing file-upload controls work with either provider; HTTPS image links remain available. JPEG, PNG and WebP files are checked and converted to WebP before storage. `media:check -- --upload` tests the selected provider and removes its temporary image.

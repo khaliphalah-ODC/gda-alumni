@@ -34,7 +34,7 @@ export const accountRepository = {
       await lockUser(tx, id, version);
       const result = await tx.user.updateMany({ where: { id, password: oldHash, sessionVersion: version, isActive: true }, data: { password: hash, sessionVersion: { increment: 1 } } });
       if (result.count !== 1) throw new AppError(409, 'Account changed. Sign in again');
-      await tx.accountToken.deleteMany({ where: { userId: id, purpose: 'EMAIL_CHANGE' } });
+      await tx.accountToken.deleteMany({ where: { userId: id, purpose: { in: ['EMAIL_CHANGE', 'PASSWORD_RESET'] } } });
       await tx.auditRecord.create({ data: { actorId: id, action: 'PASSWORD_CHANGED', targetId: id } });
     });
   },

@@ -10,7 +10,7 @@ const state = vi.hoisted(() => {
 });
 vi.mock('../repositories/platform.repository', () => ({ platformRepository: { settings: vi.fn().mockResolvedValue({ mediaEnabled: true }) } }));
 vi.mock('../repositories/account.repository', () => ({ accountRepository: { image: vi.fn().mockResolvedValue({}), saveImage: vi.fn() } }));
-vi.mock('../repositories/media.repository', () => ({ mediaRepository: { pending: vi.fn().mockResolvedValue([]), queue: vi.fn(), done: vi.fn() } }));
+vi.mock('../repositories/media.repository', () => ({ mediaRepository: { pending: vi.fn().mockResolvedValue([]), claim: vi.fn().mockResolvedValue([]), complete: vi.fn(), retry: vi.fn(), queue: vi.fn(), done: vi.fn() } }));
 vi.mock('../middleware/auth.middleware', async () => {
   const { AppError } = await import('../utils/app-error.js');
   return {
@@ -57,7 +57,7 @@ describe('server image storage', () => {
     await expect(mediaService.upload({ userId: 'test', role: 'ADMIN' }, { buffer: input, size: input.length, mimetype: 'image/png' } as Express.Multer.File, 0)).rejects.toThrow('Conflicting version');
     const publicId = vi.mocked(mediaRepository.queue).mock.calls.at(-1)![0];
     expect(publicId.startsWith('local/')).toBe(true);
-    vi.mocked(mediaRepository.pending).mockResolvedValueOnce([{ id: 'job', publicId }] as Awaited<ReturnType<typeof mediaRepository.pending>>);
+    vi.mocked(mediaRepository.claim).mockResolvedValueOnce([{ id: 'job', publicId, attempts: 0, leaseToken: 'lease' }]);
     await mediaService.cleanup();
     await expect(stat(`${localMediaRoot}/${publicId.slice(6)}.webp`)).rejects.toMatchObject({ code: 'ENOENT' });
   });

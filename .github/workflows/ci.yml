@@ -11,7 +11,7 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     services:
       postgres:
         image: postgres:16
@@ -53,3 +53,5 @@ jobs:
       - run: npm run test:e2e
         working-directory: frontend
 
+      - run: npm run test:e2e:excellence && npm run test:e2e:release
+        working-directory: frontend

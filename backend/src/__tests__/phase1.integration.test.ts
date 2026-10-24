@@ -11,7 +11,7 @@ const service = vi.hoisted(() => ({
 
 vi.mock('../services/auth.service', () => ({ authService: service }));
 
-import { app } from '../app';
+import app from '../app';
 
 const alumni = {
   id: 'cm9z2p7es0000l9m86e4w8v1a',

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import rateLimit from 'express-rate-limit';
+import { createLimiter } from '../utils/shared-rate-limit';
 import * as controller from '../controllers/membership.controller';
 import { requireAuth } from '../middleware/auth.middleware';
 import { requirePermission } from '../policies/permission.policy';
@@ -7,7 +7,7 @@ import { validateBody, validateParams, validateQuery } from '../middleware/valid
 import { applicationSchema, trackingSchema, correctionSchema, activationSchema, membershipIdSchema, membershipListSchema, reviewSchema } from '../validators/membership.validator';
 export const membershipRouter = Router();
 membershipRouter.use((_req, res, next) => { res.set('Cache-Control', 'no-store'); res.set('Referrer-Policy', 'no-referrer'); next(); });
-const publicLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 30, standardHeaders: true, legacyHeaders: false, message: { success: false, message: 'Too many membership requests. Try again later', data: null, pagination: null } });
+const publicLimiter = createLimiter('membership', { windowMs: 15 * 60 * 1000, limit: 30, standardHeaders: true, legacyHeaders: false, message: { success: false, message: 'Too many membership requests. Try again later', data: null, pagination: null } });
 membershipRouter.post('/applications', publicLimiter, validateBody(applicationSchema), controller.apply);
 membershipRouter.post('/status', publicLimiter, validateBody(trackingSchema), controller.status);
 membershipRouter.patch('/application', publicLimiter, validateBody(correctionSchema), controller.correct);

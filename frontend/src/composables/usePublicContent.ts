@@ -3,7 +3,7 @@ import { api, errorMessage } from '@/api/client';
 import { contentEndpoint, type ContentKind } from '@/utils/content';
 import type { ApiResponse, Pagination, Post } from '@/types/api';
 
-export function usePublicContent(kind: MaybeRefOrGetter<ContentKind>, limit = 9, extraParams?: MaybeRefOrGetter<Record<string, string>>) {
+export function usePublicContent(kind: MaybeRefOrGetter<ContentKind>, limit = 9, extraParams?: MaybeRefOrGetter<Record<string, string | undefined>>) {
   const posts = ref<Post[]>([]), pagination = ref<Pagination | null>(null);
   const page = ref(1), search = ref(''), loading = ref(false), error = ref('');
   let controller: AbortController | undefined;

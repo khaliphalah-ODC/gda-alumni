@@ -1,5 +1,5 @@
 export type Role = 'SUPER_ADMIN' | 'ADMIN' | 'ALUMNI' | 'STUDENT';
-export type PostType = 'ANNOUNCEMENT' | 'STORY' | 'EVENT' | 'HISTORY' | 'SCHOOL_LEADER' | 'ALUMNI_LEADER';
+export type PostType = 'ANNOUNCEMENT' | 'STORY' | 'EVENT' | 'HISTORY' | 'SCHOOL_LEADER' | 'ALUMNI_LEADER' | 'GALLERY' | 'ACHIEVEMENT';
 export type RequestType = 'CERTIFICATE' | 'TRANSCRIPT' | 'DIPLOMA' | 'WAEC_CERTIFICATE' | 'WASSCE_CERTIFICATE';
 export type RequestStatus = 'SUBMITTED' | 'IN_REVIEW' | 'APPROVED' | 'REJECTED' | 'READY_FOR_PICKUP' | 'COMPLETED';
 
@@ -18,7 +18,9 @@ export interface AlumniDashboard {
   requests: Pick<DocumentRequest, 'id' | 'requestType' | 'status' | 'adminNote' | 'createdAt' | 'completedAt'>[];
   requestCounts: { status: RequestStatus; _count: { _all: number } }[];
 }
-export interface Post { id: string; version: number; title: string; content: string; image?: string | null; type: PostType; isPublished: boolean; publishedAt?: string | null; createdBy: string; eventDate?: string | null; eventTime?: string | null; eventLocation?: string | null; audience?: string | null; createdAt: string; user: Pick<User, 'id'>; }
+export interface Post { id: string; version: number; title: string; content: string; image?: string | null; category?: string | null; type: PostType; isPublished: boolean; publishedAt?: string | null; createdBy: string; eventDate?: string | null; eventTime?: string | null; eventLocation?: string | null; audience?: string | null; createdAt: string; user: Pick<User, 'id'>; }
+export interface ShowcasePost extends Post { imageAlt: string; imageCaption: string | null; imageWidth: number; imageHeight: number; displayOrder: number; summary: string | null; heading: string | null; sourceUrl: string | null; sourceLabel: string | null; milestoneDate: string | null; }
+export interface ManagedCollection { managed: boolean; items: ShowcasePost[]; }
 export interface AboutRecord extends Post { milestoneDate: string | null; position: string | null; displayOrder: number; }
 export interface DocumentRequest { id: string; version: number; requestType: RequestType; purpose: string; status: RequestStatus; adminNote?: string | null; requestedBy: string; fullNameAtGraduation: string; graduationYear?: number | null; studentIdOrIndexNumber?: string | null; contactPhone: string; completedAt?: string | null; createdAt: string; user: Pick<User, 'id' | 'email' | 'role'>; }
 

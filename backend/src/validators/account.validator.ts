@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { passwordSchema } from './auth.validator';
 export const emailSchema = z.string().trim().toLowerCase().email().max(254);
+export const recoveryRequestSchema = z.object({ email: emailSchema }).strict();
 export const currentPassword = z.string().min(1).max(72).refine((value) => Buffer.byteLength(value, 'utf8') <= 72, 'Password exceeds 72 UTF-8 bytes');
 export const newPassword = passwordSchema.refine((value) => /[A-Za-z]/.test(value) && /[^A-Za-z]/.test(value), 'Use letters and at least one number or symbol');
 export const passwordChangeSchema = z.object({ currentPassword, newPassword, confirmation: z.string() }).strict().refine((data) => data.newPassword === data.confirmation, { message: 'Passwords must match', path: ['confirmation'] });
@@ -8,6 +9,7 @@ export const profileSchema = z.object({ fullName: z.string().trim().min(2).max(1
 export const emailChangeSchema = z.object({ newEmail: emailSchema, currentPassword }).strict();
 export const tokenSchema = z.object({ token: z.string().regex(/^[a-f0-9]{64}$/) }).strict();
 export const adminActivationSchema = tokenSchema.extend({ password: newPassword, confirmation: z.string() }).strict().refine((data) => data.password === data.confirmation, { message: 'Passwords must match', path: ['confirmation'] });
+export const passwordResetSchema = tokenSchema.extend({ newPassword, confirmation: z.string() }).strict().refine((data) => data.newPassword === data.confirmation, { message: 'Passwords must match', path: ['confirmation'] });
 export const imageUrlSchema = z.object({ url: z.string().trim().max(2000).url().refine((value) => { try { const url = new URL(value); return url.protocol === 'https:' && !url.username && !url.password; } catch { return false; } }, 'Use an HTTPS image URL without embedded credentials').nullable(), version: z.number().int().nonnegative() }).strict();
 export const imageVersionSchema = z.object({ version: z.coerce.number().int().nonnegative() }).strict();
 export const settingsSchema = z.object({ currentPassword, platformName: z.string().trim().min(2).max(150).optional(), emailEnabled: z.boolean().optional(), mediaEnabled: z.boolean().optional() }).strict();

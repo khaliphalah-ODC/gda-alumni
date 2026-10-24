@@ -10,6 +10,8 @@ export const healthRepository = {
         (SELECT "sessionVersion" FROM "User" LIMIT 1),
         (SELECT "isActive" FROM "User" LIMIT 1),
         (SELECT "version" FROM "Post" LIMIT 1),
+        (SELECT "category" FROM "Post" LIMIT 1),
+        (SELECT "imageCaption" FROM "Post" LIMIT 1),
         (SELECT "milestoneDate" FROM "Post" LIMIT 1),
         (SELECT "position" FROM "Post" LIMIT 1),
         (SELECT "displayOrder" FROM "Post" LIMIT 1),
@@ -20,12 +22,15 @@ export const healthRepository = {
         (SELECT "profileImagePublicId" FROM "StaffProfile" LIMIT 1),
         (SELECT "profileImagePublicId" FROM "AlumniProfile" LIMIT 1),
         (SELECT "id" FROM "AccountToken" LIMIT 1),
+        (SELECT "sessionVersion" FROM "AccountToken" LIMIT 1),
         (SELECT "id" FROM "PlatformSettings" LIMIT 1),
+        (SELECT "galleryManaged" FROM "PlatformSettings" LIMIT 1),
         (SELECT "id" FROM "AuditRecord" LIMIT 1),
         (SELECT "id" FROM "ChatbotSettings" LIMIT 1),
         (SELECT "id" FROM "ChatbotFaq" LIMIT 1),
         (SELECT "day" FROM "ChatbotUsage" LIMIT 1),
-        (SELECT "id" FROM "MediaCleanup" LIMIT 1)
+        (SELECT "leaseToken" FROM "MediaCleanup" LIMIT 1),
+        (SELECT "key" FROM "RateLimitBucket" LIMIT 1)
       LIMIT 0
     `;
   },

@@ -9,7 +9,7 @@ import { createAnnouncement, listAnnouncements } from '../controllers/posts.cont
 import { optionalAuth, requireAuth } from '../middleware/auth.middleware';
 import { validateBody, validateParams, validateQuery } from '../middleware/validate.middleware';
 import { requirePermission } from '../policies/permission.policy';
-import { contentListQuerySchema, createAnnouncementSchema, postIdParamSchema, updateStorySchema, publicationSchema, deletionQuerySchema } from '../validators/post.validator';
+import { contentListQuerySchema, createAnnouncementSchema, postIdParamSchema, updateAnnouncementSchema, publicationSchema, deletionQuerySchema } from '../validators/post.validator';
 
 export const postsRouter = Router();
 postsRouter.use((_req, res, next) => { res.set('Cache-Control', 'no-store'); next(); });
@@ -19,7 +19,7 @@ postsRouter.post('/announcements', requireAuth, requirePermission('SCHOOL_MANAGE
 
 const handlers = contentHandlers('ANNOUNCEMENT');
 postsRouter.get('/announcements/:id', optionalAuth, validateParams(postIdParamSchema), handlers.detail);
-postsRouter.patch('/announcements/:id', requireAuth, requirePermission('SCHOOL_MANAGE'), validateParams(postIdParamSchema), validateBody(updateStorySchema), handlers.update);
+postsRouter.patch('/announcements/:id', requireAuth, requirePermission('SCHOOL_MANAGE'), validateParams(postIdParamSchema), validateBody(updateAnnouncementSchema), handlers.update);
 postsRouter.delete('/announcements/:id', requireAuth, requirePermission('SCHOOL_MANAGE'), validateParams(postIdParamSchema), validateQuery(deletionQuerySchema), handlers.remove);
 postsRouter.patch('/announcements/:id/publish', requireAuth, requirePermission('SCHOOL_MANAGE'), validateParams(postIdParamSchema), validateBody(publicationSchema), handlers.publish);
 postsRouter.patch('/announcements/:id/unpublish', requireAuth, requirePermission('SCHOOL_MANAGE'), validateParams(postIdParamSchema), validateBody(publicationSchema), handlers.unpublish);
