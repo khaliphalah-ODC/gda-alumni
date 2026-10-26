@@ -17,6 +17,32 @@ async function accessible(page: Page) {
   expect(results.violations.map((item) => ({ id: item.id, impact: item.impact, targets: item.nodes.map((node) => node.target) }))).toEqual([]);
 }
 async function fits(page: Page) { expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true); }
+test('failed sign-in clears and hides the password, preserves email and allows retry', async ({ page }) => {
+  const email = 'retry@example.test';
+  await page.route('**/api/auth/me', route => route.fulfill({ status: 401, json: { message: 'Authentication is required' } }));
+  for (const failure of [401, 403, 503, 'network', 'session'] as const) {
+    await page.route('**/api/auth/login', async route => {
+      expect(route.request().postDataJSON()).toEqual({ email, password: ' RetryPassword123! ' });
+      if (failure === 'network') return route.abort('failed');
+      return route.fulfill({ status: failure === 'session' ? 200 : failure, json: failure === 'session' ? { data: { role: 'ALUMNI' } } : { message: `Sign-in rejected (${failure})` } });
+    });
+    await page.goto('/login');
+    await page.getByLabel('Email address', { exact: true }).fill(email);
+    const input = page.getByLabel('Password', { exact: true });
+    await input.fill(' RetryPassword123! ');
+    await page.getByRole('button', { name: 'Show password', exact: true }).click();
+    await expect(input).toHaveAttribute('type', 'text');
+    await page.getByRole('button', { name: 'Log in', exact: true }).click();
+    await expect(page.getByRole('alert')).toBeVisible();
+    await expect(input).toHaveValue('');
+    await expect(input).toHaveAttribute('type', 'password');
+    await expect(page.getByRole('button', { name: 'Show password', exact: true })).toHaveAttribute('aria-pressed', 'false');
+    await expect(page.getByLabel('Email address', { exact: true })).toHaveValue(email);
+    await expect(page.getByRole('button', { name: 'Log in', exact: true })).toBeEnabled();
+    await expect(page).toHaveURL(/\/login$/);
+    await page.unroute('**/api/auth/login');
+  }
+});
 test.beforeAll(async () => {
   prisma = new PrismaClient({ datasourceUrl: process.env.PHASE1_TEST_DATABASE_URL });
   await prisma.user.create({ data: { email: adminEmail, password: await bcrypt.hash(password, 12), role: 'ADMIN', staffProfile: { create: { fullName: 'Browser Administrator' } } } });
@@ -105,7 +131,10 @@ test('separate staff roles, shared mobile settings and accessible password contr
       } else { await page.goto('/super-admin'); await expect(page).toHaveURL(email === adminEmail ? /\/admin$/ : /\/dashboard$/); }
       await page.setViewportSize({ width: 390, height: 844 }); await page.goto('/account/settings');
       await expect(page.getByLabel('Current email', { exact: true })).toHaveValue(email);
-      await expect(page.getByLabel('Upload image (JPEG, PNG or WebP, maximum 5 MB)', { exact: true })).toBeDisabled();
+      // Choosing and previewing is available even when hosted storage is unavailable.
+      await expect(page.getByLabel('Upload image (JPEG, PNG or WebP, maximum 5 MB)', { exact: true })).toBeEnabled();
+      await expect(page.getByRole('button', { name: 'Upload selected image', exact: true })).toBeDisabled();
+      await expect(page.locator('#profile-upload-status')).toContainText('Image storage is not configured.');
       await expect(page.getByRole('link', { name: 'Open platform upload settings', exact: true })).toHaveCount(email === superEmail ? 1 : 0);
       await expect(page.getByText('Email changes are temporarily unavailable because email verification is not enabled. Please contact the platform administrator for assistance.')).toBeVisible();
       await page.getByLabel('Full name', { exact: true }).fill(email === settingsMemberEmail ? 'Browser Alumni' : 'Browser Staff Profile');

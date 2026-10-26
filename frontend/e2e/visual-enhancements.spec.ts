@@ -40,11 +40,14 @@ test('hero supports arrows, pagination, keyboard, opt-in autoplay, focus pause a
   const mobile = await context.newPage();
   await mobile.goto('/');
   const session = await context.newCDPSession(mobile);
-  const bounds = await mobile.locator('.hero-carousel').boundingBox();
+  const bounds = await mobile.locator('.hero-photographs').boundingBox();
   if (!bounds) throw new Error('Hero has no bounds');
-  const y = Math.min(bounds.y + bounds.height - 160, 650);
-  await session.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: 340, y }] });
-  for (const x of [290, 240, 180, 110, 40]) await session.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x, y }] });
+  // Swipe the photograph, above the overlaid links and controls. Their positions
+  // change when the app name wraps on mobile.
+  const y = bounds.y + 40, startX = bounds.x + bounds.width - 40, endX = bounds.x + 40;
+  expect(await mobile.evaluate(({ x, y }) => !!document.elementFromPoint(x, y)?.closest('.hero-photographs'), { x: startX, y })).toBe(true);
+  await session.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: startX, y }] });
+  for (const fraction of [0.2, 0.4, 0.6, 0.8, 1]) await session.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: startX + (endX - startX) * fraction, y }] });
   await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
   await expect(mobile.getByRole('button', { name: 'Show Flags on parade', exact: true })).toHaveAttribute('aria-pressed', 'true');
   await context.close();
