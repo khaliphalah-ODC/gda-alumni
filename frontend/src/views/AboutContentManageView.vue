@@ -136,7 +136,7 @@ watch(() => props.kind, () => {
             <label for="about-content" class="field-label">{{ history ? 'Description' : 'Short biography' }}</label>
             <textarea id="about-content" v-model.trim="form.content" class="field-input" rows="5" required :maxlength="history ? 20000 : 2000"></textarea>
           </div>
-          <ContentImageInput :key="editorKey" v-model="form.image" :upload-enabled="media.enabled" :checking="checking" :availability-error="mediaError" @refresh="refreshMedia" :max-bytes="media.maxBytes" :busy="busy" @file="pendingImage = $event" />
+          <ContentImageInput :key="editorKey" v-model="form.image" :upload-enabled="media.enabled" :checking="checking" :availability-error="mediaError" :unavailable-reason="media.unavailableReason" @refresh="refreshMedia" :max-bytes="media.maxBytes" :busy="busy" @file="pendingImage = $event" />
           <div>
             <label for="about-order" class="field-label">Display order</label>
             <input id="about-order" v-model.number="form.displayOrder" class="field-input" type="number" required min="0" max="1000000" step="1" aria-describedby="about-order-help">

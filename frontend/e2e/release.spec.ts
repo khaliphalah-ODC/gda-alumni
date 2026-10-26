@@ -21,6 +21,8 @@ test.beforeAll(async () => {
   actorId = (await db.user.create({ data: { email, role: 'ADMIN', password: await bcrypt.hash(password, 4) } })).id;
   pixels = await sharp({ create: { width: 32, height: 24, channels: 3, background: '#4169e1' } }).png().toBuffer();
 });
+test.beforeEach(async () => { await db.user.update({ where: { id: actorId }, data: { password: await bcrypt.hash(password, 4) } }); });
+test.afterEach(async ({ page }) => { await page.unrouteAll({ behavior: 'wait' }); });
 test.afterAll(async () => {
   if (actorId) {
     await db.accountToken.deleteMany({ where: { userId: actorId } }); await db.post.deleteMany({ where: { createdBy: actorId } });
@@ -50,6 +52,7 @@ test('forgotten-password email link works once and ends existing browser session
     await expect(recovery.getByRole('status').filter({ hasText: 'Password reset.' })).toBeVisible();
     expect((await page.request.get('/api/auth/me')).status()).toBe(401);
     await login(page, replacement);
+    await recovery.goto('http://127.0.0.1:55751/forgot-password');
     await recovery.goto(`http://127.0.0.1:55751/reset-password#token=${token}`);
     await recovery.getByLabel('New password', { exact: true }).fill(password); await recovery.getByLabel('Confirm new password', { exact: true }).fill(password);
     await recovery.getByRole('button', { name: 'Reset password', exact: true }).click(); await expect(recovery.getByRole('alert')).toBeVisible();
@@ -69,7 +72,7 @@ test('announcement and event category controls filter real published database re
 });
 
 for (const kind of ['gallery', 'achievements'] as const) test(`Admin uploads, publishes and edits ${kind}; public pages read the saved collection`, async ({ page, browser }) => {
-  await login(page, replacement); await page.goto(`/admin/content/${kind}`);
+  await login(page); await page.goto(`/admin/content/${kind}`);
   await page.getByRole('button', { name: kind === 'gallery' ? 'Add photograph' : 'Add achievement', exact: true }).click();
   const title = `${tag} ${kind}`;
   await page.getByLabel(kind === 'gallery' ? 'Photograph title' : 'Card title', { exact: true }).fill(title);
@@ -96,4 +99,51 @@ for (const kind of ['gallery', 'achievements'] as const) test(`Admin uploads, pu
     await page.getByRole('button', { name: 'Save draft', exact: true }).click(); await expect(page.getByRole('status').filter({ hasText: 'Draft saved.' })).toBeVisible();
     await publicPage.reload(); await expect(publicPage.getByText(kind === 'gallery' ? 'No gallery photographs are published.' : 'No featured achievements are published.', { exact: true })).toBeVisible();
   } finally { await context.close(); }
+});
+
+test('photo selection survives missing profiles, disabled storage, failed availability refreshes and real upload replacement', async ({ page }) => {
+  await login(page);
+  let state: 'disabled' | 'failed' | 'enabled' = 'disabled';
+  await page.route('**/api/account/me', async route => {
+    if (state === 'failed') return route.fulfill({ status: 503, json: { success: false, message: 'Temporary availability failure', data: null } });
+    const response = await route.fetch(), body = await response.json();
+    if (state === 'disabled') body.data.media = { ...body.data.media, enabled: false, unavailableReason: 'Image uploads are disabled in Platform settings. Ask the platform administrator to enable them.' };
+    await route.fulfill({ response, json: body });
+  });
+  await page.goto('/account/settings');
+  const picker = page.getByLabel('Upload image (JPEG, PNG or WebP, maximum 5 MB)', { exact: true });
+  const upload = page.getByRole('button', { name: 'Upload selected image', exact: true });
+  await expect(picker).toBeEnabled();
+  const chooser = page.waitForEvent('filechooser'); await picker.click();
+  await (await chooser).setFiles({ name: 'selected.png', mimeType: 'image/png', buffer: pixels });
+  await expect(page.getByAltText('Profile picture preview')).toHaveAttribute('src', /^blob:/);
+  await expect(upload).toBeDisabled(); await expect(page.getByText('Save your personal profile above before uploading this picture. Your selected photo will be kept.', { exact: true })).toBeVisible();
+  await page.getByLabel('Full name', { exact: true }).fill('Photo browser fixture');
+  await page.getByRole('button', { name: 'Save personal profile', exact: true }).click();
+  await expect(page.getByRole('status').filter({ hasText: 'Personal profile saved.' })).toBeVisible();
+  await expect(picker).toHaveValue(/selected\.png$/); await expect(upload).toBeDisabled();
+  await expect(page.getByText('Image uploads are disabled in Platform settings. Ask the platform administrator to enable them.', { exact: true })).toBeVisible();
+  state = 'failed'; await page.getByRole('button', { name: 'Refresh upload availability', exact: true }).click();
+  await expect(page.getByRole('alert').filter({ hasText: 'Could not check image uploads.' })).toBeVisible();
+  await expect(picker).toBeEnabled(); await expect(picker).toHaveValue(/selected\.png$/);
+  state = 'enabled'; await page.getByRole('button', { name: 'Refresh upload availability', exact: true }).click();
+  await expect(upload).toBeEnabled();
+  await page.evaluate(() => window.dispatchEvent(new Event('focus')));
+  await expect(picker).toBeEnabled(); await expect(picker).toHaveValue(/selected\.png$/); await expect(upload).toBeEnabled();
+  await page.unrouteAll({ behavior: 'wait' });
+  await page.getByLabel('Location', { exact: true }).fill('Unsaved location survives uploading');
+  await upload.click(); await expect(page.getByRole('status').filter({ hasText: 'Profile picture saved.' })).toBeVisible();
+  await expect(page.getByLabel('Location', { exact: true })).toHaveValue('Unsaved location survives uploading');
+  const first = await db.staffProfile.findUniqueOrThrow({ where: { userId: actorId } }); expect(first.imageVersion).toBe(1);
+  await expect(page.getByAltText('Profile picture preview')).toHaveAttribute('src', first.profileImage);
+  await page.reload(); await expect(page.getByAltText('Profile picture preview')).toHaveAttribute('src', first.profileImage);
+  await expect.poll(() => page.getByAltText('Profile picture preview').evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
+  await picker.setInputFiles({ name: 'replacement.png', mimeType: 'image/png', buffer: pixels }); await upload.click();
+  await expect.poll(async () => (await db.staffProfile.findUniqueOrThrow({ where: { userId: actorId } })).imageVersion).toBe(2);
+  await expect.poll(async () => (await page.request.get(new URL(first.profileImage).pathname)).status()).toBe(404);
+  const second = await db.staffProfile.findUniqueOrThrow({ where: { userId: actorId } });
+  await expect(page.getByAltText('Profile picture preview')).toHaveAttribute('src', second.profileImage);
+  await page.getByRole('button', { name: 'Restore default picture', exact: true }).click();
+  await expect.poll(async () => (await db.staffProfile.findUniqueOrThrow({ where: { userId: actorId } })).profileImage).toBeNull();
+  await expect.poll(async () => (await page.request.get(new URL(second.profileImage).pathname)).status()).toBe(404);
 });

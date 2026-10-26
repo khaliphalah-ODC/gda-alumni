@@ -35,7 +35,13 @@ export function mediaConfiguration() {
   return { provider: env.MEDIA_STORAGE, configured: env.MEDIA_STORAGE === 'local' || Boolean(env.CLOUDINARY_CLOUD_NAME && env.CLOUDINARY_API_KEY && env.CLOUDINARY_API_SECRET), maxBytes: env.IMAGE_MAX_BYTES, formats: ['JPEG', 'PNG', 'WebP'], status: env.MEDIA_STORAGE === 'local' ? 'Images are stored on the API server. Hosting requires a persistent disk and backups.' : 'Not externally verified' };
 }
 export const mediaService = {
-  async status() { const settings = await platformRepository.settings(); const config = mediaConfiguration(); return { enabled: Boolean(settings?.mediaEnabled && config.configured), maxBytes: config.maxBytes, provider: config.provider }; },
+  async status() {
+    const settings = await platformRepository.settings(), config = mediaConfiguration();
+    const unavailableReason = !config.configured
+      ? 'Image storage is not configured. Ask the platform administrator to configure Cloudinary on the backend.'
+      : !settings?.mediaEnabled ? 'Image uploads are disabled in Platform settings. Ask the platform administrator to enable them.' : null;
+    return { enabled: !unavailableReason, maxBytes: config.maxBytes, provider: config.provider, unavailableReason };
+  },
   async cleanup() {
     const jobs = await mediaRepository.claim();
     const results = await Promise.all(jobs.map(async job => {

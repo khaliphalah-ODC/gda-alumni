@@ -37,7 +37,7 @@ export interface AdminDashboard {
 }
 
 export interface AccountProfile { fullName: string; phone: string | null; location: string | null; profileImage: string | null; imageVersion: number; }
-export interface AccountSettings { id: string; email: string; role: Role; isActive: boolean; profile: AccountProfile | null; emailChangeAvailable: boolean; media: { enabled: boolean; maxBytes: number; provider?: 'local' | 'cloudinary' }; }
+export interface AccountSettings { id: string; email: string; role: Role; isActive: boolean; profile: AccountProfile | null; emailChangeAvailable: boolean; media: { enabled: boolean; maxBytes: number; provider?: 'local' | 'cloudinary'; unavailableReason?: string | null }; }
 export interface MediaConfiguration { provider: 'local' | 'cloudinary'; configured: boolean; maxBytes: number; formats: string[]; status: string; }
 export interface PlatformSettings { media: MediaConfiguration; platformName: string; emailEnabled: boolean; mediaEnabled: boolean; email: { configured: boolean; sender: string | null; status: string }; cloudinary: { configured: boolean; cloudName: string | null; maxBytes: number; formats: string[]; status: string }; }
 export interface StaffAccount extends User { isActive: boolean; staffProfile: AccountProfile | null; }

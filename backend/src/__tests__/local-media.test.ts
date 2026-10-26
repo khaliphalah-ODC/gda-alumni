@@ -51,6 +51,19 @@ describe('server image storage', () => {
     await expect(mediaService.upload({ userId: 'test', role: 'ADMIN' }, undefined, 0)).rejects.toMatchObject({ statusCode: 503 });
     await expect(mediaService.prepareImage({ buffer: Buffer.from('not an image'), size: 12, mimetype: 'image/png' } as Express.Multer.File)).rejects.toMatchObject({ statusCode: 400 });
   });
+  it('explains missing storage separately from a disabled platform switch', async () => {
+    const previous = { ...env };
+    try {
+      expect((await mediaService.status()).unavailableReason).toBeNull();
+      env.MEDIA_STORAGE = 'cloudinary'; env.CLOUDINARY_CLOUD_NAME = undefined; env.CLOUDINARY_API_KEY = undefined; env.CLOUDINARY_API_SECRET = undefined;
+      expect(await mediaService.status()).toMatchObject({ enabled: false, provider: 'cloudinary', unavailableReason: expect.stringContaining('storage is not configured') });
+      env.CLOUDINARY_CLOUD_NAME = 'fixture'; env.CLOUDINARY_API_KEY = 'fixture'; env.CLOUDINARY_API_SECRET = 'fixture';
+      vi.mocked(platformRepository.settings).mockResolvedValue({ mediaEnabled: false } as Awaited<ReturnType<typeof platformRepository.settings>>);
+      expect(await mediaService.status()).toMatchObject({ enabled: false, unavailableReason: expect.stringContaining('disabled in Platform settings') });
+      vi.mocked(platformRepository.settings).mockResolvedValue({ mediaEnabled: true } as Awaited<ReturnType<typeof platformRepository.settings>>);
+      expect(await mediaService.status()).toMatchObject({ enabled: true, unavailableReason: null });
+    } finally { Object.assign(env, previous); }
+  });
   it('queues local assets for cleanup when saving the profile fails', async () => {
     const input = await sharp({ create: { width: 2, height: 2, channels: 3, background: 'blue' } }).png().toBuffer();
     vi.mocked(accountRepository.saveImage).mockRejectedValueOnce(new Error('Conflicting version'));

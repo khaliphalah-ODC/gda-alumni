@@ -65,7 +65,10 @@ export class PostRepository {
 
   list({ type, where, skip, take, chronological = false }: { type: PostType; where?: Prisma.PostWhereInput; skip: number; take: number; chronological?: boolean }) {
     const finalWhere: Prisma.PostWhereInput = { ...where, type };
-    return prisma.$transaction([
+    // Independent reads release their connections after each statement rather
+    // than reserving one across BEGIN, both reads and COMMIT over the network.
+    // The former default READ COMMITTED transaction provided no shared snapshot.
+    return Promise.all([
       prisma.post.findMany({ where: finalWhere, skip, take, orderBy: type === 'HISTORY' && chronological
         ? [{ milestoneDate: { sort: 'asc', nulls: 'last' } }, { displayOrder: 'asc' }, { id: 'asc' }]
         : ['HISTORY', 'SCHOOL_LEADER', 'ALUMNI_LEADER', 'GALLERY', 'ACHIEVEMENT'].includes(type)

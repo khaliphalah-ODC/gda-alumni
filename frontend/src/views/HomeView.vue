@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { APP_NAME } from '@/config/branding';
+
 import { onMounted, onScopeDispose, reactive, ref } from 'vue';
 import PublicLayout from '@/layouts/PublicLayout.vue';
 import HeroCarousel from '@/components/HeroCarousel.vue';
@@ -47,7 +49,7 @@ onMounted(load);
 <div class="relative max-w-7xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
 <div class="space-y-8">
 <h1 class="font-h1 text-white text-[48px] md:text-[56px] leading-[1.1]">
-                        Gray D. Allison Alumni and Information Management System
+                        {{ APP_NAME }}
                     </h1>
 <p class="font-body-lg text-slate-300 max-w-lg">
                         The official gateway for the Gray D. Allison High School community. Securely manage academic records, connect with fellow alumni, and stay updated with school developments under the Ministry of National Defense.
@@ -89,7 +91,7 @@ onMounted(load);
                             Gray D. Allison High School brings its alumni community together through academic records, school updates and shared experiences. This portal supports graduates as they stay connected with the school and one another.
                         </p>
 <p class="font-body-md text-on-surface-variant">
-                            The Alumni &amp; Information Management System (AIMS) is our digital leap forward, ensuring that every graduate remains connected to their alma mater and has seamless access to their essential academic credentials.
+                            Our digital portal keeps graduates connected to their alma mater and provides access to membership, school information and academic record services.
                         </p>
 <RouterLink to="/about" class="text-primary font-label-sm border-b-2 border-primary pb-1 hover:text-on-primary-container hover:border-on-primary-container transition-colors">LEARN MORE ABOUT OUR MISSION</RouterLink>
 </div>

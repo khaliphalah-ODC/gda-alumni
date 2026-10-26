@@ -1,5 +1,6 @@
 import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { APP_NAME } from '../src/config/branding';
 
 const heading = 'Excellence in Discipline & Academics';
 async function open(page: Page) {
@@ -81,6 +82,8 @@ test('both faces fit at all requested widths without clipping or overflow', asyn
     const cards = section.locator('.excellence-card');
     const first = await cards.nth(0).boundingBox(), second = await cards.nth(1).boundingBox();
     expect(first && second).toBeTruthy();
+    expect(first!.width).toBeLessThanOrEqual(449);
+    await expect(cards.first().locator('.excellence-card-photo')).toHaveCSS('height', '192px');
     if (width >= 1024) expect(Math.abs(first!.y - second!.y)).toBeLessThan(2);
     else expect(second!.y).toBeGreaterThan(first!.y + first!.height);
     for (const card of await cards.all()) {
@@ -118,4 +121,24 @@ test('touch controls work without swipe conflicts or automatic flipping', async 
     await card.getByRole('button', { name: /Flip back:/ }).tap();
     await expect(card.locator('.excellence-card-rotor')).not.toHaveClass(/is-flipped/);
   } finally { await context.close(); }
+});
+
+
+test('homepage photos cover the full hero and the new app name fits every viewport', async ({ page }) => {
+  for (const width of [375, 768, 1024, 1280, 1440]) {
+    await page.setViewportSize({ width, height: 1000 });
+    await open(page); await expect(page).toHaveTitle(`Home | ${APP_NAME}`);
+    const hero = page.locator('.hero-carousel'); await hero.scrollIntoViewIfNeeded();
+    const photograph = hero.locator('.swiper-slide-active img');
+    await expect.poll(() => photograph.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
+    const frame = await hero.boundingBox(), image = await photograph.boundingBox();
+    expect(frame && image).toBeTruthy();
+    expect(Math.abs(image!.width - frame!.width)).toBeLessThanOrEqual(2);
+    expect(Math.abs(image!.height - frame!.height)).toBeLessThanOrEqual(2);
+    await expect(photograph).toHaveCSS('object-fit', 'cover');
+    await expect(page.getByRole('navigation', { name: 'Main navigation', exact: true }).getByRole('link', { name: APP_NAME, exact: true })).toBeVisible();
+    if (width >= 1280) await expect(page.getByRole('navigation', { name: 'Main navigation', exact: true }).getByRole('link', { name: 'About', exact: true })).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+  }
+  await page.screenshot({ path: '/tmp/gda-homepage-presentation.png' });
 });

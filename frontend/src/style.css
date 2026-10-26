@@ -83,7 +83,7 @@ html { scrollbar-gutter: stable; }
 .hero-copy a, .hero-copy button { pointer-events: auto; }
 .hero-shade { background: linear-gradient(90deg, #031935ed 0%, #031935b3 45%, #03193533 100%); }
 .site-footer { color-scheme: light; }
-.hero-photographs .school-photo { width: 70%; margin-left: auto; }
+.hero-photographs .school-photo { width: 100%; height: 100%; object-fit: cover; object-position: center; margin: 0; }
 .carousel-control { display: inline-flex; min-width: 44px; min-height: 44px; align-items: center; justify-content: center; border: 1px solid currentColor; border-radius: 4px; background: transparent; }
 .carousel-control:hover:enabled { background: #ffffff15; }
 .hero-dot { display: grid; width: 30px; height: 44px; place-items: center; }

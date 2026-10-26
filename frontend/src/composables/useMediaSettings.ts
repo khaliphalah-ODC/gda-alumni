@@ -3,7 +3,7 @@ import { api, errorMessage } from '@/api/client';
 import type { AccountSettings, ApiResponse } from '@/types/api';
 
 export function useMediaSettings() {
-  const media = ref({ enabled: false, maxBytes: 5242880 });
+  const media = ref<AccountSettings['media']>({ enabled: false, maxBytes: 5242880 });
   const checking = ref(true), mediaError = ref('');
   let controller: AbortController | undefined;
   async function refreshMedia() {
@@ -16,7 +16,7 @@ export function useMediaSettings() {
     } catch (cause) { if (!current.signal.aborted) mediaError.value = errorMessage(cause); }
     finally { if (!current.signal.aborted) checking.value = false; }
   }
-  function focused() { void refreshMedia(); }
+  function focused() { if (!checking.value) void refreshMedia(); }
   onMounted(() => { void refreshMedia(); window.addEventListener('focus', focused); });
   onScopeDispose(() => { controller?.abort(); window.removeEventListener('focus', focused); });
   return { media, checking, mediaError, refreshMedia };

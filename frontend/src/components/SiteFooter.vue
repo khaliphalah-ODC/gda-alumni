@@ -1,8 +1,11 @@
+<script setup lang="ts">
+import { APP_NAME } from '@/config/branding';
+</script>
 <template><div class="reference-ui"><footer class="site-footer border-t border-slate-200 bg-slate-50 text-slate-700">
 <div class="max-w-7xl mx-auto px-6 pt-16 pb-8">
 <div class="grid md:grid-cols-4 gap-12 mb-16">
 <div class="md:col-span-2 space-y-6">
-<h3 class="text-lg font-black text-[#1B2E4B] tracking-widest uppercase">Gray D. Allison High School</h3>
+<h3 class="text-lg font-black text-[#1B2E4B] tracking-widest uppercase">{{ APP_NAME }}</h3>
 <p class="font-body-md text-on-surface-variant max-w-md">
                         The premiere educational institution of the Ministry of National Defense, Liberia. Connecting alumni with school information, membership and academic record services.
                     </p>

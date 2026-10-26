@@ -1,3 +1,4 @@
+import { APP_NAME } from '@/config/branding';
 const ChatbotFaqView = () => import('@/views/ChatbotFaqView.vue');
 const ChatbotManagementView = () => import('@/views/ChatbotManagementView.vue');
 const ManageAlumniView = () => import('@/views/ManageAlumniView.vue');
@@ -82,7 +83,7 @@ window.addEventListener('gda:session-expired', () => {
   if (current.meta.auth) void router.replace({ path: '/login', query: { redirect: current.fullPath } });
 });
 router.afterEach(async (to) => {
-  document.title = `${to.path.split('/').filter(Boolean).map((part) => part.charAt(0).toUpperCase() + part.slice(1)).slice(0, 2).join(' · ') || 'Home'} | Gray D. Allison`;
+  document.title = `${to.path.split('/').filter(Boolean).map((part) => part.charAt(0).toUpperCase() + part.slice(1)).slice(0, 2).join(' · ') || 'Home'} | ${APP_NAME}`;
   await nextTick();
   document.getElementById('main-content')?.focus({ preventScroll: true });
 });
