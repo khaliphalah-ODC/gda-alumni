@@ -6,5 +6,5 @@
     "build": "npm --prefix backend run build && npm --prefix frontend run build",
     "test": "npm --prefix backend test && npm --prefix frontend test"
   },
-  "engines": { "node": ">=20.19.0" }
+  "engines": { "node": ">=22.13.0" }
 }

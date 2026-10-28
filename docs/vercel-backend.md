@@ -30,7 +30,7 @@ Use [backend/.env.vercel.example](../backend/.env.vercel.example) as the list of
 - `TRUST_PROXY_HOPS=1`
 - `RATE_LIMIT_STORAGE=database` (automatic on Vercel). Atomic PostgreSQL counters apply across warm instances and cold starts.
 - `CRON_SECRET`: generate an independent value with `openssl rand -hex 48`. Required on Vercel; scheduled maintenance authenticates with its Bearer header.
-- `ACTIVATION_DELIVERY=smtp`
+- `EMAIL_PROVIDER=brevo`, with `BREVO_API_KEY`, `BREVO_SENDER_EMAIL` and `BREVO_SENDER_NAME` configured privately, or `EMAIL_PROVIDER=smtp` for the existing SMTP transport. See [email delivery](email-delivery.md). The legacy `ACTIVATION_DELIVERY=smtp` setting remains supported when `EMAIL_PROVIDER` is unset.
 - Gmail: `SMTP_HOST=smtp.gmail.com`, `SMTP_PORT=465`, `SMTP_SECURE=true`, and the same complete Gmail address for `SMTP_USER` and `SMTP_FROM`. Set `SMTP_PASSWORD` to a Google app password without spaces, after enabling Google 2-Step Verification. A normal Gmail password is insufficient. Other SMTP providers can use their own settings.
 - `MEDIA_STORAGE=cloudinary`
 - `IMAGE_MAX_BYTES=4194304` (4 MiB, leaving room for multipart overhead)
@@ -64,7 +64,7 @@ https://YOUR-API.vercel.app/api/ready
 
 `/api/health` should return JSON with `success: true`. `/api/ready` should return HTTP 200 with `database: connected`. The `/` URL has no website; a JSON 404 there is expected. `/api/ready` validates database access/schema and the production delivery selection, but does not verify SMTP credentials or inbox delivery.
 
-If `/api/health` fails, inspect Vercel's runtime logs for missing/invalid environment variables or bundling errors. If only `/api/ready` fails, check Neon connectivity and pending migrations; production also requires `ACTIVATION_DELIVERY=smtp`. Fix environment variables and redeploy after changes.
+If `/api/health` fails, inspect Vercel's runtime logs for missing/invalid environment variables or bundling errors. If only `/api/ready` fails, check Neon connectivity and pending migrations; production also requires configured Brevo or SMTP delivery. Fix environment variables and redeploy after changes.
 
 If Vercel Deployment Protection returns a login page instead of API JSON, make the production API accessible to its intended clients in the project protection settings. Keep authentication on the app's private routes.
 

@@ -1,6 +1,7 @@
 import { z } from 'zod';
+import { supportedGroqModels } from '../config/ai';
 export const publicPaths = ['/register', '/membership/status', '/activate', '/login', '/services', '/requests/new', '/requests', '/events', '/announcements', '/stories', '/about', '/contact', '/help', '/privacy', '/terms'] as const;
-export interface ChatSource { id: string; title: string; text: string; path: string }
+export interface ChatSource { id: string; title: string; text: string; path: string; documentId?: string; pageNumber?: number; edition?: number }
 // Product workflow guidance, not unverified school fees, dates or policy claims.
 export const workflowSources: ChatSource[] = [
   { id: 'registration', title: 'Registration guide', path: '/register', text: 'Submit a membership application on the registration page. Save the private receipt and tracking credentials. School Admin reviews the application; submitting it does not immediately create an active account.' },
@@ -12,7 +13,7 @@ export const workflowSources: ChatSource[] = [
   { id: 'navigation', title: 'Website navigation', path: '/help', text: 'Use the public navigation for About, Services, Announcements, Stories and Events. Log in to reach your role dashboard and Account Settings. Contact the school through Contact for information unavailable here.' },
 ];
 export const messageSchema = z.object({ message: z.string().trim().min(2).max(600) }).strict();
-export const settingsSchema = z.object({ enabled: z.boolean(), model: z.enum(['openai/gpt-oss-20b', 'openai/gpt-oss-120b']), dailyRequests: z.number().int().min(1).max(10000), dailyBudgetMicros: z.number().int().min(1000).max(100000000), currentPassword: z.string().min(1).max(128) }).strict();
+export const settingsSchema = z.object({ enabled: z.boolean(), model: z.enum(supportedGroqModels), outputTokenLimit: z.number().int().min(256).max(2048).default(1024), dailyRequests: z.number().int().min(1).max(10000), dailyBudgetMicros: z.number().int().min(1000).max(100000000), currentPassword: z.string().min(1).max(128) }).strict();
 export const faqSchema = z.object({ question: z.string().trim().min(5).max(180), answer: z.string().trim().min(5).max(1800), path: z.enum(publicPaths), published: z.boolean(), validUntil: z.string().datetime().refine(v => Date.parse(v) > Date.now() && Date.parse(v) < Date.now() + 366 * 86400000, 'Choose a future review date within one year'), version: z.number().int().nonnegative().optional() }).strict();
 // Reject common credential/PII formats before anything is sent to the provider.
 export function sensitiveMessage(message: string) {

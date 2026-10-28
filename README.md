@@ -1,6 +1,6 @@
 # Gray D. Allison Alumni Portal
 
-Vue 3/TypeScript frontend and Express/Prisma/PostgreSQL backend. Requires Node.js 20.19 or newer.
+Vue 3/TypeScript frontend and Express/Prisma/PostgreSQL backend. Requires Node.js 22.13 or newer (`.nvmrc` selects Node 22).
 
 ## Setup
 
@@ -18,7 +18,7 @@ Run `npm run build` and `npm test` from this directory. For database and browser
 
 From `frontend`, install Chromium with `npx playwright install chromium`, then run `npm run test:e2e`. The suite starts local test servers and manages its own fixtures.
 
-`/api/health` checks the API process; `/api/ready` checks required database fields and production delivery configuration. Production requires HTTPS, SMTP invitation delivery and server-side credentials. Never commit `.env` files or database backups.
+`/api/health` checks the API process; `/api/ready` checks required database fields and production delivery configuration. Production requires HTTPS, configured Brevo HTTPS or SMTP delivery and server-side credentials. Never commit `.env` files or database backups. See [email delivery setup](docs/email-delivery.md) for Brevo on Railway, Gmail locally, legacy provider compatibility and guarded testing.
 
 For database connection errors, run `npm --prefix backend run db:check` to verify connectivity and required tables without changing records. For Neon, preserve the connection string from its Connect dialog (including `sslmode=require`) and append `&connect_timeout=15&pool_timeout=15` to allow time for idle compute startup. See [Prisma's Neon timeout guidance](https://docs.prisma.io/docs/orm/v6/overview/databases/neon). Restart the backend after editing `backend/.env`. If connections still time out, check the Neon project's compute status and network access to outbound port 5432, and try another network to isolate local connectivity problems.
 
@@ -36,4 +36,4 @@ Admin accounts can open **Membership QR code** in the sidebar or from **Membersh
 
 ## Public school assistant
 
-Groq chatbot implementation, activation steps, privacy behavior and verification: [chatbot implementation](docs/chatbot-implementation.md). Apply the new migration before deploying this backend. Configure the server-only `GROQ_API_KEY`, publish school-approved FAQ answers through Admin, evaluate the model, then enable the assistant through SuperAdmin → Chatbot settings.
+Groq SDK integration, private PDF storage, Admin approval, PostgreSQL retrieval, setup and verification: [AI knowledge implementation](docs/ai-knowledge-implementation.md). Apply the additive knowledge migration before deploying this backend. Keep `GROQ_API_KEY` server-only; configure `GROQ_MODEL` and `AI_CHAT_ENABLED`. Admin manages PDFs at `/admin/ai-knowledge` and FAQs at `/admin/chatbot`; SuperAdmin controls enablement, models and usage at `/super-admin/chatbot`. Scanned PDFs are flagged for OCR; documents remain quarantined until manual safety and public-information review.

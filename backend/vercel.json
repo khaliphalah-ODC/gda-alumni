@@ -3,7 +3,9 @@
   "framework": "express",
   "installCommand": "npm ci --include=dev",
   "buildCommand": "npm run build:vercel",
-  "regions": ["iad1"],
+  "regions": [
+    "iad1"
+  ],
   "crons": [
     {
       "path": "/api/cron/maintenance",
@@ -13,7 +15,7 @@
   "functions": {
     "src/app.ts": {
       "maxDuration": 60,
-      "includeFiles": "node_modules/.prisma/client/**"
+      "includeFiles": "{node_modules/.prisma/client/**,node_modules/unpdf/**,src/services/ai-knowledge/pdf.worker.cjs}"
     }
   }
 }

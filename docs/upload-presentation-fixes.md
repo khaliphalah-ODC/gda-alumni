@@ -6,6 +6,14 @@ The homepage slideshow fills its frame using cover cropping. Other photographs r
 
 ## Upload behavior
 
+### File chooser correction — 28 October 2026
+
+The shared content button **Upload image file** now opens the device file chooser directly. Previously it only switched the editor to file mode. The input stays mounted so the chooser opens during the original click or keyboard/touch gesture. Reopening the chooser preserves the current selection. Profile screens also expose a **Choose photo** button; **Upload selected image** submits the chosen file.
+
+The chooser works independently of backend upload availability. Saving still checks the existing permissions, profile and storage prerequisites. The frontend must be redeployed before hosted users receive this change.
+
+After building the frontend, run `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/google-chrome npx playwright test --config playwright.file-picker.config.ts` from `frontend`. These browser checks mock API responses and make no database or storage writes. They cover all eight content editors, all three account roles, the alumni profile, keyboard/touch activation and retaining a selection when reopening the chooser.
+
 File pickers allow local selection and preview while availability is loading or unavailable, or before a profile exists. Upload submission stays blocked until its existing prerequisites are satisfied. Availability refreshes preserve the selected file, and uploading from Account Settings preserves unsaved personal-profile fields.
 
 The account response adds optional `media.unavailableReason` text. Missing backend storage and a disabled SuperAdmin upload switch have separate messages. Older backend responses remain supported by a generic explanation. There are no new database migrations or upload endpoints.

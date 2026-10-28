@@ -33,6 +33,8 @@ const router = createRouter({ history: createWebHistory(), scrollBehavior: (to, 
   if (to.path === from.path) return false;
   return { top: 0 };
 }, routes: [
+  { path: '/admin/ai-knowledge', component: () => import('@/views/AiKnowledgeView.vue'), meta: { auth: true, admin: true } },
+  { path: '/help/knowledge/:id', component: () => import('@/views/KnowledgeSourceView.vue') },
   { path: '/gallery', component: () => import('@/views/GalleryView.vue') },
   { path: '/forgot-password', component: PasswordRecoveryView },
   { path: '/reset-password', component: PasswordRecoveryView, props: { reset: true } },

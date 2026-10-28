@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "test": "node ../backend/node_modules/tsx/dist/cli.mjs --test tests/*.test.ts",
     "test:e2e": "npm run test:e2e:functional",
-    "test:e2e:functional": "playwright test e2e/portal.spec.ts && playwright test e2e/content-images.spec.ts e2e/about-content.spec.ts && playwright test e2e/visual-enhancements.spec.ts && playwright test e2e/public.spec.ts && playwright test e2e/admin.spec.ts e2e/dashboard.spec.ts e2e/forms.spec.ts && playwright test e2e/chatbot.spec.ts",
+    "test:e2e:functional": "playwright test e2e/portal.spec.ts && playwright test e2e/content-images.spec.ts e2e/about-content.spec.ts && playwright test e2e/visual-enhancements.spec.ts && playwright test e2e/public.spec.ts && playwright test e2e/admin.spec.ts e2e/dashboard.spec.ts e2e/forms.spec.ts && playwright test e2e/chatbot.spec.ts && playwright test e2e/ai-knowledge.spec.ts",
     "test:e2e:visual": "playwright test e2e/visual-enhancements.spec.ts",
     "build:netlify": "npm run build && node ../scripts/netlify-redirects.mjs",
     "test:e2e:uploads": "playwright test e2e/image-uploads.spec.ts",

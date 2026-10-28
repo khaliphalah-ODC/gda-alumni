@@ -32,6 +32,32 @@ describe('production configuration', () => {
     expect(result.SMTP_SECURE).toBe(false);
     expect(result.SMTP_PORT).toBe(587);
   });
+  it('selects Brevo without SMTP and overrides the legacy setting', () => {
+    const result = environmentSchema.parse({ ...settings, EMAIL_PROVIDER: 'brevo', ACTIVATION_DELIVERY: 'smtp',
+      BREVO_API_KEY: 'private-api-key', BREVO_SENDER_EMAIL: 'registrar@school.example', BREVO_SENDER_NAME: 'School Registrar' });
+    expect(result.EMAIL_PROVIDER).toBe('brevo');
+  });
+  it('accepts an explicit development provider despite the legacy SMTP selection', () => {
+    expect(environmentSchema.safeParse({ ...settings, EMAIL_PROVIDER: 'development', ACTIVATION_DELIVERY: 'smtp' }).success).toBe(true);
+  });
+  it('requires SMTP configuration when the explicit SMTP provider overrides development', () => {
+    expect(environmentSchema.safeParse({ ...settings, EMAIL_PROVIDER: 'smtp' }).success).toBe(false);
+    expect(environmentSchema.safeParse({ ...settings, EMAIL_PROVIDER: 'smtp', SMTP_HOST: 'smtp.gmail.com', SMTP_FROM: 'sender@example.test' }).success).toBe(true);
+  });
+  it.each(['BREVO_API_KEY', 'BREVO_SENDER_EMAIL', 'BREVO_SENDER_NAME'])('requires %s for Brevo', key => {
+    const configuration: Record<string, unknown> = { ...settings, EMAIL_PROVIDER: 'brevo', BREVO_API_KEY: 'api-key', BREVO_SENDER_EMAIL: 'registrar@school.example', BREVO_SENDER_NAME: 'School Registrar' };
+    delete configuration[key];
+    const result = environmentSchema.safeParse(configuration);
+    expect(result.success).toBe(false);
+    if (!result.success) expect(result.error.flatten().fieldErrors).toHaveProperty(key);
+  });
+  it.each([
+    { EMAIL_PROVIDER: 'unknown' }, { EMAIL_PROVIDER: 'brevo', BREVO_SENDER_EMAIL: 'not-an-email' },
+    { EMAIL_PROVIDER: 'brevo', BREVO_SENDER_NAME: 'Sender\r\nInjected: value' },
+    { EMAIL_PROVIDER: 'brevo', BREVO_API_KEY: ' ' },
+  ])('rejects invalid email configuration %j', change => {
+    expect(environmentSchema.safeParse({ ...settings, BREVO_API_KEY: 'api-key', BREVO_SENDER_EMAIL: 'registrar@school.example', BREVO_SENDER_NAME: 'Registrar', ...change }).success).toBe(false);
+  });
   it.each([
     { ACTIVATION_DELIVERY: 'smtp' },
     { SMTP_USER: 'registrar' },

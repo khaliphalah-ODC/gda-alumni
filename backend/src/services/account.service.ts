@@ -30,13 +30,13 @@ export const accountService = {
     if (email === user.email) throw new AppError(400, 'Choose an email different from your current address');
     const token = randomBytes(32).toString('hex');
     const id = await accountRepository.reserve(user.id, 'EMAIL_CHANGE', email, tokenHash(token), new Date(Date.now() + 30 * 60000), user.id, user.sessionVersion);
-    try { await accountMailService.send(email, 'Verify your new email address', `Confirm your email change within 30 minutes: ${env.FRONTEND_ORIGIN}/verify-email#token=${token}\nIf you did not request this, ignore this message.`); }
+    try { await accountMailService.send(email, 'Verify your new email address', `Confirm your email change within 30 minutes: ${env.FRONTEND_ORIGIN}/verify-email#token=${token}\nIf you did not request this, ignore this message.`, { deliveryKey: id }); }
     catch (error) { await accountRepository.delivery(id, false); throw error; }
     await accountRepository.delivery(id, true);
   },
   async verifyEmail(token: string) {
     await accountMailService.requireDelivery(true);
     const result = await accountRepository.consume(tokenHash(token), 'EMAIL_CHANGE');
-    if (result.oldEmail) { try { await accountMailService.send(result.oldEmail, 'Your account email has changed', 'Your portal email address was changed after verification. If this was not you, contact the platform administrator.'); } catch { try { await accountRepository.notificationFailed(result.userId); } catch { /* The verified email change is already committed. */ } } }
+    if (result.oldEmail) { try { await accountMailService.send(result.oldEmail, 'Your account email has changed', 'Your portal email address was changed after verification. If this was not you, contact the platform administrator.', { deliveryKey: tokenHash(token) }); } catch { try { await accountRepository.notificationFailed(result.userId); } catch { /* The verified email change is already committed. */ } } }
   },
 };

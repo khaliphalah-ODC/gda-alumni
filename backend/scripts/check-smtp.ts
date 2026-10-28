@@ -1,8 +1,9 @@
 import nodemailer from 'nodemailer';
 import { env } from '../src/config/env';
 import { smtpOptions } from '../src/services/activation-delivery.service';
+import { resolveEmailProvider } from '../src/config/email';
 async function main() {
-  if (env.ACTIVATION_DELIVERY !== 'smtp') throw new Error('Set ACTIVATION_DELIVERY=smtp and configure SMTP before checking delivery');
+  if (resolveEmailProvider(env) !== 'smtp') throw new Error('Select EMAIL_PROVIDER=smtp and configure SMTP before checking delivery');
   await nodemailer.createTransport(smtpOptions()).verify();
   console.log('SMTP connection and authentication verified. No email was sent; inbox delivery still requires a verified sender/domain.');
 }

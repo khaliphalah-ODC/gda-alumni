@@ -1,5 +1,7 @@
 import 'dotenv/config';
 import { z } from 'zod';
+import { supportedGroqModels, defaultGroqModel } from './ai';
+import { resolveEmailProvider } from './email';
 
 const schema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
@@ -9,10 +11,17 @@ const schema = z.object({
   PORT: z.coerce.number().int().positive().default(4000),
   TRUST_PROXY_HOPS: z.coerce.number().int().min(0).max(5).default(0),
   ACTIVATION_DELIVERY: z.enum(['development', 'smtp']).default('development'),
+  EMAIL_PROVIDER: z.preprocess(value => value === '' ? undefined : value, z.enum(['brevo', 'smtp', 'development']).optional()),
+  BREVO_API_KEY: z.preprocess(value => value === '' ? undefined : value, z.string().trim().min(1).optional()),
+  BREVO_SENDER_EMAIL: z.preprocess(value => value === '' ? undefined : value, z.string().trim().email().optional()),
+  BREVO_SENDER_NAME: z.preprocess(value => value === '' ? undefined : value, z.string().trim().min(1).max(150).regex(/^[^\r\n]+$/).optional()),
   CLOUDINARY_CLOUD_NAME: z.preprocess((value) => value === '' ? undefined : value, z.string().regex(/^[a-zA-Z0-9_-]+$/).optional()),
   CLOUDINARY_API_KEY: z.preprocess((value) => value === '' ? undefined : value, z.string().min(1).optional()),
   CLOUDINARY_API_SECRET: z.preprocess((value) => value === '' ? undefined : value, z.string().min(1).optional()),
   GROQ_API_KEY: z.preprocess((value) => value === '' ? undefined : value, z.string().min(1).optional()),
+  GROQ_MODEL: z.enum(supportedGroqModels).default(defaultGroqModel),
+  AI_CHAT_ENABLED: z.enum(['true', 'false']).default('true').transform(value => value === 'true'),
+  AI_PDF_MAX_BYTES: z.coerce.number().int().min(1024).max(10 * 1024 * 1024).default(10 * 1024 * 1024),
   IMAGE_MAX_BYTES: z.coerce.number().int().min(1024).max(5 * 1024 * 1024).default(5 * 1024 * 1024),
   MEDIA_STORAGE: z.enum(['cloudinary', 'local']).default('cloudinary'),
   MEDIA_UPLOAD_DIR: z.string().trim().min(1).optional(),
@@ -45,10 +54,16 @@ export const environmentSchema = schema.superRefine((config, context) => {
   if (config.VERCEL === '1' && config.MEDIA_STORAGE === 'local') {
     context.addIssue({ code: 'custom', path: ['MEDIA_STORAGE'], message: 'Vercel cannot persist server image uploads. Use MEDIA_STORAGE=cloudinary.' });
   }
-  if (config.ACTIVATION_DELIVERY === 'smtp' && (!config.SMTP_HOST || !config.SMTP_FROM)) {
-    context.addIssue({ code: 'custom', path: ['ACTIVATION_DELIVERY'], message: 'SMTP delivery requires SMTP_HOST and SMTP_FROM' });
+  const emailProvider = resolveEmailProvider(config);
+  if (emailProvider === 'brevo') {
+    for (const key of ['BREVO_API_KEY', 'BREVO_SENDER_EMAIL', 'BREVO_SENDER_NAME'] as const) {
+      if (!config[key]) context.addIssue({ code: 'custom', path: [key], message: `${key} is required when EMAIL_PROVIDER=brevo` });
+    }
   }
-  if (Boolean(config.SMTP_USER) !== Boolean(config.SMTP_PASSWORD)) {
+  if (emailProvider === 'smtp' && (!config.SMTP_HOST || !config.SMTP_FROM)) {
+    context.addIssue({ code: 'custom', path: ['EMAIL_PROVIDER'], message: 'SMTP delivery requires SMTP_HOST and SMTP_FROM' });
+  }
+  if (emailProvider !== 'brevo' && Boolean(config.SMTP_USER) !== Boolean(config.SMTP_PASSWORD)) {
     context.addIssue({ code: 'custom', path: ['SMTP_USER'], message: 'Configure both SMTP_USER and SMTP_PASSWORD, or neither for a trusted relay' });
   }
   if (config.NODE_ENV !== 'production') return;

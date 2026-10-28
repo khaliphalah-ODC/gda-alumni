@@ -1,3 +1,5 @@
+> Historical implementation record. The current SDK, PDF knowledge base, generated RAG answers and verification are documented in [AI knowledge implementation](ai-knowledge-implementation.md).
+
 # Public Groq assistant — 22 October 2026
 
 Implemented inside the existing Express/Vue application. No private account, directory, membership or document lookups are delegated to the model. SuperAdmin retains platform-only permissions.

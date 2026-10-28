@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import { motion, useReducedMotion } from 'motion-v';
 import PublicationImage from './PublicationImage.vue';
 import MotionCard from './MotionCard.vue';
 import PaginationControls from './PaginationControls.vue';
@@ -9,7 +8,7 @@ import { aboutContentEndpoint, type AboutContentKind } from '@/utils/about-conte
 import type { AboutRecord, ApiResponse, Pagination } from '@/types/api';
 
 const props = defineProps<{ kind: AboutContentKind }>();
-const reduced = useReducedMotion();
+const expandedHistory = ref<Record<string, boolean>>({});
 const records = ref<AboutRecord[]>([]), pagination = ref<Pagination | null>(null);
 const page = ref(1), loading = ref(true), error = ref('');
 const title = computed(() => ({ history: 'Our School History', school: 'School Leadership', alumni: 'Alumni Leadership' }[props.kind]));
@@ -46,14 +45,14 @@ watch(() => props.kind, () => { void load(); }, { immediate: true });
         <p class="font-body-md max-w-3xl text-on-surface-variant">{{ kind === 'history' ? 'School history milestones will appear here once verified and published by the school.' : `Verified ${kind === 'school' ? 'school' : 'alumni'} leadership information will appear here once published.` }}</p>
         <RouterLink to="/contact" class="font-label-sm mt-6 inline-block text-primary underline">School contact information</RouterLink>
       </div>
-      <ol v-else-if="kind === 'history'" class="space-y-8 border-l-4 border-primary pl-6 md:pl-10">
-        <li v-for="(record, index) in records" :key="record.id" class="relative">
-          <motion.span aria-hidden="true" :initial="reduced ? false : { opacity: 0.5, scale: 0.85 }" :whileInView="{ opacity: 1, scale: 1 }" :inViewOptions="{ once: true }" :transition="{ duration: reduced ? 0 : 0.3 }" class="milestone-marker absolute -left-[35px] top-8 h-4 w-4 rounded-full border-4 border-white bg-primary md:-left-[51px]"></motion.span>
-          <MotionCard :index="index" timeline :hover="false" class="border border-outline-variant bg-white p-6 md:p-8">
-          <time :datetime="record.milestoneDate || undefined" class="font-label-sm text-primary">{{ record.milestoneDate }}</time>
-          <h3 class="font-h2 mt-3 break-words text-primary">{{ record.title }}</h3>
-          <PublicationImage v-if="record.image" :src="record.image" :alt="record.title" fit="contain" class="mt-6 aspect-video w-full" />
-          <p class="font-body-md mt-4 whitespace-pre-wrap break-words text-on-surface-variant">{{ record.content }}</p>
+      <ol v-else-if="kind === 'history'" class="relative mx-auto grid max-w-4xl grid-cols-2 items-start gap-x-6 gap-y-3 before:pointer-events-none before:absolute before:inset-y-0 before:left-1/2 before:w-0.5 before:-translate-x-1/2 before:bg-primary before:content-[''] sm:gap-x-8 sm:gap-y-5">
+        <li v-for="(record, index) in records" :key="record.id" class="min-w-0">
+          <MotionCard :index="index" :hover="false" class="min-w-0 border border-outline-variant border-t-2 border-t-primary bg-white p-3 sm:p-5">
+          <time :datetime="record.milestoneDate || undefined" class="block break-words text-xs font-semibold text-primary sm:text-sm">{{ record.milestoneDate }}</time>
+          <h3 class="mt-2 break-words text-base font-bold leading-snug text-primary sm:text-xl">{{ record.title }}</h3>
+          <PublicationImage v-if="record.image" :src="record.image" :alt="record.title" fit="contain" class="mt-3 h-24 w-full sm:h-32" />
+          <p :id="`history-description-${record.id}`" class="mt-3 whitespace-pre-wrap break-words text-[13px] leading-5 text-on-surface-variant sm:text-sm" :class="{ 'line-clamp-3': !expandedHistory[record.id] }">{{ record.content }}</p>
+          <button class="mt-2 min-h-11 max-w-full break-words text-left text-xs font-semibold text-primary underline underline-offset-4 sm:text-sm" :aria-expanded="!!expandedHistory[record.id]" :aria-controls="`history-description-${record.id}`" :aria-label="`${expandedHistory[record.id] ? 'Show less' : 'Read more'}: ${record.title}`" @click="expandedHistory[record.id] = !expandedHistory[record.id]">{{ expandedHistory[record.id] ? 'Show less' : 'Read more' }}</button>
           </MotionCard></li>
       </ol>
       <div v-else class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">

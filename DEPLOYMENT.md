@@ -33,8 +33,11 @@ Set the following Railway service variables:
 | `JWT_EXPIRES_IN` | `7d` |
 | `FRONTEND_ORIGIN` | Exact primary HTTPS URL of your Netlify preview project |
 | `TRUST_PROXY_HOPS` | `1` for the Railway edge; verify the actual forwarding chain before increasing this |
-| `ACTIVATION_DELIVERY` | `smtp` |
-| `SMTP_HOST` | Your SMTP test/delivery provider hostname |
+| `EMAIL_PROVIDER` | `brevo` for HTTPS production delivery; `smtp` is also supported |
+| `BREVO_API_KEY` | Private API key when using Brevo |
+| `BREVO_SENDER_EMAIL`, `BREVO_SENDER_NAME` | Verified Brevo sender address and display name |
+| `ACTIVATION_DELIVERY` | Legacy fallback (`smtp` or `development`) only when `EMAIL_PROVIDER` is unset |
+| `SMTP_HOST` | Required only for SMTP: your delivery provider hostname |
 | `SMTP_PORT` | `587` for STARTTLS, or `465` for implicit TLS |
 | `SMTP_SECURE` | `false` with 587; `true` with 465 |
 | `SMTP_FROM` | Provider-approved sender address |
@@ -45,7 +48,7 @@ Set the following Railway service variables:
 
 Railway supplies `PORT`; the API listens on it. Do not bind this service to `localhost` or publish a development Vite server.
 
-The pre-deploy command applies all migrations, including history and both leadership groups, to the selected preview database. Use the dedicated preview database rather than the current application's database. A readiness failure means database access/migrations or production SMTP configuration needs attention; check deployment logs before retrying.
+The pre-deploy command applies all migrations, including history and both leadership groups, to the selected preview database. Use the dedicated preview database rather than the current application's database. A readiness failure means database access/migrations or production email configuration needs attention; check deployment logs before retrying. See [email delivery](docs/email-delivery.md) for provider selection and local Gmail settings.
 
 Generate a Railway public HTTPS domain for the API. Verify `https://YOUR-API.up.railway.app/api/ready` returns HTTP 200 before configuring the frontend proxy.
 
@@ -74,12 +77,12 @@ Log in on the Netlify preview URL, open SuperAdmin → Platform settings, enable
 From the Railway service shell these checks are available:
 
 ```bash
-npm run smtp:check:production
+npm run email:check:production
 npm run media:check:production
 npm run media:check:production -- --upload
 ```
 
-The first media check verifies Cloudinary credentials and the upload switch. `--upload` creates one tiny temporary image and immediately deletes it. Use `npm run media:cleanup:production` to retry queued cleanup jobs if needed.
+The email check validates configuration without making a network request or sending mail. Sending a single diagnostic message requires an explicitly configured recipient, user confirmation and both guarded flags described in [email delivery](docs/email-delivery.md). `smtp:check:production` remains available for SMTP-only connection checks. The first media check verifies Cloudinary credentials and the upload switch. `--upload` creates one tiny temporary image and immediately deletes it. Use `npm run media:cleanup:production` to retry queued cleanup jobs if needed.
 
 ## 4. Netlify frontend
 

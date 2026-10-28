@@ -24,6 +24,8 @@ model User {
   staffProfile          StaffProfile?
   accountTokens         AccountToken[]
   auditRecords          AuditRecord[]
+  uploadedKnowledge     AiKnowledgeDocument[] @relation("KnowledgeUploader")
+  reviewedKnowledge     AiKnowledgeDocument[] @relation("KnowledgeReviewer")
   membershipApplication MembershipApplication?  @relation("MemberAccount")
   reviewedApplications  MembershipApplication[] @relation("ApplicationReviewer")
   membershipActions     MembershipReview[]
@@ -317,7 +319,72 @@ model ChatbotSettings {
   model String @default("openai/gpt-oss-20b")
   dailyRequests Int @default(100)
   dailyBudgetMicros Int @default(1000000)
+  outputTokenLimit Int @default(1024)
   updatedAt DateTime @updatedAt
+}
+
+enum KnowledgeProcessingStatus {
+  PROCESSING
+  READY
+  NEEDS_REVIEW
+  OCR_REQUIRED
+  FAILED
+}
+
+enum KnowledgeApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  ARCHIVED
+  SUPERSEDED
+}
+
+model AiKnowledgeDocument {
+  id String @id @default(cuid())
+  title String
+  description String @default("")
+  category String
+  originalFilename String
+  originalBytes Bytes
+  fileSize Int
+  mimeType String @default("application/pdf")
+  fileHash String
+  processingStatus KnowledgeProcessingStatus @default(PROCESSING)
+  approvalStatus KnowledgeApprovalStatus @default(PENDING)
+  securityReviewed Boolean @default(false)
+  publicOriginal Boolean @default(false)
+  processingError String?
+  warnings String[] @default([])
+  pageCount Int @default(0)
+  emptyPages Int[] @default([])
+  edition Int @default(1)
+  version Int @default(0)
+  supersedesId String? @unique
+  supersedesVersion Int?
+  supersedes AiKnowledgeDocument? @relation("KnowledgeReplacement", fields: [supersedesId], references: [id], onDelete: SetNull)
+  replacement AiKnowledgeDocument? @relation("KnowledgeReplacement")
+  uploadedBy String
+  reviewedBy String?
+  reviewedAt DateTime?
+  uploader User @relation("KnowledgeUploader", fields: [uploadedBy], references: [id], onDelete: Restrict)
+  reviewer User? @relation("KnowledgeReviewer", fields: [reviewedBy], references: [id], onDelete: SetNull)
+  chunks AiKnowledgeChunk[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([approvalStatus, processingStatus])
+  @@index([category, createdAt])
+}
+
+model AiKnowledgeChunk {
+  id String @id @default(cuid())
+  documentId String
+  document AiKnowledgeDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  text String
+  pageNumber Int
+  ordering Int
+  edition Int
+  @@unique([documentId, ordering])
 }
 model ChatbotFaq {
   id String @id @default(cuid())

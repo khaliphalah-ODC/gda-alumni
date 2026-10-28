@@ -1,3 +1,4 @@
+import { aiKnowledgeRouter, publicKnowledgeRouter } from './routes/ai-knowledge.routes';
 import { chatbotRouter, chatbotPlatformRouter, chatbotFaqRouter } from './routes/chatbot.routes';
 import { accountRouter } from './routes/account.routes';
 import { historyRouter, schoolLeadershipRouter, alumniLeadershipRouter } from './routes/about-content.routes';
@@ -47,6 +48,8 @@ app.use('/api/media/images', (req, res, next) => {
 app.get('/api/health', (_request, response) => sendSuccess(response, 200, 'API is healthy', { status: 'ok' }));
 app.get('/api/ready', readiness);
 app.use('/api/cron', maintenanceRouter);
+app.use('/api/chatbot/documents', publicKnowledgeRouter);
+app.use('/api/admin/ai-knowledge', aiKnowledgeRouter);
 app.use('/api/chatbot', chatbotRouter);
 app.use('/api/super-admin/chatbot', chatbotPlatformRouter);
 app.use('/api/admin/chatbot/faqs', chatbotFaqRouter);
