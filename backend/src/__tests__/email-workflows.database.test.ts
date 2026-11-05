@@ -79,7 +79,7 @@ describe.skipIf(!databaseUrl)('Brevo with real membership and authentication tra
   it('sends approval once, keeps hashes private, and activates only once', async () => {
     const receipt = await membership.apply(input('approved'));
     expect(fetchMock).not.toHaveBeenCalled(); // Application confirmation email does not exist.
-    const application = await db.membershipApplication.findUniqueOrThrow({ where: { reference: receipt.reference } });
+    const application = await db.membershipApplication.findUniqueOrThrow({ where: { reference: receipt.trackingCode } });
     await expect(membership.review(member, application.id, 'APPROVED')).rejects.toMatchObject({ statusCode: 403 });
     const result = await membership.review(admin, application.id, 'APPROVED');
     expect(result.application).toMatchObject({ status: 'APPROVED', activationDeliveryStatus: 'SENT' });
@@ -96,7 +96,7 @@ describe.skipIf(!databaseUrl)('Brevo with real membership and authentication tra
 
   it('preserves approval on API failure and reissues a new single-use invitation', async () => {
     const receipt = await membership.apply(input('failed'));
-    const application = await db.membershipApplication.findUniqueOrThrow({ where: { reference: receipt.reference } });
+    const application = await db.membershipApplication.findUniqueOrThrow({ where: { reference: receipt.trackingCode } });
     fetchMock.mockImplementationOnce(async (_url, init) => {
       messages.push(JSON.parse(init!.body as string));
       return new Response('{"message":"private provider failure"}', { status: 401 });
@@ -105,6 +105,7 @@ describe.skipIf(!databaseUrl)('Brevo with real membership and authentication tra
     const oldToken = tokenFrom('/activate#token=');
     expect(failed.application).toMatchObject({ status: 'APPROVED', activationDeliveryStatus: 'FAILED' });
     expect(JSON.stringify(failed)).not.toContain('private provider failure');
+    await db.membershipInvitation.updateMany({ where: { applicationId: application.id }, data: { createdAt: new Date(0) } }); await db.membershipApplication.update({ where: { id: application.id }, data: { updatedAt: new Date(0) } });
     const retry = await membership.reissue(admin, application.id);
     expect(retry.delivery.status).toBe('sent');
     const newToken = tokenFrom('/activate#token=');

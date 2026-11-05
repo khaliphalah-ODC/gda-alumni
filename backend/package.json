@@ -26,7 +26,9 @@
     "media:check:production": "node dist/scripts/check-media.js",
     "media:cleanup:production": "node dist/scripts/retry-media-cleanup.js",
     "chatbot:evaluate": "tsx scripts/evaluate-chatbot.ts",
-    "chatbot:check": "tsx scripts/check-ai.ts"
+    "chatbot:check": "tsx scripts/check-ai.ts",
+    "invitations:process": "tsx scripts/process-invitations.ts",
+    "invitations:process:production": "node dist/scripts/process-invitations.js"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

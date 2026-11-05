@@ -37,3 +37,8 @@ Admin accounts can open **Membership QR code** in the sidebar or from **Membersh
 ## Public school assistant
 
 Groq SDK integration, private PDF storage, Admin approval, PostgreSQL retrieval, setup and verification: [AI knowledge implementation](docs/ai-knowledge-implementation.md). Apply the additive knowledge migration before deploying this backend. Keep `GROQ_API_KEY` server-only; configure `GROQ_MODEL` and `AI_CHAT_ENABLED`. Admin manages PDFs at `/admin/ai-knowledge` and FAQs at `/admin/chatbot`; SuperAdmin controls enablement, models and usage at `/super-admin/chatbot`. Scanned PDFs are flagged for OCR; documents remain quarantined until manual safety and public-information review.
+
+
+## Membership invitations and tracking
+
+Applicants receive one permanent 12-digit tracking code. Private status and pending corrections require email verification; earlier reference/secret receipts remain usable. Only school Admin approves membership. Approval commits a durable invitation job, and the applicant receives the activation link privately by email. Admin sees safe delivery status and attempt diagnostics, with resend/revoke controls and no invitation links. Apply all November 4 membership migrations before running this version. See [email and tracking report](docs/membership-email-tracking.md) for rollout, scheduler, local capture and verification results.

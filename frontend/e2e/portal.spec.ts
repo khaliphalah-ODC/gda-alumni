@@ -1,4 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
+import { readFileSync } from 'node:fs';
 import AxeBuilder from '@axe-core/playwright';
 import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
@@ -8,6 +9,15 @@ const suffix = `@browser-${Date.now()}.example`;
 const superEmail = `super${suffix}`, settingsMemberEmail = `settings-member${suffix}`;
 const adminEmail = `admin${suffix}`, alumniEmail = `alumnus${suffix}`, password = 'BrowserTestPassword123';
 let prisma: InstanceType<typeof PrismaClient>;
+let previousSettings: any;
+async function capturedMessage(email: string, pattern: RegExp) {
+  let text = '';
+  await expect.poll(() => {
+    try { text = readFileSync(process.env.GDA_TEST_OUTBOX!, 'utf8').split('\n').filter(Boolean).map(line => JSON.parse(line)).filter(message => message.to === email && pattern.test(message.text)).at(-1)?.text || ''; } catch { text = ''; }
+    return pattern.test(text);
+  }).toBe(true);
+  return text;
+}
 async function login(page: Page, email: string, passwordValue = password) {
   await page.goto('/login'); await page.getByLabel('Email address', { exact: true }).fill(email); await page.getByLabel('Password', { exact: true }).fill(passwordValue); await page.getByRole('button', { name: 'Log in', exact: true }).click();
   await expect(page).toHaveURL(email === superEmail ? /\/super-admin$/ : email === adminEmail ? /\/admin$/ : /\/dashboard$/);
@@ -45,6 +55,8 @@ test('failed sign-in clears and hides the password, preserves email and allows r
 });
 test.beforeAll(async () => {
   prisma = new PrismaClient({ datasourceUrl: process.env.PHASE1_TEST_DATABASE_URL });
+  previousSettings = await prisma.platformSettings.findUnique({ where: { id: 1 } });
+  await prisma.platformSettings.upsert({ where: { id: 1 }, create: { emailEnabled: true }, update: { emailEnabled: true } });
   await prisma.user.create({ data: { email: adminEmail, password: await bcrypt.hash(password, 12), role: 'ADMIN', staffProfile: { create: { fullName: 'Browser Administrator' } } } });
   await prisma.user.create({ data: { email: superEmail, password: await bcrypt.hash(password, 12), role: 'SUPER_ADMIN', staffProfile: { create: { fullName: 'Browser Platform Operator' } } } });
   await prisma.user.create({ data: { email: settingsMemberEmail, password: await bcrypt.hash(password, 12), role: 'ALUMNI', alumniProfile: { create: { fullName: 'Settings Member' } }, membershipApplication: { create: { email: settingsMemberEmail, fullName: 'Settings Member', reference: `settings${suffix}`, trackingHash: 'test-fixture', phone: '123456789', graduationYear: 2005, status: 'APPROVED', activatedAt: new Date() } } } });
@@ -56,7 +68,7 @@ test.afterAll(async () => {
   await prisma.auditRecord.deleteMany({ where: { actorId: { in: ids } } }); await prisma.accountToken.deleteMany({ where: { userId: { in: ids } } });
   await prisma.request.deleteMany({ where: { requestedBy: { in: ids } } }); await prisma.post.deleteMany({ where: { createdBy: { in: ids } } });
   await prisma.membershipReview.deleteMany({ where: { applicationId: { in: applications.map((app: { id: string }) => app.id) } } });
-  await prisma.membershipApplication.deleteMany({ where: { email: { endsWith: suffix } } }); await prisma.user.deleteMany({ where: { id: { in: ids } } }); await prisma.$disconnect();
+  await prisma.membershipApplication.deleteMany({ where: { email: { endsWith: suffix } } }); await prisma.user.deleteMany({ where: { id: { in: ids } } }); if (previousSettings) await prisma.platformSettings.update({ where: { id: 1 }, data: previousSettings }); else await prisma.platformSettings.deleteMany({ where: { id: 1 } }); await prisma.$disconnect();
 });
 test('public pages render while the session service is still waiting', async ({ page }) => {
   let sessionRequested = false;
@@ -87,14 +99,39 @@ test('visitor application → review → activation → member profile, stories,
   const errors: string[] = []; member.on('pageerror', (error) => errors.push(error.message)); admin.on('pageerror', (error) => errors.push(error.message));
   try {
     await member.goto('/register'); await member.getByLabel('Full name', { exact: true }).fill('Browser Alumni'); await member.getByLabel('Email address', { exact: true }).fill(alumniEmail); await member.getByLabel('Phone number', { exact: true }).fill('123456789'); await member.getByLabel('Graduation year', { exact: true }).selectOption('2005');
-    await member.getByLabel(/I have read the/).check(); await member.getByRole('button', { name: 'Submit application', exact: true }).click(); await expect(member.getByRole('heading', { name: 'Application submitted' })).toBeVisible();
-    const receipt = await member.getByLabel('Private tracking credentials').inputValue(); const reference = /Reference: (GDA-[A-F0-9]{24})/.exec(receipt)![1]!, secret = /Tracking secret: ([a-f0-9]{64})/.exec(receipt)![1]!;
+    await member.getByLabel(/I have read the/).check(); await member.getByRole('button', { name: 'Submit application', exact: true }).click(); await expect(member.getByRole('heading', { name: 'Membership Application Submitted Successfully' })).toBeVisible();
+    const trackingCode = await member.getByLabel('Your Application Tracking Code').inputValue();
+    expect(trackingCode).toMatch(/^[0-9]{12}$/);
+    await member.setViewportSize({ width: 390, height: 844 });
+    await fits(member); await accessible(member);
+    await member.setViewportSize({ width: 1440, height: 1000 });
+    await visitor.grantPermissions(['clipboard-read', 'clipboard-write']);
+    await member.getByRole('button', { name: 'Copy Tracking Code', exact: true }).click();
+    await expect(member.getByText('Tracking code copied.', { exact: true })).toBeVisible();
+    expect(await member.evaluate(() => navigator.clipboard.readText())).toBe(trackingCode);
     expect(await prisma.user.findUnique({ where: { email: alumniEmail } })).toBeNull();
-    await member.goto('/membership/status'); await member.getByLabel('Application reference', { exact: true }).fill(reference); await member.getByLabel('Private tracking secret', { exact: true }).fill(secret); await member.getByRole('button', { name: 'Check status', exact: true }).click(); await expect(member.getByRole('heading', { name: 'PENDING', exact: true })).toBeVisible();
+    await member.getByRole('link', { name: 'Track Application', exact: true }).click();
+    await member.getByLabel('Application Tracking Code', { exact: true }).fill(trackingCode);
+    await member.getByLabel('Application email address', { exact: true }).fill(alumniEmail);
+    await member.getByRole('button', { name: 'Track Application', exact: true }).click();
+    await expect(member.getByRole('heading', { name: 'PENDING', exact: true })).toHaveCount(0);
+    const verification = await capturedMessage(alumniEmail, /code is [0-9]{6}/);
+    await expect.poll(() => prisma.membershipTrackingChallenge.count({ where: { application: { email: alumniEmail }, deliveredAt: { not: null } } })).toBe(1);
+    await member.getByLabel('Email verification code', { exact: true }).fill(verification.match(/code is ([0-9]{6})/)![1]!);
+    await member.getByRole('button', { name: 'Verify and view status', exact: true }).click();
+    await expect(member.getByRole('heading', { name: 'PENDING', exact: true })).toBeVisible();
+    expect(new URL(member.url()).search).toBe('');
     await login(admin, adminEmail); await expect(admin.getByRole('heading', { name: 'Administrator dashboard' })).toBeVisible(); await accessible(admin);
-    await admin.goto('/admin/membership'); await admin.getByLabel('Search name, email or reference').fill(alumniEmail); await admin.getByRole('button', { name: 'Search', exact: true }).click(); await admin.getByRole('button', { name: 'Review details', exact: true }).click(); await admin.getByLabel('Private verification notes').fill('School records verified in browser test'); await admin.getByRole('button', { name: 'Approve membership', exact: true }).click();
-    await expect(admin.getByLabel('Private invitation link')).toBeVisible(); const invitation = await admin.getByLabel('Private invitation link').inputValue();
+    await admin.goto('/admin/membership'); await admin.getByLabel('Search name, email or tracking code').fill(alumniEmail); await admin.getByRole('button', { name: 'Search', exact: true }).click(); await admin.getByRole('button', { name: 'Review details', exact: true }).click(); await admin.getByLabel('Private verification notes').fill('School records verified in browser test'); await admin.getByRole('button', { name: 'Approve membership', exact: true }).click();
+    await expect(admin.getByText('Invitation submitted to email provider. Inbox delivery is not confirmed.', { exact: true })).toBeVisible();
+    await expect(admin.locator('#private-invitation')).toHaveCount(0);
+    const mail = await capturedMessage(alumniEmail, /\/activate#token=/);
+    const invitation = mail.match(/http[^\s]+\/activate#token=[a-f0-9]{64}/)![0];
+    await member.getByRole('button', { name: 'Refresh status', exact: true }).click();
+    await expect(member.getByRole('list', { name: 'Application progress' })).toContainText('Invitation submitted to email provider');
+    await expect(member.getByText(`Application tracking code: ${trackingCode}`, { exact: false })).toBeVisible();
     await member.goto(invitation); await expect(member).toHaveURL(/\/activate$/); await member.getByLabel('Create password', { exact: true }).fill(password); await member.getByLabel('Confirm password', { exact: true }).fill(password); await member.getByRole('button', { name: 'Activate account', exact: true }).click(); await expect(member.getByText('Your approved account is activated and your profile is ready to complete.')).toBeVisible();
+    expect((await prisma.membershipApplication.findUniqueOrThrow({ where: { trackingCode } })).trackingCode).toBe(trackingCode);
     await login(member, alumniEmail); await member.getByText('Membership, profile and alumni updates', { exact: true }).click(); await expect(member.getByText('APPROVED · Activated')).toBeVisible(); await accessible(member);
     await member.goto('/profile'); await expect(member.getByLabel('Full name', { exact: true })).toHaveValue('Browser Alumni'); await member.getByLabel('Occupation', { exact: true }).fill('Engineer'); await member.getByLabel('Current location', { exact: true }).fill('Monrovia'); await member.getByLabel('Biography', { exact: true }).fill('Browser-verified member biography.'); await member.getByRole('button', { name: 'Save profile', exact: true }).click(); await expect(member.getByRole('status').filter({ hasText: 'Profile saved' })).toBeVisible();
     await member.goto('/alumni'); await member.getByLabel('Search by name', { exact: true }).fill('Browser Alumni'); await member.getByRole('button', { name: 'Search directory', exact: true }).click(); await member.getByRole('button', { name: 'View alumni profile' }).click(); await expect(member.getByText('Browser-verified member biography.')).toBeVisible(); expect(await member.locator('main').getByText(alumniEmail, { exact: true }).count()).toBe(0);

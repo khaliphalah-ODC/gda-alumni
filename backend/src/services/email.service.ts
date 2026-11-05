@@ -5,16 +5,21 @@ import { resolveEmailProvider } from '../config/email';
 import { AppError } from '../utils/app-error';
 
 const senderName = 'Gray D. Allison Alumni Portal';
-const deliveryFailed = () => new AppError(503, 'Email delivery failed. Please try again later');
 export interface EmailOptions { html?: string; deliveryKey?: string }
+export class EmailDeliveryError extends AppError {
+  constructor(public readonly diagnostic: string, public readonly retrySafe = false) {
+    super(503, 'Email delivery failed. Please try again later');
+  }
+}
 
 export function emailConfiguration() {
   const provider = resolveEmailProvider(env);
   const configured = provider === 'brevo'
     ? Boolean(env.BREVO_API_KEY && env.BREVO_SENDER_EMAIL && env.BREVO_SENDER_NAME)
-    : provider === 'smtp' && Boolean(env.SMTP_HOST && env.SMTP_FROM);
+    : provider === 'smtp' ? Boolean(env.SMTP_HOST && env.SMTP_FROM)
+      : env.NODE_ENV !== 'production' && env.DEVELOPMENT_MAIL_CAPTURE && ['localhost', '127.0.0.1', '::1'].includes(env.SMTP_HOST ?? '') && Boolean(env.SMTP_FROM);
   return {
-    provider, configured, sender: provider === 'brevo' ? env.BREVO_SENDER_EMAIL ?? null : provider === 'smtp' ? env.SMTP_FROM ?? null : null,
+    provider, configured, sender: provider === 'brevo' ? env.BREVO_SENDER_EMAIL ?? null : env.SMTP_FROM ?? null,
     status: 'Not transport-verified; configuration does not prove inbox delivery',
   };
 }
@@ -49,13 +54,17 @@ export const emailService = {
   async send(to: string, subject: string, text: string, options: EmailOptions = {}): Promise<void> {
     try {
       const configuration = emailConfiguration();
-      if (!configuration.configured) throw deliveryFailed();
+      if (!configuration.configured) throw new EmailDeliveryError('EMAIL_NOT_CONFIGURED', true);
       const html = options.html ?? htmlFromText(text);
-      if (configuration.provider === 'smtp') {
-        const result = await nodemailer.createTransport(smtpOptions()).sendMail({
+      if (configuration.provider === 'smtp' || configuration.provider === 'development') {
+        // Plain SMTP is allowed only for an explicitly selected loopback catcher.
+        const transport = configuration.provider === 'development'
+          ? { ...smtpOptions(), secure: false, requireTLS: false, ignoreTLS: true, auth: undefined } : smtpOptions();
+        const result = await nodemailer.createTransport(transport).sendMail({
           from: { name: senderName, address: env.SMTP_FROM! }, to, subject, text, html,
+          ...(options.deliveryKey ? { messageId: `<${createHash('sha256').update(options.deliveryKey).digest('hex')}@${env.SMTP_FROM!.split('@').at(-1)}>` } : {}),
         });
-        if (!result.accepted?.length || result.rejected?.length) throw deliveryFailed();
+        if (!result.accepted?.length || result.rejected?.length) throw new EmailDeliveryError('RECIPIENT_REJECTED', true);
         return;
       }
       const response = await fetch('https://api.brevo.com/v3/smtp/email', {
@@ -67,15 +76,23 @@ export const emailService = {
           headers: { idempotencyKey: idempotencyKey(options.deliveryKey, configuration.sender!, to, subject, text, html) },
         }),
       });
+      if (!response.ok && response.status !== 400) throw new EmailDeliveryError(response.status === 401 || response.status === 403 ? 'PROVIDER_AUTHORIZATION' : response.status === 429 ? 'PROVIDER_RATE_LIMIT' : response.status >= 500 ? 'PROVIDER_UNAVAILABLE' : 'PROVIDER_REJECTED', response.status < 500);
       const result: unknown = await response.json();
       // Brevo rejects replayed idempotency keys after accepting the first send.
       if (response.status === 400 && result && typeof result === 'object' && 'code' in result && result.code === 'duplicate_parameter') return;
       if (!response.ok || !result || typeof result !== 'object' || !('messageId' in result)
-        || typeof result.messageId !== 'string' || !result.messageId.trim()) throw deliveryFailed();
-    } catch {
+        || typeof result.messageId !== 'string' || !result.messageId.trim()) throw new EmailDeliveryError('PROVIDER_REJECTED', response.status >= 400 && response.status < 500);
+    } catch (error) {
       // Never log/return provider response bodies, request headers or credentials.
       // No automatic retries or fallback: a timeout can follow an accepted send.
-      throw deliveryFailed();
+      if (error instanceof EmailDeliveryError) throw error;
+      const smtp = error as { code?: string; command?: string; responseCode?: number };
+      if (smtp.code === 'EAUTH') throw new EmailDeliveryError('SMTP_AUTHENTICATION', true);
+      if (smtp.responseCode && smtp.responseCode >= 400) throw new EmailDeliveryError('SMTP_REJECTED', true);
+      if (smtp.code === 'EDNS' || (smtp.code === 'ECONNECTION' && smtp.command === 'CONN')) throw new EmailDeliveryError('SMTP_CONNECTION', true);
+      // An interrupted connection/timeout can follow acceptance. Require an
+      // explicit resend rather than risk an automatic duplicate SMTP message.
+      throw new EmailDeliveryError('ACCEPTANCE_UNKNOWN');
     }
   },
 };

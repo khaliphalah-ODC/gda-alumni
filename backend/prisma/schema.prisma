@@ -177,6 +177,10 @@ enum ActivationDeliveryStatus {
   DEVELOPMENT
   SENT
   FAILED
+  QUEUED
+  SENDING
+  UNKNOWN
+  CANCELLED
 }
 
 enum MembershipStatus {
@@ -198,6 +202,7 @@ enum MembershipAction {
 model MembershipApplication {
   id                       String                   @id @default(cuid())
   reference                String                   @unique
+  trackingCode             String                   @unique @default(dbgenerated("((100000000000::bigint + ((('x'::text || substr(replace((gen_random_uuid())::text, '-'::text, ''::text), 1, 12)))::bit(48))::bigint % 900000000000::bigint))::text"))
   trackingHash             String
   email                    String
   fullName                 String
@@ -214,6 +219,7 @@ model MembershipApplication {
   reviewedAt               DateTime?
   activationDeliveryStatus ActivationDeliveryStatus @default(NONE)
   activationDeliveryAt     DateTime?
+  activationDeliveryError  String?
   activationHash           String?                  @unique
   activationExpiresAt      DateTime?
   activationConsumedAt     DateTime?
@@ -224,9 +230,59 @@ model MembershipApplication {
   reviewer                 User?                    @relation("ApplicationReviewer", fields: [reviewedBy], references: [id], onDelete: Restrict)
   user                     User?                    @relation("MemberAccount", fields: [userId], references: [id], onDelete: Restrict)
   history                  MembershipReview[]
+  invitations              MembershipInvitation[]
+  trackingChallenges       MembershipTrackingChallenge[]
 
   @@index([email])
   @@index([status, createdAt])
+}
+
+// Tokens are derived from the job UUID using a server-only HMAC key. Only
+// their hash is persisted, including in this durable outbox.
+model MembershipInvitation {
+  id            String @id @default(uuid())
+  applicationId String
+  tokenHash     String @unique
+  expiresAt     DateTime
+  status        ActivationDeliveryStatus @default(QUEUED)
+  attempts      Int @default(0)
+  availableAt   DateTime @default(now())
+  leaseId       String?
+  leasedAt      DateTime?
+  lastError     String?
+  provider      String?
+  acceptedAt    DateTime?
+  createdAt     DateTime @default(now())
+  application   MembershipApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  attemptsLog   MembershipInvitationAttempt[]
+  @@index([status, availableAt])
+}
+
+model MembershipInvitationAttempt {
+  id           String @id @default(cuid())
+  invitationId String
+  number       Int
+  status       ActivationDeliveryStatus @default(SENDING)
+  startedAt    DateTime @default(now())
+  completedAt  DateTime?
+  diagnostic   String?
+  invitation   MembershipInvitation @relation(fields: [invitationId], references: [id], onDelete: Cascade)
+  @@unique([invitationId, number])
+}
+
+model MembershipTrackingChallenge {
+  id            String @id @default(uuid())
+  applicationId String
+  codeHash      String
+  expiresAt     DateTime
+  attempts      Int @default(0)
+  deliveredAt   DateTime?
+  consumedAt    DateTime?
+  proofHash     String? @unique
+  proofExpiresAt DateTime?
+  createdAt     DateTime @default(now())
+  application   MembershipApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  @@index([applicationId, createdAt])
 }
 
 model MembershipReview {

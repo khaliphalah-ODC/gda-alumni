@@ -14,8 +14,16 @@ async function open(page: Page) {
   await page.goto('/');
   const section = page.getByRole('region', { name: heading, exact: true });
   await section.scrollIntoViewIfNeeded();
-  await expect(section.locator('.excellence-card').first()).toHaveCSS('opacity', '1');
-  if ((page.viewportSize()?.width ?? 0) >= 1024) await expect(section.locator('.excellence-card').nth(1)).toHaveCSS('opacity', '1');
+  const visibleCards = (page.viewportSize()?.width ?? 0) >= 1024 ? 2 : 1;
+  for (let index = 0; index < visibleCards; index++) {
+    const card = section.locator('.excellence-card').nth(index);
+    await expect(card).toHaveCSS('opacity', '1');
+    // Text stays opaque while moving; geometry checks need the movement to finish.
+    await expect.poll(() => card.evaluate(element => {
+      const transform = getComputedStyle(element).transform;
+      return transform === 'none' || new DOMMatrixReadOnly(transform).isIdentity;
+    })).toBe(true);
+  }
   return { section, requests };
 }
 

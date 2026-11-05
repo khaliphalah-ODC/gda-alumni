@@ -1,12 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import { environmentSchema } from '../config/env';
-const settings = { NODE_ENV: 'production', DATABASE_URL: 'postgresql://test@localhost/test', FRONTEND_ORIGIN: 'https://school.example', JWT_SECRET: 'Qz8!vK4$nM2@bP9#xL7&cR3*wH6%jD5+' };
+const settings = { EMAIL_PROVIDER: 'smtp', SMTP_HOST: 'smtp.school.example', SMTP_FROM: 'registrar@school.example', NODE_ENV: 'production', DATABASE_URL: 'postgresql://test@localhost/test', FRONTEND_ORIGIN: 'https://school.example', JWT_SECRET: 'Qz8!vK4$nM2@bP9#xL7&cR3*wH6%jD5+' };
 describe('production configuration', () => {
   it('accepts HTTPS and a random secret', () => {
     expect(environmentSchema.safeParse(settings).success).toBe(true);
   });
   it.each([
     { FRONTEND_ORIGIN: 'http://school.example' },
+    { FRONTEND_ORIGIN: 'https://localhost' },
+    { FRONTEND_ORIGIN: 'https://127.0.0.1' },
+    { DEVELOPMENT_MAIL_CAPTURE: 'true' },
     { FRONTEND_ORIGIN: 'https://school.example/path' },
     { JWT_SECRET: 'replace-this-with-a-long-random-secret-at-least-32-characters' },
     { JWT_SECRET: 'a'.repeat(40) },
@@ -37,11 +40,11 @@ describe('production configuration', () => {
       BREVO_API_KEY: 'private-api-key', BREVO_SENDER_EMAIL: 'registrar@school.example', BREVO_SENDER_NAME: 'School Registrar' });
     expect(result.EMAIL_PROVIDER).toBe('brevo');
   });
-  it('accepts an explicit development provider despite the legacy SMTP selection', () => {
-    expect(environmentSchema.safeParse({ ...settings, EMAIL_PROVIDER: 'development', ACTIVATION_DELIVERY: 'smtp' }).success).toBe(true);
+  it('rejects development email in production despite the legacy SMTP selection', () => {
+    expect(environmentSchema.safeParse({ ...settings, EMAIL_PROVIDER: 'development', ACTIVATION_DELIVERY: 'smtp' }).success).toBe(false);
   });
   it('requires SMTP configuration when the explicit SMTP provider overrides development', () => {
-    expect(environmentSchema.safeParse({ ...settings, EMAIL_PROVIDER: 'smtp' }).success).toBe(false);
+    expect(environmentSchema.safeParse({ ...settings, EMAIL_PROVIDER: 'smtp', SMTP_HOST: undefined }).success).toBe(false);
     expect(environmentSchema.safeParse({ ...settings, EMAIL_PROVIDER: 'smtp', SMTP_HOST: 'smtp.gmail.com', SMTP_FROM: 'sender@example.test' }).success).toBe(true);
   });
   it.each(['BREVO_API_KEY', 'BREVO_SENDER_EMAIL', 'BREVO_SENDER_NAME'])('requires %s for Brevo', key => {
@@ -59,7 +62,7 @@ describe('production configuration', () => {
     expect(environmentSchema.safeParse({ ...settings, BREVO_API_KEY: 'api-key', BREVO_SENDER_EMAIL: 'registrar@school.example', BREVO_SENDER_NAME: 'Registrar', ...change }).success).toBe(false);
   });
   it.each([
-    { ACTIVATION_DELIVERY: 'smtp' },
+    { EMAIL_PROVIDER: 'smtp', SMTP_HOST: undefined },
     { SMTP_USER: 'registrar' },
     { SMTP_PASSWORD: 'provider-credential' },
     { SMTP_SECURE: 'disabled' },

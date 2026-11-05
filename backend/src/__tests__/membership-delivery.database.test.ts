@@ -22,17 +22,17 @@ describe.skipIf(!databaseUrl)('Invitation delivery and persistent membership out
   it('sends a production invitation without exposing it in the API and activates its hashed token', async () => {
     Object.assign(config, { NODE_ENV: 'production', ACTIVATION_DELIVERY: 'smtp', FRONTEND_ORIGIN: 'https://school.example', SMTP_HOST: 'smtp.example', SMTP_FROM: 'registrar@school.example' });
     mail.sendMail.mockResolvedValue({ accepted: [input('sent').email], rejected: [] });
-    const receipt = await service.apply(input('sent')); const application = await prisma.membershipApplication.findUniqueOrThrow({ where: { reference: receipt.reference } });
+    const receipt = await service.apply(input('sent')); const application = await prisma.membershipApplication.findUniqueOrThrow({ where: { reference: receipt.trackingCode } });
     const result = await service.review(admin, application.id, 'APPROVED'); expect(result).not.toHaveProperty('developmentActivationLink'); expect(result.delivery?.status).toBe('sent'); expect(result.application.activationDeliveryStatus).toBe('SENT');
     const text = mail.sendMail.mock.calls[0]![0].text as string; const token = /#token=([a-f0-9]{64})/.exec(text)![1]!;
     expect(JSON.stringify(result)).not.toContain(token); expect((await prisma.membershipApplication.findUniqueOrThrow({ where: { id: application.id } })).activationHash).not.toBe(token);
     await service.activate(token, 'ProductionPathPassword123'); expect((await prisma.membershipApplication.findUniqueOrThrow({ where: { id: application.id } })).activatedAt).toBeTruthy();
   });
   it('retains the approved decision after delivery failure and recovers through reissue', async () => {
-    Object.assign(config, { NODE_ENV: 'production', ACTIVATION_DELIVERY: 'smtp' }); mail.sendMail.mockRejectedValue(new Error('private provider failure'));
-    const receipt = await service.apply(input('retry')); const application = await prisma.membershipApplication.findUniqueOrThrow({ where: { reference: receipt.reference } });
+    Object.assign(config, { NODE_ENV: 'production', ACTIVATION_DELIVERY: 'smtp' }); mail.sendMail.mockRejectedValue(Object.assign(new Error('private provider failure'), { code: 'EAUTH' }));
+    const receipt = await service.apply(input('retry')); const application = await prisma.membershipApplication.findUniqueOrThrow({ where: { reference: receipt.trackingCode } });
     const failed = await service.review(admin, application.id, 'APPROVED'); expect(failed.delivery?.status).toBe('failed'); expect(failed.application.status).toBe('APPROVED'); expect(failed.application.activationDeliveryStatus).toBe('FAILED');
-    mail.sendMail.mockResolvedValue({ accepted: [input('retry').email], rejected: [] }); const reissued = await service.reissue(admin, application.id); expect(reissued.delivery.status).toBe('sent');
+    mail.sendMail.mockResolvedValue({ accepted: [input('retry').email], rejected: [] }); await prisma.membershipInvitation.updateMany({ where: { applicationId: application.id }, data: { createdAt: new Date(0) } }); await prisma.membershipApplication.update({ where: { id: application.id }, data: { updatedAt: new Date(0) } }); const reissued = await service.reissue(admin, application.id); expect(reissued.delivery.status).toBe('sent');
     expect((await prisma.membershipApplication.findUniqueOrThrow({ where: { id: application.id } })).activationDeliveryStatus).toBe('SENT');
   });
 });

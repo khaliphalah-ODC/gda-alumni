@@ -19,7 +19,7 @@ async function flip(value: boolean) {
 
 <template>
   <motion.article class="excellence-card min-w-0 w-full max-w-md" :aria-label="achievement.category"
-    :initial="reduced ? false : { opacity: 0, y: 24 }" :whileInView="{ opacity: 1, y: 0 }"
+    :initial="reduced ? false : { y: 24 }" :whileInView="{ y: 0 }"
     :inViewOptions="{ once: true, amount: 0.12 }" :transition="{ duration: reduced ? 0 : 0.5, delay: reduced ? 0 : index * 0.12 }">
     <div class="excellence-card-lift">
       <div class="excellence-card-rotor" :class="{ 'is-flipped': flipped }">

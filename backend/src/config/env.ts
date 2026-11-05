@@ -12,6 +12,7 @@ const schema = z.object({
   TRUST_PROXY_HOPS: z.coerce.number().int().min(0).max(5).default(0),
   ACTIVATION_DELIVERY: z.enum(['development', 'smtp']).default('development'),
   EMAIL_PROVIDER: z.preprocess(value => value === '' ? undefined : value, z.enum(['brevo', 'smtp', 'development']).optional()),
+  DEVELOPMENT_MAIL_CAPTURE: z.enum(['true', 'false']).default('false').transform(value => value === 'true'),
   BREVO_API_KEY: z.preprocess(value => value === '' ? undefined : value, z.string().trim().min(1).optional()),
   BREVO_SENDER_EMAIL: z.preprocess(value => value === '' ? undefined : value, z.string().trim().email().optional()),
   BREVO_SENDER_NAME: z.preprocess(value => value === '' ? undefined : value, z.string().trim().min(1).max(150).regex(/^[^\r\n]+$/).optional()),
@@ -29,12 +30,12 @@ const schema = z.object({
     const url = new URL(value);
     return ['http:', 'https:'].includes(url.protocol) && url.pathname === '/' && !url.search && !url.hash && !url.username && !url.password;
   }, 'Use a public API origin without a path or credentials').optional(),
-  SMTP_HOST: z.string().trim().min(1).max(253).optional(),
+  SMTP_HOST: z.preprocess(value => value === '' ? undefined : value, z.string().trim().min(1).max(253).optional()),
   SMTP_PORT: z.coerce.number().int().min(1).max(65535).default(465),
   SMTP_SECURE: z.enum(['true', 'false']).default('true').transform((value) => value === 'true'),
-  SMTP_FROM: z.string().email().optional(),
-  SMTP_USER: z.string().min(1).optional(),
-  SMTP_PASSWORD: z.string().min(1).optional(),
+  SMTP_FROM: z.preprocess(value => value === '' ? undefined : value, z.string().email().optional()),
+  SMTP_USER: z.preprocess(value => value === '' ? undefined : value, z.string().min(1).optional()),
+  SMTP_PASSWORD: z.preprocess(value => value === '' ? undefined : value, z.string().min(1).optional()),
   DATABASE_URL: z.string().url(),
   JWT_SECRET: z.string().min(32, 'JWT_SECRET must be at least 32 characters'),
   JWT_EXPIRES_IN: z.string().regex(/^[1-9]\d*(s|m|h|d)$/, 'Use a duration such as 30m, 12h, or 7d').default('7d'),
@@ -55,6 +56,9 @@ export const environmentSchema = schema.superRefine((config, context) => {
     context.addIssue({ code: 'custom', path: ['MEDIA_STORAGE'], message: 'Vercel cannot persist server image uploads. Use MEDIA_STORAGE=cloudinary.' });
   }
   const emailProvider = resolveEmailProvider(config);
+  if (config.DEVELOPMENT_MAIL_CAPTURE && (config.NODE_ENV === 'production' || emailProvider !== 'development' || !['localhost', '127.0.0.1', '::1'].includes(config.SMTP_HOST ?? '') || !config.SMTP_FROM)) {
+    context.addIssue({ code: 'custom', path: ['DEVELOPMENT_MAIL_CAPTURE'], message: 'Local mail capture requires development delivery, a loopback SMTP_HOST and SMTP_FROM outside production' });
+  }
   if (emailProvider === 'brevo') {
     for (const key of ['BREVO_API_KEY', 'BREVO_SENDER_EMAIL', 'BREVO_SENDER_NAME'] as const) {
       if (!config[key]) context.addIssue({ code: 'custom', path: [key], message: `${key} is required when EMAIL_PROVIDER=brevo` });
@@ -67,10 +71,11 @@ export const environmentSchema = schema.superRefine((config, context) => {
     context.addIssue({ code: 'custom', path: ['SMTP_USER'], message: 'Configure both SMTP_USER and SMTP_PASSWORD, or neither for a trusted relay' });
   }
   if (config.NODE_ENV !== 'production') return;
+  if (emailProvider === 'development') context.addIssue({ code: 'custom', path: ['EMAIL_PROVIDER'], message: 'Production requires EMAIL_PROVIDER=brevo or smtp' });
   if (config.MEDIA_STORAGE === 'local' && (!config.MEDIA_UPLOAD_DIR || !config.MEDIA_PUBLIC_ORIGIN?.startsWith('https://'))) {
     context.addIssue({ code: 'custom', path: ['MEDIA_STORAGE'], message: 'Production server uploads require a persistent MEDIA_UPLOAD_DIR and HTTPS MEDIA_PUBLIC_ORIGIN' });
   }
-  if (!config.FRONTEND_ORIGIN.startsWith('https://')) {
+  if (!config.FRONTEND_ORIGIN.startsWith('https://') || /^(localhost|127\.|0\.|\[::1\]|.*\.localhost$)/i.test(new URL(config.FRONTEND_ORIGIN).hostname)) {
     context.addIssue({ code: 'custom', path: ['FRONTEND_ORIGIN'], message: 'Production requires an HTTPS frontend origin' });
   }
   if (/replace|example|change.?me|secret|choose/i.test(config.JWT_SECRET) || new Set(config.JWT_SECRET).size < 12) {

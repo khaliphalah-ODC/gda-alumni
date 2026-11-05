@@ -21,12 +21,12 @@ describe('private activation delivery', () => {
     expect(smtpOptions().requireTLS).toBe(true); expect(smtpOptions().tls.minVersion).toBe('TLSv1.2');
   });
   it('reports a recoverable failure without leaking provider errors or tokens', async () => {
-    env.ACTIVATION_DELIVERY = 'smtp'; mail.createTransport.mockReturnValue({ sendMail: mail.sendMail }); mail.sendMail.mockRejectedValue(new Error('private SMTP password recipient details'));
+    env.ACTIVATION_DELIVERY = 'smtp'; mail.createTransport.mockReturnValue({ sendMail: mail.sendMail }); mail.sendMail.mockRejectedValue(Object.assign(new Error('private SMTP password recipient details'), { code: 'EAUTH' }));
     const result = await service.send('alumni@example.com', 'Applicant', 'b'.repeat(64));
     expect(result.status).toBe('failed'); expect(JSON.stringify(result)).not.toContain('private SMTP'); expect(JSON.stringify(result)).not.toContain('b'.repeat(64));
   });
   it('never exposes development delivery in production', async () => {
     env.NODE_ENV = 'production'; env.ACTIVATION_DELIVERY = 'development';
-    await expect(service.send('alumni@example.com', 'Applicant', 'c'.repeat(64))).rejects.toMatchObject({ statusCode: 503 });
+    expect(await service.send('alumni@example.com', 'Applicant', 'c'.repeat(64))).toMatchObject({ status: 'failed', diagnostic: 'EMAIL_NOT_CONFIGURED' });
   });
 });

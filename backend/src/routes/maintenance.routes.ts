@@ -3,6 +3,7 @@ import { timingSafeEqual } from 'node:crypto';
 import { env } from '../config/env';
 import { prisma } from '../config/prisma';
 import { mediaService } from '../services/media.service';
+import { membershipInvitationService } from '../services/membership-invitation.service';
 import { sendError, sendSuccess } from '../utils/api-response';
 
 export const maintenanceRouter = Router();
@@ -24,11 +25,21 @@ maintenanceRouter.get('/maintenance', async (req, res, next) => {
       } while (Date.now() < deadline && total.processed < 90);
       return { ...total, remaining: await prisma.mediaCleanup.count() };
     };
-    const [media, buckets, tokens] = await Promise.all([
+    const [media, buckets, tokens, invitations] = await Promise.all([
       drain(),
       prisma.rateLimitBucket.deleteMany({ where: { resetAt: { lt: new Date() } } }),
       prisma.accountToken.deleteMany({ where: { expiresAt: { lt: new Date(Date.now() - 30 * 86400000) } } }),
+      membershipInvitationService.drain(1),
     ]);
-    return sendSuccess(res, 200, 'Maintenance completed', { media, expiredRateBuckets: buckets.count, expiredTokens: tokens.count });
+    await prisma.membershipTrackingChallenge.deleteMany({ where: { expiresAt: { lt: new Date(Date.now() - 86400000) } } });
+    return sendSuccess(res, 200, 'Maintenance completed', { media, invitations, expiredRateBuckets: buckets.count, expiredTokens: tokens.count });
   } catch (error) { next(error); }
+});
+// Invoke every minute using an authenticated scheduler on serverless hosts.
+maintenanceRouter.get('/invitations', async (req, res, next) => {
+  res.set('Cache-Control', 'no-store');
+  const provided = Buffer.from(req.get('Authorization') ?? '');
+  const expected = Buffer.from(`Bearer ${env.CRON_SECRET ?? ''}`);
+  if (!env.CRON_SECRET || provided.length !== expected.length || !timingSafeEqual(provided, expected)) return sendError(res, 401, 'Unauthorized');
+  try { return sendSuccess(res, 200, 'Invitation queue processed', await membershipInvitationService.drain(1)); } catch (error) { next(error); }
 });

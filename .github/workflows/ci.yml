@@ -50,10 +50,16 @@ jobs:
       - run: npm run build --prefix frontend
       - run: npx playwright install --with-deps chromium
         working-directory: frontend
-      - run: npm run test:e2e
+      - name: Browser workflow tests
+        run: npm run test:e2e
         working-directory: frontend
 
-      - run: npm run test:e2e:excellence && npm run test:e2e:release
+      - name: Animation and accessibility regressions
+        run: npm run test:e2e:excellence
+        working-directory: frontend
+
+      - name: Release workflow tests
+        run: npm run test:e2e:release
         working-directory: frontend
 
       - name: Upload browser failure details

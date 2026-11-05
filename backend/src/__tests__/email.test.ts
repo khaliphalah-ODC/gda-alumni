@@ -108,9 +108,9 @@ describe('email provider selection and HTTPS transport', () => {
 
 describe('activation compatibility and safe diagnostics', () => {
   const service = new ActivationDeliveryService();
-  it('keeps the private development link without sending email', async () => {
+  it('never returns a private development link and sends no mail without a catcher', async () => {
     Object.assign(env, { EMAIL_PROVIDER: 'development', ACTIVATION_DELIVERY: 'smtp' });
-    expect(await service.send(recipient, 'Member', 'a'.repeat(64))).toMatchObject({ status: 'development', developmentActivationLink: expect.stringContaining('#token=') });
+    expect(await service.send(recipient, 'Member', 'a'.repeat(64))).toMatchObject({ status: 'failed', diagnostic: 'EMAIL_NOT_CONFIGURED' });
     expect(fetchMock).not.toHaveBeenCalled(); expect(mocks.sendMail).not.toHaveBeenCalled();
     expect(await accountMailService.available()).toBe(false);
   });
@@ -128,7 +128,7 @@ describe('activation compatibility and safe diagnostics', () => {
   });
   it('never exposes development activation links in production', async () => {
     Object.assign(env, { NODE_ENV: 'production', EMAIL_PROVIDER: 'development', ACTIVATION_DELIVERY: 'smtp' });
-    await expect(service.send(recipient, 'Member', 'd'.repeat(64))).rejects.toMatchObject({ statusCode: 503 });
+    expect(await service.send(recipient, 'Member', 'd'.repeat(64))).toMatchObject({ status: 'failed', diagnostic: 'EMAIL_NOT_CONFIGURED' });
     expect(fetchMock).not.toHaveBeenCalled();
   });
   it('checks configuration without making any network requests by default', async () => {
